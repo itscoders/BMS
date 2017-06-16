@@ -1,13 +1,11 @@
 package pl.psk.projekt.bms;
 
-/**
- * Hello world!
- *
- */
+
 public class App 
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!");
+    	StartWindow sw = new StartWindow();
+       
     }
 }
