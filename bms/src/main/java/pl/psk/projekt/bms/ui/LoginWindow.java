@@ -1,4 +1,4 @@
-package pl.psk.projekt.bms;
+package pl.psk.projekt.bms.ui;
 
 
 import javax.swing.*;
