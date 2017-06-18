@@ -20,24 +20,25 @@ public class StartWindow extends JFrame implements ActionListener
 	
 	public StartWindow()
 	{
+		setTitle("Bus Management");
 
 		
 		setSize(600,600);
 		setVisible(true);
-		setLayout(null);
+		getContentPane().setLayout(null);
 		setLocationRelativeTo(null);
 	
 
 		labelWindow.setBounds(125,100,325,50);
-		add(labelWindow);
+		getContentPane().add(labelWindow);
 		labelWindow.setPreferredSize(new Dimension(150, 100));
 		labelWindow.setFont(new Font("Courier New", Font.BOLD, 20));
 		labelWindow.setForeground(Color.DARK_GRAY);
 		
 		
 		move.setBounds(200,350,175,50);
-		add(move);
-		move.setBackground(Color.GRAY);
+		getContentPane().add(move);
+		move.setBackground(Color.LIGHT_GRAY);
 		move.addActionListener(this);
 
 		
