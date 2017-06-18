@@ -5,17 +5,22 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import pl.psk.projekt.bms.jdbc.CreateDB;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.Color;
-
 
 public class ManagementWindow extends JFrame implements ActionListener {
 
@@ -25,7 +30,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	private JButton workerButton;
 	private JButton scheduleButton;
 	private JButton busButton;
-	private JButton lineButton;
+	private JButton btnLine;
 	private JButton ticketButton;
 	private JButton userButton;
 	private JButton raportButton;
@@ -45,6 +50,24 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	}
 
 	public ManagementWindow() {
+
+			try {
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedLookAndFeelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		SwingUtilities.updateComponentTreeUI(this);
 		setTitle("Management - Bus Management");
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -78,53 +101,33 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		raportButton.setBackground(Color.LIGHT_GRAY);
 		raportButton.addActionListener(this);
 
-		JButton btnLine = new JButton("Line");
+		btnLine = new JButton("Line");
 		btnLine.setBackground(Color.LIGHT_GRAY);
-
-		JButton databaseButton = new JButton("Database");
+		btnLine.addActionListener(this);
+		
+		databaseButton = new JButton("Database");
 		databaseButton.addActionListener(this);
 		databaseButton.setBackground(Color.LIGHT_GRAY);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(workerButton)
-					.addGap(18)
-					.addComponent(scheduleButton)
-					.addGap(18)
-					.addComponent(busButton)
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(databaseButton)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnLine)
-							.addGap(18)
-							.addComponent(ticketButton)
-							.addGap(18)
-							.addComponent(userButton)
-							.addGap(18)
-							.addComponent(raportButton)))
-					.addContainerGap(91, Short.MAX_VALUE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(workerButton)
-						.addComponent(scheduleButton)
-						.addComponent(busButton)
-						.addComponent(btnLine)
-						.addComponent(ticketButton)
-						.addComponent(userButton)
-						.addComponent(raportButton))
-					.addGap(18)
-					.addComponent(databaseButton)
-					.addContainerGap(386, Short.MAX_VALUE))
-		);
-		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, userButton, raportButton, btnLine});
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, userButton, raportButton, btnLine});
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(42, Short.MAX_VALUE)
+						.addComponent(workerButton).addGap(18).addComponent(scheduleButton).addGap(18)
+						.addComponent(busButton).addGap(18)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addComponent(databaseButton)
+								.addGroup(gl_contentPane.createSequentialGroup().addComponent(btnLine).addGap(18)
+										.addComponent(ticketButton).addGap(18).addComponent(userButton).addGap(18)
+										.addComponent(raportButton)))
+						.addGap(31)));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(workerButton)
+								.addComponent(scheduleButton).addComponent(busButton).addComponent(btnLine)
+								.addComponent(ticketButton).addComponent(userButton).addComponent(raportButton))
+						.addGap(18).addComponent(databaseButton).addContainerGap(386, Short.MAX_VALUE)));
+		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] { workerButton, scheduleButton, busButton,
+				ticketButton, userButton, raportButton, btnLine, databaseButton });
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { workerButton, scheduleButton, busButton,
+				ticketButton, userButton, raportButton, btnLine, databaseButton });
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -132,24 +135,21 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == workerButton) {
-			//dispose();
 			WorkerWindow wd = new WorkerWindow();
 			wd.setVisible(true);
 		}
 
 		if (e.getSource() == scheduleButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			ScheduleWindow sw = new ScheduleWindow();
+			sw.setVisible(true);
 		}
 
 		if (e.getSource() == busButton) {
-			//dispose();
 			BusWindow bw = new BusWindow();
 			bw.setVisible(true);
 		}
 
-		if (e.getSource() == lineButton) {
-			dispose();
+		if (e.getSource() == btnLine) {
 			LineWindow lw = new LineWindow();
 			lw.setVisible(true);
 		}
@@ -170,7 +170,12 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == databaseButton) {
-		
+			try {
+				CreateDB c = new CreateDB();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 	}

@@ -27,6 +27,23 @@ public class LoginWindow extends JFrame implements ActionListener {
 	StartWindow startWindow;
 
 	public LoginWindow(StartWindow startWindow) {
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		SwingUtilities.updateComponentTreeUI(this);
+		
 		setTitle("Login - Bus Management");
 
 		this.startWindow = startWindow;

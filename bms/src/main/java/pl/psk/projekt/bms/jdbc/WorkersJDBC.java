@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import pl.psk.projekt.bms.dbobjects.Workers;
 
 
@@ -104,6 +103,7 @@ public class WorkersJDBC {
             return false;
             
     }
+
     
     
     public boolean updateWorker(Workers w)throws SQLException{
@@ -138,5 +138,6 @@ public class WorkersJDBC {
               else
                   return false;
     }
+    
     
 }
