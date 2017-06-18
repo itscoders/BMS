@@ -3,6 +3,12 @@ package pl.psk.projekt.bms.ui;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -11,8 +17,12 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
-import javax.swing.JPasswordField;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import java.awt.Component;
 import java.awt.Color;
 import javax.swing.JComboBox;
@@ -20,7 +30,10 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import com.toedter.calendar.JDateChooser;
+
+
+import pl.psk.projekt.bms.dbobjects.BusLine;
+import pl.psk.projekt.bms.jdbc.BusLineJDBC;
 
 public class LineWindow extends JFrame implements ActionListener {
 
@@ -34,6 +47,9 @@ public class LineWindow extends JFrame implements ActionListener {
 	private JButton addButton;
 	private JButton editButton;
 	private JButton deleteButton;
+	JComboBox<String> comboBoxType;
+	PreparedStatement  preparedStatement;
+    Connection connect;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -49,9 +65,18 @@ public class LineWindow extends JFrame implements ActionListener {
 	}
 
 	public LineWindow() {
+		
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+		SwingUtilities.updateComponentTreeUI(this);
+		
 		setTitle("Line - Bus Management");
 		setBounds(new Rectangle(100, 100, 700, 400));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -73,15 +98,19 @@ public class LineWindow extends JFrame implements ActionListener {
 		stopStationField = new JTextField();
 		stopStationField.setColumns(10);
 
-		JComboBox comboBoxType = new JComboBox();
+		 comboBoxType = new JComboBox<String>();
+		 String e ="normalny";
+		 comboBoxType.addItem(e);
+		 e ="pośpieszny";
+		 comboBoxType.addItem(e);
 
-		JButton addButton = new JButton("Add");
+		addButton = new JButton("Add");
 		addButton.addActionListener(this);
 
-		JButton editButton = new JButton("Edit");
+		editButton = new JButton("Edit");
 		editButton.addActionListener(this);
 
-		JButton deleteButton = new JButton("Delete");
+		deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(this);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -145,12 +174,62 @@ public class LineWindow extends JFrame implements ActionListener {
 		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {lineNameField, startStationField, stopStationField});
 		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelLineName, labelStartStation, labelType, labelStopStation});
 
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(new String[] {"ID", "Line Name", "Line Type", "Start Station", "End Station", "Price"});
 		table = new JTable();
 		table.setSelectionForeground(Color.WHITE);
 		table.setBackground(Color.WHITE);
-		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "ID", "User Name", "Name", "Surname",
-				"Type", "Position", "Birthday", "Mobile Phone", "Adress", "Salary" }));
-		scrollPane.setViewportView(table);
+		table.setModel(model);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		
+		JScrollPane scroll = new JScrollPane(table);
+        scroll.setHorizontalScrollBarPolicy(
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scroll.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
+         String busLineID = "";
+         String busLineName = "";
+         String busLineType = "";
+         String startStation = "";
+         String endStation = "";
+         String  price = "";
+     
+        try {
+			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+        
+        
+        try {
+        	preparedStatement = connect.prepareStatement("SELECT * FROM busline");
+        	ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+            	busLineID = rs.getString("busLineID");
+            	busLineName = rs.getString("busLineName");
+            	busLineType = rs.getString("busLineType");
+            	startStation = rs.getString("startStation");
+            	endStation = rs.getString("endStation");
+            	price = rs.getString("price");
+                model.addRow(new Object[]{busLineID, busLineName, busLineType, startStation, endStation, price});
+                i++;
+            }
+            if (i < 1) {
+                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            if (i == 1) {
+                System.out.println(i + " Record Found");
+            } else {
+                System.out.println(i + " Records Found");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+		
+		
+		
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -158,19 +237,55 @@ public class LineWindow extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == addButton) {
-			dispose();
-			// WorkerWindow wd = new Worker();
-			// wd.setVisible(true);
+			String busLineName = lineNameField.getText();
+			String startStation = startStationField.getText();
+			String stopStationField = startStationField.getText();
+			
+			String busLineType = (String) comboBoxType.getSelectedItem();
+			
+			try {
+				BusLineJDBC bj = new BusLineJDBC();
+				BusLine b = new BusLine(busLineName, busLineType, startStation, stopStationField, 20);
+				bj.createBusLine(b);
+			} catch (SQLException e1) {
+				
+				e1.printStackTrace();
+			}
 		}
 
 		if (e.getSource() == editButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			
+			int value = Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()));
+			String busLineName = lineNameField.getText();
+			String startStation = startStationField.getText();
+			String stopStationField = startStationField.getText();
+			
+			String busLineType = (String) comboBoxType.getSelectedItem();
+			
+			try {
+				BusLineJDBC bj = new BusLineJDBC();
+				BusLine b = new BusLine(busLineName, busLineType, startStation, stopStationField, 20);
+				b.setBusLineID(value);
+				bj.updateBusLine(b);
+			} catch (SQLException e1) {
+				
+				e1.printStackTrace();
+			}
 		}
 
 		if (e.getSource() == deleteButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			int value = Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()));
+			
+			
+			try {
+				BusLineJDBC bj = new BusLineJDBC();
+				BusLine b = new BusLine();
+				b.setBusLineID(value);
+				bj.deleteBusLine(b);
+			} catch (SQLException e1) {
+				
+				e1.printStackTrace();
+			}
 		}
 
 	}

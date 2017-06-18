@@ -9,15 +9,16 @@ public class BusLine {
     private String endStation;
     private int  price;
     
-	public BusLine(int busLineID, String busLineName, String busLineType, String startStation, String endStation, int price) {
+	public BusLine(String busLineName, String busLineType, String startStation, String endStation, int price) {
 		
-		this.busLineID = busLineID;
 		this.busLineName = busLineName;
 		this.busLineType = busLineType;
 		this.startStation = startStation;
 		this.endStation = endStation;
 		this.price = price;
 	}
+
+	public BusLine() {}
 
 	public int getBusLineID() {
 		return busLineID;

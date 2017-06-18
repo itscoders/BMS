@@ -5,8 +5,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import pl.psk.projekt.bms.jdbc.CreateDB;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -17,7 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.Color;
-import javax.swing.LayoutStyle.ComponentPlacement;
+
 
 public class ManagementWindow extends JFrame implements ActionListener {
 
@@ -152,7 +150,8 @@ public class ManagementWindow extends JFrame implements ActionListener {
 
 		if (e.getSource() == lineButton) {
 			dispose();
-			// startWindow.setVisible(true);
+			LineWindow lw = new LineWindow();
+			lw.setVisible(true);
 		}
 
 		if (e.getSource() == ticketButton) {
@@ -171,12 +170,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == databaseButton) {
-			try {
-				CreateDB c = new CreateDB();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+		
 		}
 
 	}

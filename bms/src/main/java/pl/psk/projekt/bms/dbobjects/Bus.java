@@ -6,10 +6,10 @@ public class Bus {
     private String busName;
     private int seat;
     
+    public Bus(){}
     
-	public Bus(int busID, String busName, int seat) {
+	public Bus(String busName, int seat) {
 		
-		this.busID = busID;
 		this.busName = busName;
 		this.seat = seat;
 	}

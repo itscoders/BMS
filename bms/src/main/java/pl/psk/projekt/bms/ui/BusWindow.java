@@ -3,6 +3,12 @@ package pl.psk.projekt.bms.ui;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -11,7 +17,12 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import java.awt.Component;
 import java.awt.Color;
 import javax.swing.JComboBox;
@@ -19,6 +30,10 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import pl.psk.projekt.bms.dbobjects.Bus;
+import pl.psk.projekt.bms.jdbc.BusJDBC;
+
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class BusWindow extends JFrame implements ActionListener {
@@ -26,11 +41,14 @@ public class BusWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
-	private JTextField userNameField;
+	private JTextField busNameField;
 	private JTable table;
 	private JButton addButton;
 	private JButton editButton;
 	private JButton deleteButton;
+	private JComboBox<String> comboBoxSeat;
+	PreparedStatement  preparedStatement;
+    Connection connect;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -46,29 +64,44 @@ public class BusWindow extends JFrame implements ActionListener {
 	}
 
 	public BusWindow() {
+		
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+		SwingUtilities.updateComponentTreeUI(this);
+		
 		setTitle("Bus - Bus Management");
 		setBounds(new Rectangle(100, 100, 700, 400));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		userNameField = new JTextField();
-		userNameField.setColumns(10);
+		busNameField = new JTextField();
+		busNameField.setColumns(10);
 
 		JLabel labelBusName = new JLabel("Bus Name:");
 
 		JLabel labelSeat = new JLabel("Seat:");
 
-		JComboBox comboBoxSeat = new JComboBox();
+		comboBoxSeat = new JComboBox<String>();
+		String e ="25";
+		comboBoxSeat.addItem(e);
+		 e ="35";
+		comboBoxSeat.addItem(e);
+		 e ="60";
+		comboBoxSeat.addItem(e);
 
-		JButton addButton = new JButton("Add");
+		addButton = new JButton("Add");
 		addButton.addActionListener(this);
 
-		JButton editButton = new JButton("Edit");
+		editButton = new JButton("Edit");
 		editButton.addActionListener(this);
 
-		JButton deleteButton = new JButton("Delete");
+		deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(this);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -90,7 +123,7 @@ public class BusWindow extends JFrame implements ActionListener {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(labelBusName)
 							.addGap(18)
-							.addComponent(userNameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+							.addComponent(busNameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
 							.addGap(30)
 							.addComponent(labelSeat)
 							.addGap(18)
@@ -103,7 +136,7 @@ public class BusWindow extends JFrame implements ActionListener {
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(labelBusName)
-						.addComponent(userNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(busNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelSeat)
 						.addComponent(comboBoxSeat, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(41)
@@ -116,19 +149,58 @@ public class BusWindow extends JFrame implements ActionListener {
 					.addGap(33))
 		);
 		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelBusName, labelSeat});
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {userNameField, comboBoxSeat});
-
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {busNameField, comboBoxSeat});
+		
+		
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(new String[] {"ID", "Bus Name", "Seat"});
 		table = new JTable();
 		table.setSelectionForeground(Color.WHITE);
 		table.setBackground(Color.WHITE);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"ID", "Bus Name", "Seat"
-			}
-		));
-		scrollPane.setViewportView(table);
+		table.setModel(model);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		
+		JScrollPane scroll = new JScrollPane(table);
+        scroll.setHorizontalScrollBarPolicy(
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scroll.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
+        String busID = "";
+        String busName = "";
+        String seat = "";
+     
+        try {
+			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+        
+        
+        try {
+        	preparedStatement = connect.prepareStatement("SELECT * FROM bus");
+        	ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+            	busID = rs.getString("busID");
+            	busName = rs.getString("busName");
+            	seat = rs.getString("seat");
+                model.addRow(new Object[]{busID, busName, seat});
+                i++;
+            }
+            if (i < 1) {
+                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            if (i == 1) {
+                System.out.println(i + " Record Found");
+            } else {
+                System.out.println(i + " Records Found");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+		
+		
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -136,19 +208,53 @@ public class BusWindow extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == addButton) {
-			dispose();
-			// WorkerWindow wd = new Worker();
-			// wd.setVisible(true);
+			String busName = busNameField.getText();
+			int seat = Integer.parseInt((String) comboBoxSeat.getSelectedItem());
+			
+			try {
+				BusJDBC bj = new BusJDBC();
+				Bus b = new Bus(busName, seat);
+				bj.createBus(b);
+			} catch (SQLException e1) {
+				
+				e1.printStackTrace();
+			}
+			
 		}
 
 		if (e.getSource() == editButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			
+			if (e.getSource() == addButton) {
+				
+			}
+				String busName = busNameField.getText();
+				int seat = Integer.parseInt((String) comboBoxSeat.getSelectedItem());
+				int value = Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()));
+				
+				try {
+					BusJDBC bj = new BusJDBC();
+					Bus b = new Bus(busName, seat);
+					b.setBusID(value);
+					bj.updateBus(b);
+				} catch (SQLException e1) {
+					
+					e1.printStackTrace();
+				}
+			
 		}
 
 		if (e.getSource() == deleteButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			
+			int value = Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()));
+			try {
+				BusJDBC bj = new BusJDBC();
+				Bus b = new Bus();
+				b.setBusID(value);
+				bj.deleteBus(b);
+			} catch (SQLException e1) {
+				
+				e1.printStackTrace();
+			}
 		}
 
 	}

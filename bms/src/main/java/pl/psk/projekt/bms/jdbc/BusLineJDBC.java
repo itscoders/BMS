@@ -19,19 +19,22 @@ public class BusLineJDBC {
     
     
     public BusLineJDBC() throws SQLException{    
-        String url = "jdbc:mysql://localhost:3306/bms_db";
+        String url = "jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York";
         String username = "root";
         String password = "toor";
         connect = DriverManager.getConnection(url,username,password);
         statement = connect.createStatement();            
     }
     
-    /*
+    
     public boolean createBusLine(BusLine b)throws SQLException{
-    String sql="INSERT INTO BUS (busName,seat) values(?,?,?)";
+    String sql="INSERT INTO BusLine (busLineName, busLineType, startStation, endStation, price) values(?,?,?,?,?)";
     preparedStatement=connect.prepareStatement(sql);
-    preparedStatement.setString(1,b.getBusName());
-    preparedStatement.setInt(2,b.getSeat());
+    preparedStatement.setString(1,b.getBusLineName());
+    preparedStatement.setString(2,b.getBusLineType());
+    preparedStatement.setString(3,b.getBusLineName());
+    preparedStatement.setString(4,b.getBusLineType());
+    preparedStatement.setInt(5,b.getPrice());
     int result = preparedStatement.executeUpdate();
         if(result > 0)
             return true;
@@ -40,9 +43,9 @@ public class BusLineJDBC {
     }
     
     public boolean deleteBusLine(BusLine b)throws SQLException{
-        String sql ="DELETE FROM BUS WHERE busName=?";
+        String sql ="DELETE FROM BusLine WHERE busLineID=?";
         preparedStatement = connect.prepareStatement(sql);
-        preparedStatement.setString(1,b.getBusName());
+        preparedStatement.setInt(1,b.getBusLineID());
         int result = preparedStatement.executeUpdate();
         if(result > 0)
             return true;
@@ -51,11 +54,13 @@ public class BusLineJDBC {
     }
     
     public boolean updateBusLine(BusLine b) throws SQLException{
-    String sql="update bus set busName=?, seat=?  where busID=? ";
+    String sql="update BusLine set busLineName=?, busLineType=?, startStation=?, endStation=? where busLineID=? ";
     preparedStatement=connect.prepareStatement(sql);
-    preparedStatement.setString(1,b.getBusName());
-    preparedStatement.setInt(2,b.getSeat());
-    preparedStatement.setString(3,b.getBusID());
+    preparedStatement.setString(1,b.getBusLineName());
+    preparedStatement.setString(2,b.getBusLineType());
+    preparedStatement.setString(3,b.getBusLineName());
+    preparedStatement.setString(4,b.getBusLineType());
+    preparedStatement.setInt(5,b.getBusLineID());
    
         int result = preparedStatement.executeUpdate();
         if(result > 0)
@@ -64,7 +69,6 @@ public class BusLineJDBC {
             return false; //success
     }
 	
-	*/
 }
 
 

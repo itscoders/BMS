@@ -27,7 +27,7 @@ public class BusJDBC {
     
     
     public boolean createBus(Bus b)throws SQLException{
-    String sql="INSERT INTO BUS (busName,seat) values(?,?,?)";
+    String sql="INSERT INTO BUS (busName,seat) values(?,?)";
     preparedStatement=connect.prepareStatement(sql);
     preparedStatement.setString(1,b.getBusName());
     preparedStatement.setInt(2,b.getSeat());
@@ -39,10 +39,11 @@ public class BusJDBC {
     }
     
     public boolean deleteBus(Bus b)throws SQLException{
-        String sql ="DELETE FROM BUS WHERE busName=?";
+        String sql ="DELETE FROM BUS WHERE busID=?";
         preparedStatement = connect.prepareStatement(sql);
-        preparedStatement.setString(1,b.getBusName());
+        preparedStatement.setInt(1,b.getBusID());
         int result = preparedStatement.executeUpdate();
+       
         if(result > 0)
             return true;
         else
