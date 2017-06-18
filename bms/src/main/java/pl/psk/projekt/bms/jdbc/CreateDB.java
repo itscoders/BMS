@@ -1,6 +1,7 @@
 package pl.psk.projekt.bms.jdbc;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -9,8 +10,13 @@ public class CreateDB {
 	String create;
 	
 	 public CreateDB(Connection connection) throws SQLException {
-	        try (Statement statement = connection.createStatement()) {
-	            
+		 
+		 	String url = "jdbc:mysql://localhost:3306/bms_db";
+	        String username = "root";
+	        String password = "toor";
+	        Connection connect = DriverManager.getConnection(url,username,password);
+	        Statement   statement = connect.createStatement();  
+	       
 	            create = 	"CREATE TABLE Workers ("+
 	              			"workerId int AUTO_INCREMENT PRIMARY KEY,"+
 	              			"accountType varchar(255),"+
@@ -48,8 +54,7 @@ public class CreateDB {
           						"BusLine int FOREIGN KEY REFERENCES BusLine(busLineID),"+
           						"IdDriver int FOREIGN KEY REFERENCES Workers(workerId));";
 	            statement.execute(create);
-	            
-	        }
-	    }
+	 }
+	    
 	
 }

@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
@@ -15,7 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Cursor;
 
-public class RetrieveWindow extends JFrame {
+public class RetrieveWindow extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -51,15 +50,8 @@ public class RetrieveWindow extends JFrame {
 		userNameField.setColumns(10);
 
 		prevButton = new JButton("Prev");
-		prevButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				RetrieveWindow.this.setVisible(false);
-				loginWindow.setVisible(true);
-			}
-		});
 		prevButton.setBackground(Color.LIGHT_GRAY);
-		// prevButton.addActionListener(this);
+		prevButton.addActionListener(this);
 
 		JButton retrieveButton = new JButton("Retrieve Password");
 		retrieveButton.addActionListener(new ActionListener() {
@@ -110,6 +102,16 @@ public class RetrieveWindow extends JFrame {
 										.addComponent(prevButton).addComponent(retrieveButton))
 								.addGap(76)));
 		contentPane.setLayout(gl_contentPane);
+	}
+
+	
+	public void actionPerformed(ActionEvent e) {
+		
+		if (e.getSource() == prevButton) {
+		RetrieveWindow.this.setVisible(false);
+		loginWindow.setVisible(true);
+		
+		}
 	}
 
 }

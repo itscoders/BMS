@@ -38,7 +38,7 @@ public class WorkersJDBC {
         
         while(rs.next()){
         	
-            w.setWorkerId(rs.getString("workerId"));
+            w.setWorkerId(rs.getInt("workerId"));
             w.setPossition(rs.getString("possition"));
             w.setAddress(rs.getString("address"));
             w.setBirthday(rs.getString("birthday"));
@@ -101,7 +101,7 @@ public class WorkersJDBC {
     preparedStatement.setString(5,w.getAddress());
     preparedStatement.setString(6,w.getBirthday());
     preparedStatement.setDouble(7,w.getSalary());
-    preparedStatement.setString(8,w.getWorkerId());
+    preparedStatement.setInt(8,w.getWorkerId());
         
     int result = preparedStatement.executeUpdate();
         if(result > 0)

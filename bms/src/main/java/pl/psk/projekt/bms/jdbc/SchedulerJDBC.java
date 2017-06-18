@@ -32,7 +32,7 @@ public class SchedulerJDBC {
     public boolean addSchedulerRecord(Scheduler sc)throws SQLException{
         String sql = "insert into scheduler(scheID,scheDate,dest,departure,busID,driverID) values(?,?,?,?,?,?)";
         preparedStatement = connect.prepareStatement(sql);
-        preparedStatement.setString(1,sc.getSchedulerRecordID());
+        preparedStatement.setInt(1,sc.getSchedulerRecordID());
         preparedStatement.setString(2,sc.getDepertureTime());
         preparedStatement.setString(3,sc.getArrivalTime());
         preparedStatement.setString(4,sc.getIdBus());

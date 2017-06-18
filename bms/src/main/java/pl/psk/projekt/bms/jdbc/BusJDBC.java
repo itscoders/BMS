@@ -54,7 +54,7 @@ public class BusJDBC {
     preparedStatement=connect.prepareStatement(sql);
     preparedStatement.setString(1,b.getBusName());
     preparedStatement.setInt(2,b.getSeat());
-    preparedStatement.setString(3,b.getBusID());
+    preparedStatement.setInt(3,b.getBusID());
    
         int result = preparedStatement.executeUpdate();
         if(result > 0)
