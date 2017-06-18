@@ -21,6 +21,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JDateChooser;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import java.awt.Font;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class WorkerWindow extends JFrame implements ActionListener {
 
@@ -32,7 +36,6 @@ public class WorkerWindow extends JFrame implements ActionListener {
 	private JTextField mobilePhoneField;
 	private JTextField textField_6;
 	private JLabel labelAdress;
-	private JTextField textField_8;
 	private JLabel labelSalary;
 	private JTextField salaryField;
 	private JPasswordField passwordField;
@@ -59,6 +62,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		setBounds(new Rectangle(100, 100, 700, 500));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
+		contentPane.setFocusable(false);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
@@ -92,9 +96,6 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 		labelAdress = new JLabel("Adress:");
 
-		textField_8 = new JTextField();
-		textField_8.setColumns(10);
-
 		labelSalary = new JLabel("Salary:");
 
 		salaryField = new JTextField();
@@ -118,124 +119,117 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane();
 
 		JDateChooser birthdayField = new JDateChooser();
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane
-				.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(40, Short.MAX_VALUE)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
-										.createSequentialGroup().addComponent(addButton).addGap(18).addComponent(
-												editButton)
-										.addGap(18).addComponent(deleteButton).addGap(231))
-										.addGroup(gl_contentPane.createSequentialGroup().addGroup(gl_contentPane
-												.createParallelGroup(Alignment.TRAILING, false)
-												.addComponent(scrollPane, Alignment.LEADING)
-												.addGroup(gl_contentPane.createSequentialGroup()
-														.addGroup(gl_contentPane
-																.createParallelGroup(Alignment.LEADING)
-																.addGroup(gl_contentPane
-																		.createSequentialGroup()
-																		.addGroup(gl_contentPane
-																				.createParallelGroup(Alignment.LEADING)
-																				.addComponent(labelUserName)
-																				.addComponent(labelName))
-																		.addGap(18)
-																		.addGroup(gl_contentPane
-																				.createParallelGroup(Alignment.TRAILING)
-																				.addComponent(userNameField,
-																						GroupLayout.PREFERRED_SIZE, 202,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addComponent(nameField,
-																						GroupLayout.PREFERRED_SIZE, 202,
-																						GroupLayout.PREFERRED_SIZE)))
-																.addGroup(gl_contentPane.createSequentialGroup()
-																		.addGroup(gl_contentPane
-																				.createParallelGroup(Alignment.LEADING)
-																				.addComponent(labelBirthday)
-																				.addComponent(labelAdress)
-																				.addComponent(lblNewLabel_2))
-																		.addGap(18)
-																		.addGroup(gl_contentPane
-																				.createParallelGroup(Alignment.LEADING,
-																						false)
-																				.addComponent(birthdayField,
-																						GroupLayout.DEFAULT_SIZE,
-																						GroupLayout.DEFAULT_SIZE,
-																						Short.MAX_VALUE)
-																				.addComponent(textField_8,
-																						Alignment.TRAILING, 141, 141, Short.MAX_VALUE)
-																				.addComponent(comboBox, 0,
-																						GroupLayout.DEFAULT_SIZE,
-																						Short.MAX_VALUE))))
-														.addGap(30)
-														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-																.addComponent(labelMobilePhone)
-																.addComponent(labelPassword).addComponent(labelSurname)
-																.addComponent(labelSalary).addComponent(labelPosition))
-														.addGap(18)
-														.addGroup(gl_contentPane
-																.createParallelGroup(Alignment.LEADING, false)
-																.addComponent(salaryField).addComponent(textField_6)
-																.addComponent(passwordField, 103, 103, Short.MAX_VALUE)
-																.addComponent(mobilePhoneField).addComponent(comboBox_1,
-																		0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-												.addGap(30)))));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(labelUserName)
-								.addComponent(userNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelPassword).addComponent(passwordField, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(nameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelName).addComponent(labelSurname).addComponent(textField_6,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addGap(40)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-												.addComponent(labelPosition).addComponent(comboBox_1,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-												.addComponent(labelMobilePhone)
-												.addComponent(mobilePhoneField, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(labelSalary).addComponent(salaryField,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE)))
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(labelUserName)
+										.addComponent(labelName))
+									.addGap(18)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+										.addComponent(userNameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+										.addComponent(nameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)))
 								.addGroup(gl_contentPane.createSequentialGroup()
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-												.addComponent(lblNewLabel_2).addComponent(comboBox,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addGroup(gl_contentPane.createSequentialGroup()
-														.addComponent(labelBirthday).addGap(24)
-														.addComponent(labelAdress))
-												.addGroup(gl_contentPane.createSequentialGroup()
-														.addComponent(birthdayField, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-														.addGap(18).addComponent(textField_8,
-																GroupLayout.PREFERRED_SIZE, 64,
-																GroupLayout.PREFERRED_SIZE)))))
-						.addGap(18)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(addButton)
-								.addComponent(editButton).addComponent(deleteButton))
-						.addGap(34).addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
-						.addContainerGap()));
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL,
-				new Component[] { labelUserName, labelName, lblNewLabel_2, labelBirthday, labelPassword, labelSurname,
-						labelPosition, labelMobilePhone, labelAdress, labelSalary });
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { passwordField, userNameField, nameField,
-				mobilePhoneField, textField_6, textField_8, salaryField });
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(labelBirthday)
+										.addComponent(labelAdress)
+										.addComponent(lblNewLabel_2))
+									.addGap(18)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+										.addComponent(birthdayField, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+										.addComponent(comboBox, 0, 204, Short.MAX_VALUE))))
+							.addGap(28)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(labelMobilePhone)
+								.addComponent(labelPassword)
+								.addComponent(labelSurname)
+								.addComponent(labelSalary)
+								.addComponent(labelPosition))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(salaryField)
+								.addComponent(textField_6)
+								.addComponent(passwordField, 103, 103, Short.MAX_VALUE)
+								.addComponent(mobilePhoneField)
+								.addComponent(comboBox_1, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+					.addGap(30))
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addContainerGap(254, Short.MAX_VALUE)
+					.addComponent(addButton)
+					.addGap(18)
+					.addComponent(editButton)
+					.addGap(18)
+					.addComponent(deleteButton)
+					.addGap(219))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(labelUserName)
+						.addComponent(userNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelPassword)
+						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(nameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelName)
+						.addComponent(labelSurname)
+						.addComponent(textField_6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(labelPosition)
+								.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(labelMobilePhone)
+								.addComponent(mobilePhoneField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(labelSalary)
+								.addComponent(salaryField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblNewLabel_2)
+								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(labelBirthday)
+								.addComponent(birthdayField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+								.addComponent(labelAdress))))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addButton)
+						.addComponent(editButton)
+						.addComponent(deleteButton))
+					.addGap(18)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, editButton, deleteButton});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {userNameField, nameField, mobilePhoneField, textField_6, salaryField, passwordField});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelUserName, labelName, lblNewLabel_2, labelBirthday, labelPassword, labelSurname, labelPosition, labelMobilePhone, labelAdress, labelSalary});
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setColumns(20);
+		textArea.setRows(4);
+		scrollPane_1.setViewportView(textArea);
 
 		table = new JTable();
 		table.setSelectionForeground(Color.WHITE);

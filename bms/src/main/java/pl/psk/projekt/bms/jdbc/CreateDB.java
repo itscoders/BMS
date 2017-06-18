@@ -9,7 +9,7 @@ public class CreateDB {
 	
 	String create;
 	
-	 public CreateDB(Connection connection) throws SQLException {
+	 public CreateDB() throws SQLException {
 		 
 		 	String url = "jdbc:mysql://localhost:3306/bms_db";
 	        String username = "root";
