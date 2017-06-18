@@ -2,14 +2,14 @@ package pl.psk.projekt.bms.dbobjects;
 
 public class BusLine {
 
-    private String busLineID;
+    private int busLineID;
     private String busLineName;
     private String busLineType;
     private String startStation;
     private String endStation;
     private int  price;
     
-	public BusLine(String busLineID, String busLineName, String busLineType, String startStation, String endStation, int price) {
+	public BusLine(int busLineID, String busLineName, String busLineType, String startStation, String endStation, int price) {
 		
 		this.busLineID = busLineID;
 		this.busLineName = busLineName;
@@ -19,11 +19,11 @@ public class BusLine {
 		this.price = price;
 	}
 
-	public String getBusLineID() {
+	public int getBusLineID() {
 		return busLineID;
 	}
 
-	public void setBusLineID(String busLineID) {
+	public void setBusLineID(int busLineID) {
 		this.busLineID = busLineID;
 	}
 

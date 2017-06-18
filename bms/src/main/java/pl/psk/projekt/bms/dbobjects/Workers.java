@@ -2,7 +2,7 @@ package pl.psk.projekt.bms.dbobjects;
 
 public class Workers {
 
-	private String workerId;
+	private int workerId;
 	private String accountType;
 	private String username;
 	private String password;
@@ -14,7 +14,7 @@ public class Workers {
 	private String birthday;
     private double salary;
     
-	public Workers(String workerId, String accountType, String username, String password, String name, String surname,
+	public Workers(int workerId, String accountType, String username, String password, String name, String surname,
 			String possition, String mobile, String address, String birthday, double salary) {
 		super();
 		this.workerId = workerId;
@@ -30,11 +30,11 @@ public class Workers {
 		this.salary = salary;
 	}
 
-	public String getWorkerId() {
+	public int getWorkerId() {
 		return workerId;
 	}
 
-	public void setWorkerId(String workerId) {
+	public void setWorkerId(int workerId) {
 		this.workerId = workerId;
 	}
 
