@@ -8,7 +8,7 @@ public class Bus {
     
     
 	public Bus(String busID, String busName, int seat) {
-		super();
+		
 		this.busID = busID;
 		this.busName = busName;
 		this.seat = seat;

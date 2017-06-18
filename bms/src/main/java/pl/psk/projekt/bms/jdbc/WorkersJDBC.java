@@ -142,18 +142,18 @@ public class WorkersJDBC {
             			"salary double );";
             wj.statement.execute(create);
     	
-            Workers w = new Workers("Admin43", "admin12", "admin", "admin", "2136455558588", "Kielce", "25-07-1968", 2563);
-            Workers w1 = new Workers("Admin23", "admin22", "admin", "admin", "2136455558588", "Kielce", "25-07-1968", 2563);
+         /*   Workers w = new Workers("Admin43", "admin312", "admin", "admin", "2136455558588", "Kielce", "25-07-1968", 2563);
+            Workers w1 = new Workers("Admin23", "admin322", "admin", "admin", "2136455558588", "Kielce", "25-07-1968", 2563);
             wj.createWorker(w);
             wj.createWorker(w1);
             w.setPossition("seller");
             wj.updateWorker(w);
-            Workers w2 = new Workers("Admin224", "admin32", "admin", "admin", "2136455558588", "Kielce", "25-07-1968", 2563);
+            Workers w2 = new Workers("Admin224", "admin332", "admin", "admin", "2136455558588", "Kielce", "25-07-1968", 2563);
             wj.createWorker(w2);
             wj.deleteWorker(w1);
             wj.createWorker(w1);
             
             create = "DROP TABLE WORKERS;";
-            //wj.statement.execute(create);
+            wj.statement.execute(create);*/
     }
 }
