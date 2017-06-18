@@ -19,7 +19,7 @@ public class WorkersJDBC {
     
     
     public WorkersJDBC() throws SQLException{    
-        String url = "jdbc:mysql://localhost:3306/bms_db";
+        String url = "jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York";
         String username = "root";
         String password = "toor";
         connect = DriverManager.getConnection(url,username,password);
@@ -123,37 +123,4 @@ public class WorkersJDBC {
                   return false;
     }
     
-    public static void main( String[] args ) throws SQLException
-    {
-    	
-    	
-    	WorkersJDBC wj = new WorkersJDBC();
-    	String create;
-        
-          create = 	"CREATE TABLE Workers ("+
-            			"workerId int AUTO_INCREMENT PRIMARY KEY,"+
-            			"accountType varchar(255),"+
-            			"username varchar(255),"+
-            			"password varchar(255),"+
-            			"possition varchar(255),"+
-            			"mobile varchar(255),"+
-            			"address varchar(255),"+
-            			"birthday varchar(255),"+
-            			"salary double );";
-            wj.statement.execute(create);
-    	
-         /*   Workers w = new Workers("Admin43", "admin312", "admin", "admin", "2136455558588", "Kielce", "25-07-1968", 2563);
-            Workers w1 = new Workers("Admin23", "admin322", "admin", "admin", "2136455558588", "Kielce", "25-07-1968", 2563);
-            wj.createWorker(w);
-            wj.createWorker(w1);
-            w.setPossition("seller");
-            wj.updateWorker(w);
-            Workers w2 = new Workers("Admin224", "admin332", "admin", "admin", "2136455558588", "Kielce", "25-07-1968", 2563);
-            wj.createWorker(w2);
-            wj.deleteWorker(w1);
-            wj.createWorker(w1);
-            
-            create = "DROP TABLE WORKERS;";
-            wj.statement.execute(create);*/
-    }
 }

@@ -5,16 +5,15 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import pl.psk.projekt.bms.dbobjects.Workers;
+
 public class CreateDB {
 	
-	String create;
+	
 	
 	 public CreateDB() throws SQLException {
-		 
-		 	String url = "jdbc:mysql://localhost:3306/bms_db";
-	        String username = "root";
-	        String password = "toor";
-	        Connection connect = DriverManager.getConnection(url,username,password);
+		 	String create;
+	        Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
 	        Statement   statement = connect.createStatement();  
 	       
 	            create = 	"CREATE TABLE Workers ("+
@@ -32,7 +31,7 @@ public class CreateDB {
 	            
 	            create = 		"CREATE TABLE Bus ("+
 	            				"busID int AUTO_INCREMENT PRIMARY KEY,"+
-	            				"busName int varchar(255) NOT NULL,"+
+	            				"busName varchar(255) NOT NULL,"+
 	            				"seat int NOT NULL );"; 
 	            statement.execute(create);
 	            
@@ -46,15 +45,33 @@ public class CreateDB {
             
 	            statement.execute(create);
 	            
-	            create =    	"CREATE TABLE BusLine ("+
-          						"busLineID int AUTO_INCREMENT PRIMARY KEY,"+
-          						"busLineName varchar(255),"+
-          						"busLineType varchar(255),"+
-          						"IdBus int FOREIGN KEY REFERENCES Bus(busID),"+
-          						"BusLine int FOREIGN KEY REFERENCES BusLine(busLineID),"+
-          						"IdDriver int FOREIGN KEY REFERENCES Workers(workerId));";
+	            create =    	"CREATE TABLE Scheduler ("+
+          						"schedulerID int AUTO_INCREMENT PRIMARY KEY,"+
+          						"depertureTime varchar(255),"+
+          						"arrivalTime varchar(255),"+
+          						"IdBus int,"+
+          						"IdBusLine int,"+
+          						"IdDriver int,"+
+          						"FOREIGN KEY (IdBus) REFERENCES Bus(busID),"+
+          						"FOREIGN KEY (IdBusLine) REFERENCES BusLine(busLineID),"+
+          						"FOREIGN KEY (IdDriver) REFERENCES Workers(workerId));";
 	            statement.execute(create);
+	            
+	           
 	 }
 	    
+	 
+	    public static void main( String[] args ) throws SQLException
+	    {
+	    	
+	    	new CreateDB();
+	    	
+	    	WorkersJDBC wj = new WorkersJDBC();
+	    	
+	         Workers w = new Workers("Admin", "admin", "admin", "admin", "admin", "admin", "2136455558588", "Kielce", "25-07-1968", 2563);
+	           
+	            wj.createWorker(w);
+	            
+	    }
 	
 }

@@ -95,7 +95,7 @@ public class LoginWindow extends JFrame implements ActionListener {
 
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
-				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bms_db", "root", "");
+				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("select * from workers where ");
 

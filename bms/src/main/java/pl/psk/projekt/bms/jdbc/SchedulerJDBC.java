@@ -5,10 +5,9 @@ package pl.psk.projekt.bms.jdbc;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+
 
 import pl.psk.projekt.bms.dbobjects.Scheduler;
 
@@ -20,7 +19,7 @@ public class SchedulerJDBC {
     Connection connect;
     
     public SchedulerJDBC() throws SQLException{    
-    	  String url = "jdbc:mysql://localhost:3306/bms_db";
+    	  String url = "jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York";
           String username = "root";
           String password = "toor";
           connect = DriverManager.getConnection(url,username,password);

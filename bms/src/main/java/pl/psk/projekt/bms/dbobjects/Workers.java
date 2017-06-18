@@ -14,6 +14,21 @@ public class Workers {
 	private String birthday;
     private double salary;
     
+	public Workers(String accountType, String username, String password, String name, String surname,
+			String possition, String mobile, String address, String birthday, double salary) {
+		super();
+		this.accountType = accountType;
+		this.username = username;
+		this.password = password;
+		this.name = name;
+		this.surname = surname;
+		this.possition = possition;
+		this.mobile = mobile;
+		this.address = address;
+		this.birthday = birthday;
+		this.salary = salary;
+	}
+	
 	public Workers(int workerId, String accountType, String username, String password, String name, String surname,
 			String possition, String mobile, String address, String birthday, double salary) {
 		super();
