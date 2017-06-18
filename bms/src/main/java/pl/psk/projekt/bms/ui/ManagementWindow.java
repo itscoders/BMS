@@ -13,6 +13,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class ManagementWindow extends JFrame implements ActionListener {
 
@@ -22,6 +23,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	private JButton workerButton;
 	private JButton scheduleButton;
 	private JButton busButton;
+	private JButton lineButton;
 	private JButton ticketButton;
 	private JButton userButton;
 	private JButton raportButton;
@@ -71,22 +73,44 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		JButton raportbutton = new JButton("Raport");
 		raportbutton.setBackground(Color.LIGHT_GRAY);
 		raportbutton.addActionListener(this);
+		
+		JButton btnLine = new JButton("Line");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(77, Short.MAX_VALUE)
-						.addComponent(workerButton).addGap(18).addComponent(scheduleButton).addGap(18).addComponent(busButton)
-						.addGap(18).addComponent(ticketButton).addGap(18).addComponent(userButton).addGap(18)
-						.addComponent(raportbutton).addGap(67)));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(workerButton)
-								.addComponent(scheduleButton).addComponent(busButton).addComponent(ticketButton)
-								.addComponent(userButton).addComponent(raportbutton))
-						.addContainerGap(427, Short.MAX_VALUE)));
-		gl_contentPane.linkSize(SwingConstants.VERTICAL,
-				new Component[] { workerButton, scheduleButton, busButton, ticketButton, userButton, raportbutton });
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL,
-				new Component[] { workerButton, scheduleButton, busButton, ticketButton, userButton, raportbutton });
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addGap(31)
+					.addComponent(workerButton)
+					.addGap(18)
+					.addComponent(scheduleButton)
+					.addGap(18)
+					.addComponent(busButton)
+					.addGap(18)
+					.addComponent(btnLine)
+					.addGap(18)
+					.addComponent(ticketButton)
+					.addGap(18)
+					.addComponent(userButton)
+					.addGap(18)
+					.addComponent(raportbutton)
+					.addContainerGap(34, Short.MAX_VALUE))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(workerButton)
+						.addComponent(scheduleButton)
+						.addComponent(busButton)
+						.addComponent(btnLine)
+						.addComponent(ticketButton)
+						.addComponent(userButton)
+						.addComponent(raportbutton))
+					.addContainerGap(427, Short.MAX_VALUE))
+		);
+		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, userButton, raportbutton, btnLine});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, userButton, raportbutton, btnLine});
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -105,6 +129,11 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		}
 		
 		if (e.getSource() == busButton) {
+			dispose();
+			//startWindow.setVisible(true);
+		}
+		
+		if (e.getSource() == lineButton) {
 			dispose();
 			//startWindow.setVisible(true);
 		}

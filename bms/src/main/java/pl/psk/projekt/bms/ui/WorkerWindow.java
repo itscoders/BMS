@@ -31,7 +31,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 	private JTextField nameField;
 	private JTextField mobilePhoneField;
 	private JTextField textField_6;
-	private JLabel lblNewLabel_4;
+	private JLabel labelAdress;
 	private JTextField textField_8;
 	private JLabel labelSalary;
 	private JTextField salaryField;
@@ -65,7 +65,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		userNameField = new JTextField();
 		userNameField.setColumns(10);
 
-		JLabel labelAdress = new JLabel("User Name:");
+		JLabel labelUserName = new JLabel("User Name:");
 
 		JLabel labelName = new JLabel("Name:");
 
@@ -90,7 +90,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		textField_6 = new JTextField();
 		textField_6.setColumns(10);
 
-		lblNewLabel_4 = new JLabel("Adress:");
+		labelAdress = new JLabel("Adress:");
 
 		textField_8 = new JTextField();
 		textField_8.setColumns(10);
@@ -119,21 +119,24 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 		JDateChooser birthdayField = new JDateChooser();
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(40, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_contentPane.createSequentialGroup().addComponent(addButton).addGap(18)
-										.addComponent(editButton).addGap(18).addComponent(deleteButton).addGap(231))
-								.addGroup(gl_contentPane.createSequentialGroup()
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-												.addComponent(
-														scrollPane, Alignment.LEADING)
+		gl_contentPane
+				.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(40, Short.MAX_VALUE)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
+										.createSequentialGroup().addComponent(addButton).addGap(18).addComponent(
+												editButton)
+										.addGap(18).addComponent(deleteButton).addGap(231))
+										.addGroup(gl_contentPane.createSequentialGroup().addGroup(gl_contentPane
+												.createParallelGroup(Alignment.TRAILING, false)
+												.addComponent(scrollPane, Alignment.LEADING)
 												.addGroup(gl_contentPane.createSequentialGroup()
-														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-																.addGroup(gl_contentPane.createSequentialGroup()
+														.addGroup(gl_contentPane
+																.createParallelGroup(Alignment.LEADING)
+																.addGroup(gl_contentPane
+																		.createSequentialGroup()
 																		.addGroup(gl_contentPane
 																				.createParallelGroup(Alignment.LEADING)
-																				.addComponent(labelAdress)
+																				.addComponent(labelUserName)
 																				.addComponent(labelName))
 																		.addGap(18)
 																		.addGroup(gl_contentPane
@@ -148,7 +151,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 																		.addGroup(gl_contentPane
 																				.createParallelGroup(Alignment.LEADING)
 																				.addComponent(labelBirthday)
-																				.addComponent(lblNewLabel_4)
+																				.addComponent(labelAdress)
 																				.addComponent(lblNewLabel_2))
 																		.addGap(18)
 																		.addGroup(gl_contentPane
@@ -159,8 +162,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 																						GroupLayout.DEFAULT_SIZE,
 																						Short.MAX_VALUE)
 																				.addComponent(textField_8,
-																						Alignment.TRAILING, 141, 141,
-																						Short.MAX_VALUE)
+																						Alignment.TRAILING, 141, 141, Short.MAX_VALUE)
 																				.addComponent(comboBox, 0,
 																						GroupLayout.DEFAULT_SIZE,
 																						Short.MAX_VALUE))))
@@ -176,10 +178,10 @@ public class WorkerWindow extends JFrame implements ActionListener {
 																.addComponent(passwordField, 103, 103, Short.MAX_VALUE)
 																.addComponent(mobilePhoneField).addComponent(comboBox_1,
 																		0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-										.addGap(30)))));
+												.addGap(30)))));
 		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(labelAdress)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(labelUserName)
 								.addComponent(userNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addComponent(labelPassword).addComponent(passwordField, GroupLayout.PREFERRED_SIZE,
@@ -217,7 +219,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 												.addGroup(gl_contentPane.createSequentialGroup()
 														.addComponent(labelBirthday).addGap(24)
-														.addComponent(lblNewLabel_4))
+														.addComponent(labelAdress))
 												.addGroup(gl_contentPane.createSequentialGroup()
 														.addComponent(birthdayField, GroupLayout.PREFERRED_SIZE,
 																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -230,8 +232,8 @@ public class WorkerWindow extends JFrame implements ActionListener {
 						.addGap(34).addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
 						.addContainerGap()));
 		gl_contentPane.linkSize(SwingConstants.HORIZONTAL,
-				new Component[] { labelAdress, labelName, lblNewLabel_2, labelBirthday, labelPassword, labelSurname,
-						labelPosition, labelMobilePhone, lblNewLabel_4, labelSalary });
+				new Component[] { labelUserName, labelName, lblNewLabel_2, labelBirthday, labelPassword, labelSurname,
+						labelPosition, labelMobilePhone, labelAdress, labelSalary });
 		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { passwordField, userNameField, nameField,
 				mobilePhoneField, textField_6, textField_8, salaryField });
 
