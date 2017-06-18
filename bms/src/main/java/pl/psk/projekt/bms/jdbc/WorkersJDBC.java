@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import pl.psk.projekt.bms.dbobjects.Workers;
 
 
@@ -45,10 +46,25 @@ public class WorkersJDBC {
             w.setMobile(rs.getString("mobile"));
             w.setSalary(rs.getDouble("salary"));
             w.setAccountType(rs.getString("accountType"));
+            //w.setName(rs.getString(""));
             
         }
         return true;
                 
+    }
+    
+    public String workersLog(String username,String password)throws Exception{
+        
+        Workers w = new Workers();
+        w.setUsername(username);
+        w.setPassword(password);
+        
+        boolean success = this.workersLog(w);
+        if(success)
+            return w.getName() + "" + w.getSurname();
+        else
+            return null;
+        
     }
     
  

@@ -58,9 +58,9 @@ public class WorkerWindow extends JFrame implements ActionListener {
 	}
 
 	public WorkerWindow() {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Worker - Bus Management");
 		setBounds(new Rectangle(100, 100, 700, 500));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.setFocusable(false);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -108,12 +108,15 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		JComboBox comboBox_1 = new JComboBox();
 
 		JButton addButton = new JButton("Add");
+		addButton.setBackground(Color.LIGHT_GRAY);
 		addButton.addActionListener(this);
 
 		JButton editButton = new JButton("Edit");
+		editButton.setBackground(Color.LIGHT_GRAY);
 		editButton.addActionListener(this);
 
 		JButton deleteButton = new JButton("Delete");
+		deleteButton.setBackground(Color.LIGHT_GRAY);
 		deleteButton.addActionListener(this);
 
 		JScrollPane scrollPane = new JScrollPane();

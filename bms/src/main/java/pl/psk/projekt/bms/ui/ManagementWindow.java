@@ -49,59 +49,84 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	public ManagementWindow() {
 		setTitle("Management - Bus Management");
 		setResizable(false);
-		setBounds(new Rectangle(100, 100, 700, 500));
+		setLocationRelativeTo(null);
+		setBounds(new Rectangle(100, 100, 750, 500));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		JButton workerButton = new JButton("Worker");
+		workerButton = new JButton("Worker");
 		workerButton.addActionListener(this);
 		workerButton.setBackground(Color.LIGHT_GRAY);
 
-		JButton scheduleButton = new JButton("Schedule");
+		scheduleButton = new JButton("Schedule");
 		scheduleButton.addActionListener(this);
 		scheduleButton.setBackground(Color.LIGHT_GRAY);
 
-		JButton busButton = new JButton("Bus");
+		busButton = new JButton("Bus");
 		busButton.addActionListener(this);
 		busButton.setBackground(Color.LIGHT_GRAY);
 
-		JButton ticketButton = new JButton("Ticket");
+		ticketButton = new JButton("Ticket");
 		ticketButton.addActionListener(this);
 		ticketButton.setBackground(Color.LIGHT_GRAY);
 
-		JButton userButton = new JButton("User");
+		userButton = new JButton("User");
 		userButton.addActionListener(this);
 		userButton.setBackground(Color.LIGHT_GRAY);
 
-		JButton raportbutton = new JButton("Raport");
-		raportbutton.setBackground(Color.LIGHT_GRAY);
-		raportbutton.addActionListener(this);
+		raportButton = new JButton("Raport");
+		raportButton.setBackground(Color.LIGHT_GRAY);
+		raportButton.addActionListener(this);
 
 		JButton btnLine = new JButton("Line");
+		btnLine.setBackground(Color.LIGHT_GRAY);
 
 		JButton databaseButton = new JButton("Database");
 		databaseButton.addActionListener(this);
 		databaseButton.setBackground(Color.LIGHT_GRAY);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addGap(31).addComponent(workerButton).addGap(18)
-						.addComponent(scheduleButton).addGap(18).addComponent(busButton).addGap(18)
-						.addComponent(btnLine).addGap(18).addComponent(ticketButton).addGap(18).addComponent(userButton)
-						.addGap(18).addComponent(raportbutton).addContainerGap(20, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-						.addContainerGap(308, Short.MAX_VALUE).addComponent(databaseButton).addGap(297)));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(workerButton)
-								.addComponent(scheduleButton).addComponent(busButton).addComponent(btnLine)
-								.addComponent(ticketButton).addComponent(userButton).addComponent(raportbutton))
-						.addGap(18).addComponent(databaseButton).addContainerGap(386, Short.MAX_VALUE)));
-		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] { workerButton, scheduleButton, busButton,
-				ticketButton, userButton, raportbutton, btnLine });
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { workerButton, scheduleButton, busButton,
-				ticketButton, userButton, raportbutton, btnLine });
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(workerButton)
+					.addGap(18)
+					.addComponent(scheduleButton)
+					.addGap(18)
+					.addComponent(busButton)
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(databaseButton)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(btnLine)
+							.addGap(18)
+							.addComponent(ticketButton)
+							.addGap(18)
+							.addComponent(userButton)
+							.addGap(18)
+							.addComponent(raportButton)))
+					.addContainerGap(91, Short.MAX_VALUE))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(workerButton)
+						.addComponent(scheduleButton)
+						.addComponent(busButton)
+						.addComponent(btnLine)
+						.addComponent(ticketButton)
+						.addComponent(userButton)
+						.addComponent(raportButton))
+					.addGap(18)
+					.addComponent(databaseButton)
+					.addContainerGap(386, Short.MAX_VALUE))
+		);
+		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, userButton, raportButton, btnLine});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, userButton, raportButton, btnLine});
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -109,9 +134,9 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == workerButton) {
-			dispose();
-			// WorkerWindow wd = new Worker();
-			// wd.setVisible(true);
+			//dispose();
+			WorkerWindow wd = new WorkerWindow();
+			wd.setVisible(true);
 		}
 
 		if (e.getSource() == scheduleButton) {
@@ -120,8 +145,9 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == busButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			//dispose();
+			BusWindow bw = new BusWindow();
+			bw.setVisible(true);
 		}
 
 		if (e.getSource() == lineButton) {

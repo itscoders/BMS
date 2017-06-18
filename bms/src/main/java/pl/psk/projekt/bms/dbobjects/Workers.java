@@ -14,6 +14,9 @@ public class Workers {
 	private String birthday;
     private double salary;
     
+    public Workers() {
+    	
+    }
 	public Workers(String accountType, String username, String password, String name, String surname,
 			String possition, String mobile, String address, String birthday, double salary) {
 		super();
