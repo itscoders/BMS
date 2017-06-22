@@ -45,7 +45,8 @@ public class WorkersJDBC {
             w.setMobile(rs.getString("mobile"));
             w.setSalary(rs.getDouble("salary"));
             w.setAccountType(rs.getString("accountType"));
-            //w.setName(rs.getString(""));
+            w.setName(rs.getString("name"));
+            w.setSurname(rs.getString("surname"));
             
         }
         return true;
@@ -83,17 +84,19 @@ public class WorkersJDBC {
 
     
     public boolean createWorker(Workers w)throws SQLException{
-    String sql="INSERT INTO WORKERS (accountType,username, password, possition, mobile, address, birthday, salary) values(?,?,?,?,?,?,?,?)";
+    String sql="INSERT INTO WORKERS (accountType,username, password, name, surname, possition, mobile, address, birthday, salary) values(?,?,?,?,?,?,?,?,?,?)";
     preparedStatement=connect.prepareStatement(sql);
   
     preparedStatement.setString(1,w.getAccountType());
     preparedStatement.setString(2,w.getUsername());
     preparedStatement.setString(3,w.getPassword());
-    preparedStatement.setString(4,w.getPossition());
-    preparedStatement.setString(5,w.getMobile());
-    preparedStatement.setString(6,w.getAddress());
-    preparedStatement.setString(7,w.getBirthday());
-    preparedStatement.setDouble(8,w.getSalary());
+    preparedStatement.setString(4,w.getName());
+    preparedStatement.setString(5,w.getSurname());
+    preparedStatement.setString(6,w.getPossition());
+    preparedStatement.setString(7,w.getMobile());
+    preparedStatement.setString(8,w.getAddress());
+    preparedStatement.setString(9,w.getBirthday());
+    preparedStatement.setDouble(10,w.getSalary());
     
         
     int result = preparedStatement.executeUpdate();
@@ -107,17 +110,20 @@ public class WorkersJDBC {
     
     
     public boolean updateWorker(Workers w)throws SQLException{
-    String sql ="UPDATE WORKERS SET ACCOUNTTYPE=?, PASSWORD=?, POSSITION=?, MOBILE=?, ADDRESS=?, BIRTHDAY=?,SALARY=? WHERE USERNAME=?";
+    String sql ="UPDATE WORKERS SET USERNAME=?, ACCOUNTTYPE=?, PASSWORD=?, NAME=?, SURNAME=?, POSSITION=?, MOBILE=?, ADDRESS=?, BIRTHDAY=?,SALARY=? WHERE WORKERID=?";
     preparedStatement=connect.prepareStatement(sql);
     
     preparedStatement.setString(1,w.getAccountType());
-    preparedStatement.setString(2,w.getPassword());
-    preparedStatement.setString(3,w.getPossition());
-    preparedStatement.setString(4,w.getMobile());
-    preparedStatement.setString(5,w.getAddress());
-    preparedStatement.setString(6,w.getBirthday());
-    preparedStatement.setDouble(7,w.getSalary());
-    preparedStatement.setInt(8,w.getWorkerId());
+    preparedStatement.setString(2,w.getUsername());
+    preparedStatement.setString(3,w.getPassword());
+    preparedStatement.setString(4,w.getName());
+    preparedStatement.setString(5,w.getSurname());
+    preparedStatement.setString(6,w.getPossition());
+    preparedStatement.setString(7,w.getMobile());
+    preparedStatement.setString(8,w.getAddress());
+    preparedStatement.setString(9,w.getBirthday());
+    preparedStatement.setDouble(10,w.getSalary());
+    preparedStatement.setInt(11,w.getWorkerId());
         
     int result = preparedStatement.executeUpdate();
         if(result > 0)
@@ -129,9 +135,9 @@ public class WorkersJDBC {
 
     
     public boolean deleteWorker(Workers w) throws SQLException{
-              String sql = "DELETE FROM WORKERS WHERE USERNAME=?";
+              String sql = "DELETE FROM WORKERS WHERE WHERE WORKERID=?";
               preparedStatement = connect.prepareStatement(sql);
-              preparedStatement.setString(1,w.getUsername());
+              preparedStatement.setInt(1,w.getWorkerId());
               int result = preparedStatement.executeUpdate();
               if (result > 0)
                   return true;

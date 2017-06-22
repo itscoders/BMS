@@ -169,10 +169,11 @@ public class BusWindow extends JFrame implements ActionListener {
 		table.setModel(model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
-		JScrollPane scroll = new JScrollPane(table);
-        scroll.setHorizontalScrollBarPolicy(
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scroll.setVerticalScrollBarPolicy(
+		
+		scrollPane.setViewportView(table);
+		scrollPane.setHorizontalScrollBarPolicy(
+	                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
         String busID = "";
@@ -192,8 +193,11 @@ public class BusWindow extends JFrame implements ActionListener {
             int i = 0;
             while (rs.next()) {
             	busID = rs.getString("busID");
+            	System.out.println(busID);
             	busName = rs.getString("busName");
+            	System.out.println(busName);
             	seat = rs.getString("seat");
+            	System.out.println(seat);
                 model.addRow(new Object[]{busID, busName, seat});
                 i++;
             }
@@ -208,8 +212,6 @@ public class BusWindow extends JFrame implements ActionListener {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-		
-		
 		contentPane.setLayout(gl_contentPane);
 	}
 

@@ -12,13 +12,14 @@ public class Workers {
 	private String mobile;
 	private String address;
 	private String birthday;
-    private double salary;
-    
-    public Workers() {
-    	
-    }
-	public Workers(String accountType, String username, String password, String name, String surname,
-			String possition, String mobile, String address, String birthday, double salary) {
+	private double salary;
+
+	public Workers() {
+
+	}
+
+	public Workers(String accountType, String username, String password, String name, String surname, String possition,
+			String mobile, String address, String birthday, double salary) {
 		super();
 		this.accountType = accountType;
 		this.username = username;
@@ -31,7 +32,7 @@ public class Workers {
 		this.birthday = birthday;
 		this.salary = salary;
 	}
-	
+
 	public Workers(int workerId, String accountType, String username, String password, String name, String surname,
 			String possition, String mobile, String address, String birthday, double salary) {
 		super();
@@ -135,9 +136,5 @@ public class Workers {
 	public void setSalary(double salary) {
 		this.salary = salary;
 	}
-	
-    
-	
-    
-	
+
 }

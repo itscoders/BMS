@@ -287,6 +287,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		table.setBackground(Color.WHITE);
 		table.setModel(model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		
 		scrollPane.setViewportView(table);
 		scrollPane.setHorizontalScrollBarPolicy(
 	                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -316,17 +317,16 @@ public class WorkerWindow extends JFrame implements ActionListener {
         	ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
             while (rs.next()) {
-            	
-            	username = userNameField.getText();
-    			password = passwordField.getText();
-    			name = nameField.getText();
-    			surname = surnameField.getText();
-    			type = (String) comboBoxType.getSelectedItem();
-    			position = (String) comboBoxPosition.getSelectedItem();
-    			birthday = birthdayField.getDateFormatString();
-    			mobilePhone = mobilePhoneField.getText();
-    			adress = adressField.getText();
-    			salaryy = salaryField.getText();
+            	workerId = rs.getString("workerId");
+            	username = rs.getString("username");
+    			name = rs.getString("name");
+    			surname = rs.getString("surname");
+    			type = rs.getString("accountType");
+    			position = rs.getString("possition");
+    			birthday = rs.getString("birthday");
+    			mobilePhone = rs.getString("mobile");
+    			adress = rs.getString("address");
+    			salaryy = rs.getString("salary");
                 model.addRow(new Object[]{workerId, username, name, surname, type, position, birthday, mobilePhone, adress, salaryy});
                 i++;
             }

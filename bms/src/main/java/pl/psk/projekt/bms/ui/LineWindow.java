@@ -191,10 +191,10 @@ public class LineWindow extends JFrame implements ActionListener {
 		table.setModel(model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
-		JScrollPane scroll = new JScrollPane(table);
-        scroll.setHorizontalScrollBarPolicy(
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scroll.setVerticalScrollBarPolicy(
+		scrollPane.setViewportView(table);
+		scrollPane.setHorizontalScrollBarPolicy(
+	                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
          String busLineID = "";
@@ -217,14 +217,21 @@ public class LineWindow extends JFrame implements ActionListener {
             int i = 0;
             while (rs.next()) {
             	busLineID = rs.getString("busLineID");
+            	System.out.println(busLineID);
             	busLineName = rs.getString("busLineName");
+            	System.out.println(busLineName);
             	busLineType = rs.getString("busLineType");
+            	System.out.println(busLineType);
             	startStation = rs.getString("startStation");
+            	System.out.println(startStation);
             	endStation = rs.getString("endStation");
+            	System.out.println(endStation);
             	price = rs.getString("price");
+            	System.out.println(price);
                 model.addRow(new Object[]{busLineID, busLineName, busLineType, startStation, endStation, price});
+                
                 i++;
-            }
+            };
             if (i < 1) {
                 JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
             }
