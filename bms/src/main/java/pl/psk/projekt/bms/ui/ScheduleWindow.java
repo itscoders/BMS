@@ -72,6 +72,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Schedule - Bus Management");
 		setBounds(new Rectangle(100, 100, 700, 400));
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setFocusable(false);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -103,14 +104,16 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 
 		JScrollPane scrollPane = new JScrollPane();
 
-		Date date = new Date();
-		SpinnerDateModel sm = new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
+		Date startDate = new Date();
+		SpinnerDateModel sm = new SpinnerDateModel(startDate, null, null, Calendar.HOUR_OF_DAY);
 		JSpinner spinnerDepartureTime = new JSpinner(sm);
 		spinnerDepartureTime.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		JSpinner.DateEditor de_spinnerDepartureTime = new JSpinner.DateEditor(spinnerDepartureTime, "HH:mm:ss");
 		spinnerDepartureTime.setEditor(de_spinnerDepartureTime);
 
-		JSpinner spinnerArrivalTime = new JSpinner(sm);
+		Date stopDate = new Date();
+		SpinnerDateModel sm2 = new SpinnerDateModel(stopDate, null, null, Calendar.HOUR_OF_DAY);
+		JSpinner spinnerArrivalTime = new JSpinner(sm2);
 		JSpinner.DateEditor de_spinnerArrivalTime = new JSpinner.DateEditor(spinnerArrivalTime, "HH:mm:ss");
 		spinnerArrivalTime.setEditor(de_spinnerArrivalTime);
 

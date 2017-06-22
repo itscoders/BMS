@@ -89,11 +89,25 @@ public class CreateDB {
                 
 	            create = 		"CREATE TABLE IF NOT EXISTS Ticket ("+
         						"ticketId int AUTO_INCREMENT PRIMARY KEY,"+
-        						"type varchar(255) NOT NULL,"+
+        						"type varchar(255),"+
         						"price double,"+
         						"IdBusLine int,"+
         						"FOREIGN KEY (IdBusLine) REFERENCES BusLine(busLineID));"; 
 	            statement.execute(create);
+	            
+	            create = 	"CREATE TABLE IF NOT EXISTS Transaction ("+
+							"transactionId int AUTO_INCREMENT PRIMARY KEY,"+
+							"discount varchar(255),"+
+							"number int,"+
+							"price double,"+
+							"payment varchar(255),"+
+							"IdScheduler int,"+
+							"IdTicket int,"+
+							"IdBuyer int,"+
+							"FOREIGN KEY (IdScheduler) REFERENCES Scheduler(schedulerID),"+ 
+							"FOREIGN KEY (IdTicket) REFERENCES Ticket(ticketId),"+
+							"FOREIGN KEY (IdBuyer) REFERENCES Buyer(buyerId));"; 
+        statement.execute(create);
 	            
 					}
 	 }

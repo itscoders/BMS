@@ -30,6 +30,9 @@ public class DropDB {
             
             drop = 		"DROP TABLE IF EXISTS Ticket";
             statement.execute(drop);
+            
+            drop = 		"DROP TABLE IF EXISTS Transaction";
+            statement.execute(drop);
                   
             
  }

@@ -14,6 +14,7 @@ public class Ticket {
 	
 
 	public Ticket(String type, double price, String idLine) {
+		super();
 		this.type = type;
 		this.price = price;
 		this.idLine = idLine;
@@ -22,6 +23,7 @@ public class Ticket {
 
 
 	public Ticket(int ticketId, String type, double price, String idLine) {
+		super();
 		this.ticketId = ticketId;
 		this.type = type;
 		this.price = price;

@@ -86,6 +86,7 @@ public class LineWindow extends JFrame implements ActionListener {
 		
 		setTitle("Line - Bus Management");
 		setBounds(new Rectangle(100, 100, 700, 400));
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

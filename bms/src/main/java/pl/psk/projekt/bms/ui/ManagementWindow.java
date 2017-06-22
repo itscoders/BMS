@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.Color;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class ManagementWindow extends JFrame implements ActionListener {
 
@@ -37,6 +38,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	private JButton raportButton;
 	private JButton databaseCreateButton;
 	private JButton databaseDropButton;
+	private JButton transactionButton;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -74,6 +76,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setBounds(new Rectangle(50, 100, 1300, 650));
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -114,11 +117,16 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		databaseDropButton = new JButton("Database Drop");
 		databaseDropButton.addActionListener(this);
 		databaseDropButton.setBackground(Color.LIGHT_GRAY);
+		
+		transactionButton = new JButton("Transaction");
+		transactionButton.addActionListener(this);
+		transactionButton.setBackground(Color.LIGHT_GRAY);
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(91, Short.MAX_VALUE)
+					.addContainerGap(124, Short.MAX_VALUE)
 					.addComponent(workerButton)
 					.addGap(18)
 					.addComponent(scheduleButton)
@@ -136,8 +144,10 @@ public class ManagementWindow extends JFrame implements ActionListener {
 					.addGap(18)
 					.addComponent(buyerButton)
 					.addGap(18)
+					.addComponent(transactionButton)
+					.addGap(18)
 					.addComponent(raportButton)
-					.addGap(80))
+					.addGap(114))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -150,15 +160,16 @@ public class ManagementWindow extends JFrame implements ActionListener {
 						.addComponent(btnLine)
 						.addComponent(ticketButton)
 						.addComponent(buyerButton)
+						.addComponent(transactionButton)
 						.addComponent(raportButton))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(databaseDropButton)
 						.addComponent(databaseCreateButton))
-					.addContainerGap(436, Short.MAX_VALUE))
+					.addContainerGap(536, Short.MAX_VALUE))
 		);
-		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, buyerButton, raportButton, btnLine, databaseCreateButton});
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, buyerButton, raportButton, btnLine, databaseCreateButton});
+		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, buyerButton, raportButton, btnLine, databaseCreateButton, databaseDropButton, transactionButton});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, buyerButton, raportButton, btnLine, databaseCreateButton, databaseDropButton, transactionButton});
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -193,6 +204,11 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		if (e.getSource() == buyerButton) {
 			BuyerWindow bw = new BuyerWindow();
 			bw.setVisible(true);
+		}
+		
+		if (e.getSource() == transactionButton) {
+			TransactionWindow tw = new TransactionWindow();
+			tw.setVisible(true);
 		}
 
 		if (e.getSource() == raportButton) {

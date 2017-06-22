@@ -102,6 +102,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Worker - Bus Management");
 		setBounds(new Rectangle(100, 100, 700, 500));
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setFocusable(false);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

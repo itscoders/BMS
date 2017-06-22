@@ -8,7 +8,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -33,10 +34,12 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import java.awt.ComponentOrientation;
+import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 
 
-public class TicketWindow extends JFrame implements ActionListener {
+public class TransactionWindow extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,6 +52,7 @@ public class TicketWindow extends JFrame implements ActionListener {
     Connection connect;
     ResultSet rs;
     private JTable table;
+    private JTextField textField;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -63,7 +67,7 @@ public class TicketWindow extends JFrame implements ActionListener {
 		});
 	}
 
-	public TicketWindow() {
+	public TransactionWindow() {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (ClassNotFoundException e) {
@@ -90,14 +94,6 @@ public class TicketWindow extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		JLabel labelStartStation = new JLabel("Start Station:");
-
-		JLabel labelType = new JLabel("Type:");
-
-		JLabel labelStopStation = new JLabel("Stop Station:");
-
-		JLabel labePrice = new JLabel("Price:");
-
 		addButton = new JButton("Add");
 		addButton.setBackground(Color.LIGHT_GRAY);
 		addButton.addActionListener(this);
@@ -110,84 +106,143 @@ public class TicketWindow extends JFrame implements ActionListener {
 		deleteButton.setBackground(Color.LIGHT_GRAY);
 		deleteButton.addActionListener(this);
 		
-		JComboBox comboBoxStartStation = new JComboBox();
-		
-		JComboBox comboBoxStopStation = new JComboBox();
-		
-		JComboBox comboBoxType = new JComboBox();
-		
-		JSpinner spinnerPrice = new JSpinner();
-		spinnerPrice.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(6)));
-		
 		JScrollPane scrollPane = new JScrollPane();
+		
+		JLabel labelBuyer = new JLabel("Buyer:");
+		
+		JComboBox comboBox_1 = new JComboBox();
+		
+		JComboBox comboBox = new JComboBox();
+		
+		JComboBox comboBox_2 = new JComboBox();
+		
+		JLabel label = new JLabel("Stop Station:");
+		
+		JLabel labelTicketType = new JLabel("Ticket Type:");
+		
+		JComboBox comboBox_3 = new JComboBox();
+		
+		JLabel label_2 = new JLabel("Discount:");
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		
+		Date startDate = new Date();
+		SpinnerDateModel sm = new SpinnerDateModel(startDate, null, null, Calendar.HOUR_OF_DAY);
+		JSpinner spinnerDepartureTime = new JSpinner(sm);
+		spinnerDepartureTime.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		JSpinner.DateEditor de_spinnerDepartureTime = new JSpinner.DateEditor(spinnerDepartureTime, "HH:mm:ss");
+		spinnerDepartureTime.setEditor(de_spinnerDepartureTime);
+		
+		JComboBox comboBox_4 = new JComboBox();
+		
+		JLabel label_3 = new JLabel("Start Station:");
+		
+		JLabel label_4 = new JLabel("Departure Time:");
+		
+		JLabel label_5 = new JLabel("Number:");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(labelStartStation)
-								.addComponent(labelType))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(labelBuyer)
+							.addGap(51)
+							.addComponent(comboBox_1, 0, 561, Short.MAX_VALUE))
+						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+							.addContainerGap()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(label_3, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
 									.addGap(18)
-									.addComponent(comboBoxStartStation, 0, 202, Short.MAX_VALUE))
+									.addComponent(comboBox_4, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
+									.addGap(28)
+									.addComponent(label, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(comboBox, 0, 225, Short.MAX_VALUE))
 								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+									.addGap(4)
+									.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE)
+									.addGap(28)
+									.addComponent(labelTicketType, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
 									.addGap(18)
-									.addComponent(comboBoxType, 0, 202, Short.MAX_VALUE)))
-							.addGap(28)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(labelStopStation)
-								.addComponent(labePrice))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(comboBoxStopStation, 0, 202, Short.MAX_VALUE)
-								.addComponent(spinnerPrice, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE))
-							.addGap(30))
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addComponent(addButton)
-							.addGap(18)
-							.addComponent(editButton)
-							.addGap(18)
-							.addComponent(deleteButton)
-							.addGap(219))))
+									.addComponent(comboBox_2, 0, 225, Short.MAX_VALUE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(textField, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
+									.addGap(28)
+									.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+									.addGap(38)
+									.addComponent(comboBox_3, 0, 225, Short.MAX_VALUE)))))
+					.addGap(20))
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addContainerGap(230, Short.MAX_VALUE)
+					.addComponent(addButton)
+					.addGap(18)
+					.addComponent(editButton)
+					.addGap(18)
+					.addComponent(deleteButton)
+					.addGap(219))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(18)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 636, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(20, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(labelStartStation)
-						.addComponent(labelStopStation)
-						.addComponent(comboBoxStartStation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboBoxStopStation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelBuyer))
 					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(labelType)
-						.addComponent(labePrice)
-						.addComponent(comboBoxType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(spinnerPrice, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(32)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(label_3))
+						.addComponent(comboBox_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(label))
+						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(label_4))
+						.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(labelTicketType)
+								.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(6)
+							.addComponent(label_5))
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(label_2))
+						.addComponent(comboBox_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(addButton)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 							.addComponent(editButton)
 							.addComponent(deleteButton)))
-					.addPreferredGap(ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 273, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 230, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 		);
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, editButton, deleteButton});
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelStartStation, labelType, labelStopStation, labePrice});
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, editButton, deleteButton});
 
 		contentPane.setLayout(gl_contentPane);
 	}
