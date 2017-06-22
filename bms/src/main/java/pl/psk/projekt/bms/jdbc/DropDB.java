@@ -17,14 +17,15 @@ public class DropDB {
         	statement.execute(drop);
         
             drop = 		"DROP TABLE IF EXISTS Workers";
-            
             statement.execute(drop);
             
             drop = 		"DROP TABLE IF EXISTS Bus"; 
             statement.execute(drop);
             
             drop = 		"DROP TABLE IF EXISTS BusLine";
-        
+            statement.execute(drop);
+            
+            drop = 		"DROP TABLE IF EXISTS Buyer";
             statement.execute(drop);
                   
             

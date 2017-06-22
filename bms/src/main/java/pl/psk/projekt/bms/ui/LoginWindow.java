@@ -124,7 +124,7 @@ public class LoginWindow extends JFrame implements ActionListener {
                  if (name == null){
                      JOptionPane.showMessageDialog(this, "Invalid Username or Password");
                  } else {
-                     JOptionPane.showMessageDialog(this, "Login Success\n\n Worker: "+ name);
+                     JOptionPane.showMessageDialog(this, "Login Success\n\n Worker: "+ username);
                      dispose();
                      ManagementWindow mw = new ManagementWindow();
                      mw.setVisible(true);

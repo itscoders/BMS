@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import pl.psk.projekt.bms.dbobjects.Workers;
-import pl.psk.projekt.bms.ui.StartWindow;
 
 public class CreateDB {
 	
@@ -46,7 +44,6 @@ public class CreateDB {
 	            } catch (SQLException e) {
 					e.printStackTrace();
 					} finally{
-						
 					
 	            
 	            create = 		"CREATE TABLE IF NOT EXISTS Bus ("+
@@ -76,6 +73,21 @@ public class CreateDB {
           						"FOREIGN KEY (IdBusLine) REFERENCES BusLine(busLineID),"+
           						"FOREIGN KEY (IdDriver) REFERENCES Workers(workerId));";
 	            statement.execute(create);
+	            
+	            create =	"CREATE TABLE IF NOT EXISTS Buyer ("+
+          					"buyerId int AUTO_INCREMENT PRIMARY KEY,"+
+          					"name varchar(255),"+
+          					"surname varchar(255),"+
+          					"birthday varchar(255),"+
+          					"email varchar(255),"+
+          					"mobile varchar(255),"+
+          					"street varchar(255),"+
+          					"houseNumber varchar(255),"+
+          					"postCode varchar(255),"+
+          					"city varchar(255));";
+            statement.execute(create);		
+	            
+	           
 	            
 					}
 	 }

@@ -31,7 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-
+import net.proteanit.sql.DbUtils;
 import pl.psk.projekt.bms.dbobjects.BusLine;
 import pl.psk.projekt.bms.jdbc.BusLineJDBC;
 
@@ -50,6 +50,7 @@ public class LineWindow extends JFrame implements ActionListener {
 	JComboBox<String> comboBoxType;
 	PreparedStatement  preparedStatement;
     Connection connect;
+    ResultSet rs;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -267,6 +268,8 @@ public class LineWindow extends JFrame implements ActionListener {
 				
 				e1.printStackTrace();
 			}
+			
+			Update_table();
 		}
 
 		if (e.getSource() == editButton) {
@@ -287,6 +290,7 @@ public class LineWindow extends JFrame implements ActionListener {
 				
 				e1.printStackTrace();
 			}
+			Update_table();
 		}
 
 		if (e.getSource() == deleteButton) {
@@ -303,6 +307,29 @@ public class LineWindow extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
+		Update_table();
 
 	}
+	
+    private void Update_table() {
+ try{
+	 preparedStatement = connect.prepareStatement("SELECT * FROM BusLine");
+ 	 rs = preparedStatement.executeQuery();
+     table.setModel(DbUtils.resultSetToTableModel(rs));
+ }
+ catch(Exception e){
+ JOptionPane.showMessageDialog(null, e);
+ }
+ finally {
+         
+         try{
+             rs.close();
+             preparedStatement.close();
+             
+         }
+         catch(Exception e){
+             
+         }
+     }
+ }
 }

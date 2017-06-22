@@ -33,7 +33,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	private JButton busButton;
 	private JButton btnLine;
 	private JButton ticketButton;
-	private JButton userButton;
+	private JButton buyerButton;
 	private JButton raportButton;
 	private JButton databaseCreateButton;
 	private JButton databaseDropButton;
@@ -95,9 +95,9 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		ticketButton.addActionListener(this);
 		ticketButton.setBackground(Color.LIGHT_GRAY);
 
-		userButton = new JButton("User");
-		userButton.addActionListener(this);
-		userButton.setBackground(Color.LIGHT_GRAY);
+		buyerButton = new JButton("Buyer");
+		buyerButton.addActionListener(this);
+		buyerButton.setBackground(Color.LIGHT_GRAY);
 
 		raportButton = new JButton("Raport");
 		raportButton.setBackground(Color.LIGHT_GRAY);
@@ -134,7 +134,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 							.addComponent(ticketButton))
 						.addComponent(databaseCreateButton))
 					.addGap(18)
-					.addComponent(userButton)
+					.addComponent(buyerButton)
 					.addGap(18)
 					.addComponent(raportButton)
 					.addGap(80))
@@ -149,7 +149,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 						.addComponent(busButton)
 						.addComponent(btnLine)
 						.addComponent(ticketButton)
-						.addComponent(userButton)
+						.addComponent(buyerButton)
 						.addComponent(raportButton))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
@@ -157,8 +157,8 @@ public class ManagementWindow extends JFrame implements ActionListener {
 						.addComponent(databaseCreateButton))
 					.addContainerGap(436, Short.MAX_VALUE))
 		);
-		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, userButton, raportButton, btnLine, databaseCreateButton});
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, userButton, raportButton, btnLine, databaseCreateButton});
+		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, buyerButton, raportButton, btnLine, databaseCreateButton});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, buyerButton, raportButton, btnLine, databaseCreateButton});
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -190,9 +190,9 @@ public class ManagementWindow extends JFrame implements ActionListener {
 			// startWindow.setVisible(true);
 		}
 
-		if (e.getSource() == userButton) {
-			dispose();
-			// startWindow.setVisible(true);
+		if (e.getSource() == buyerButton) {
+			BuyerWindow bw = new BuyerWindow();
+			bw.setVisible(true);
 		}
 
 		if (e.getSource() == raportButton) {
