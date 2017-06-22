@@ -85,9 +85,15 @@ public class CreateDB {
           					"houseNumber varchar(255),"+
           					"postCode varchar(255),"+
           					"city varchar(255));";
-            statement.execute(create);		
-	            
-	           
+	            statement.execute(create);
+                
+	            create = 		"CREATE TABLE IF NOT EXISTS Ticket ("+
+        						"ticketId int AUTO_INCREMENT PRIMARY KEY,"+
+        						"type varchar(255) NOT NULL,"+
+        						"price double,"+
+        						"IdBusLine int,"+
+        						"FOREIGN KEY (IdBusLine) REFERENCES BusLine(busLineID));"; 
+	            statement.execute(create);
 	            
 					}
 	 }

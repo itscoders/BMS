@@ -186,8 +186,8 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == ticketButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			TicketWindow tw = new TicketWindow();
+			tw.setVisible(true);
 		}
 
 		if (e.getSource() == buyerButton) {

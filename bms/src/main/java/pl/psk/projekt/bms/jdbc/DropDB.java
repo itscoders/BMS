@@ -27,6 +27,9 @@ public class DropDB {
             
             drop = 		"DROP TABLE IF EXISTS Buyer";
             statement.execute(drop);
+            
+            drop = 		"DROP TABLE IF EXISTS Ticket";
+            statement.execute(drop);
                   
             
  }
