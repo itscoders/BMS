@@ -19,7 +19,9 @@
     <groupId>net.proteanit.sql</groupId>
     <artifactId>rs2xml</artifactId>
     <version>1.0</version>
-</dependency>
+    <scope>system</scope>
+    <systemPath>${project.basedir}/jars/rs2xml.jar</systemPath>
+  </dependency>
   <dependency>
     <groupId>com.toedter</groupId>
     <artifactId>jcalendar</artifactId>
