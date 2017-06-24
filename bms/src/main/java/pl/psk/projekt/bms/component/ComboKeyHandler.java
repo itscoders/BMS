@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 
 public class ComboKeyHandler extends KeyAdapter {
   private final JComboBox<String> comboBox;
-  private final List<String> list = new ArrayList<>();
+  private final List<String> list = new ArrayList<String>();
   private boolean shouldHide;
 
   public ComboKeyHandler(JComboBox<String> combo) {
@@ -81,7 +81,7 @@ public class ComboKeyHandler extends KeyAdapter {
     ((JTextField) comboBox.getEditor().getEditorComponent()).setText(str);
   }
   private static ComboBoxModel<String> getSuggestedModel(List<String> list, String text) {
-    DefaultComboBoxModel<String> m = new DefaultComboBoxModel<>();
+    DefaultComboBoxModel<String> m = new DefaultComboBoxModel<String>();
     for (String s : list) {
       if (s.startsWith(text)) {
         m.addElement(s);

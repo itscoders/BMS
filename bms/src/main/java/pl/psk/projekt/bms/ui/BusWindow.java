@@ -3,6 +3,8 @@ package pl.psk.projekt.bms.ui;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,6 +18,7 @@ import java.awt.Rectangle;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -30,7 +33,9 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
+import net.proteanit.sql.DbUtils;
 import pl.psk.projekt.bms.dbobjects.Bus;
 import pl.psk.projekt.bms.jdbc.BusJDBC;
 
@@ -42,13 +47,17 @@ public class BusWindow extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField busNameField;
-	private JTable table;
+	private JTable tableFilter;
 	private JButton addButton;
 	private JButton editButton;
 	private JButton deleteButton;
 	private JComboBox<String> comboBoxSeat;
-	PreparedStatement  preparedStatement;
-    Connection connect;
+	PreparedStatement preparedStatement;
+	Connection connect;
+	ResultSet rs;
+    private JLabel lblSearchBus;
+    private JTextField filterField;
+    private DefaultTableModel modelFilter;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -64,9 +73,10 @@ public class BusWindow extends JFrame implements ActionListener {
 	}
 
 	public BusWindow() {
+		setResizable(false);
 		
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -115,20 +125,38 @@ public class BusWindow extends JFrame implements ActionListener {
 		deleteButton.addActionListener(this);
 
 		JScrollPane scrollPane = new JScrollPane();
+		
+		lblSearchBus = new JLabel("Search Bus:");
+		
+		filterField = new JTextField();
+		filterField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				String query = filterField.getText();
+				filter(query);
+			}
+		});
+		filterField.setColumns(10);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(242, Short.MAX_VALUE)
+					.addContainerGap(252, Short.MAX_VALUE)
 					.addComponent(addButton)
 					.addGap(18)
 					.addComponent(editButton)
 					.addGap(18)
 					.addComponent(deleteButton)
 					.addGap(231))
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addContainerGap(197, Short.MAX_VALUE)
+					.addComponent(lblSearchBus, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
+					.addGap(10)
+					.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+					.addGap(175))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(56)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 						.addComponent(scrollPane, Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(labelBusName)
@@ -138,7 +166,7 @@ public class BusWindow extends JFrame implements ActionListener {
 							.addComponent(labelSeat)
 							.addGap(18)
 							.addComponent(comboBoxSeat, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(46, Short.MAX_VALUE))
+					.addContainerGap(51, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -154,30 +182,54 @@ public class BusWindow extends JFrame implements ActionListener {
 						.addComponent(addButton)
 						.addComponent(editButton)
 						.addComponent(deleteButton))
-					.addPreferredGap(ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 179, GroupLayout.PREFERRED_SIZE)
-					.addGap(33))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblSearchBus))
+						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(30)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 165, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(33, Short.MAX_VALUE))
 		);
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelBusName, labelSeat});
 		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {busNameField, comboBoxSeat});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelBusName, labelSeat});
+		
+		try {
+			connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			rs = preparedStatement.executeQuery();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
+		
+		tableFilter = new JTable();
+		tableFilter.setModel(modelFilter);
 		
 		
-		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(new String[] {"ID", "Bus Name", "Seat"});
-		table = new JTable();
-		table.setSelectionForeground(Color.WHITE);
-		table.setBackground(Color.WHITE);
-		table.setModel(model);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		
-		
-		scrollPane.setViewportView(table);
+		scrollPane.setViewportView(tableFilter);
 		scrollPane.setHorizontalScrollBarPolicy(
 	                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-        String busID = "";
+        /*String busID = "";
         String busName = "";
         String seat = "";
      
@@ -212,7 +264,7 @@ public class BusWindow extends JFrame implements ActionListener {
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        }*/
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -241,7 +293,7 @@ public class BusWindow extends JFrame implements ActionListener {
 			}
 				String busName = busNameField.getText();
 				int seat = Integer.parseInt((String) comboBoxSeat.getSelectedItem());
-				int value = Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()));
+				int value = Integer.parseInt((String) tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()));
 				
 				try {
 					BusJDBC bj = new BusJDBC();
@@ -257,7 +309,7 @@ public class BusWindow extends JFrame implements ActionListener {
 
 		if (e.getSource() == deleteButton) {
 			
-			int value = Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()));
+			int value = Integer.parseInt((String) tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()));
 			try {
 				BusJDBC bj = new BusJDBC();
 				Bus b = new Bus();
@@ -270,4 +322,38 @@ public class BusWindow extends JFrame implements ActionListener {
 		}
 
 	}
+	
+	// METODA ODŚWIERZAJĄCA TABELE JTABLE
+		// MUSI ZOSTAĆ WYWOŁANA ZAWSZE NA KOŃCU W PRZYCISKACH: ADD, EDIT, DELETE
+		private void Update_table() {
+			try {
+				connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+
+				preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+				rs = preparedStatement.executeQuery();
+				tableFilter.setModel(DbUtils.resultSetToTableModel(rs));
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			} finally {
+
+				try {
+					rs.close();
+					preparedStatement.close();
+
+				} catch (Exception e) {
+
+				}
+			}
+		}
+
+		//METODA DO DYNAMICZNEGO WYSZUKIWANIA W TABELI
+		private void filter(String query) {
+
+			TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
+			tableFilter.setRowSorter(trs);
+
+			trs.setRowFilter(RowFilter.regexFilter(query));
+		}
 }

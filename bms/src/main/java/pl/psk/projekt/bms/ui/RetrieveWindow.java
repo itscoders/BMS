@@ -35,7 +35,7 @@ public class RetrieveWindow extends JFrame implements ActionListener {
 
 	public RetrieveWindow(LoginWindow loginWindow) {
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

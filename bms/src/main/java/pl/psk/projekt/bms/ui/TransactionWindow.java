@@ -60,11 +60,10 @@ public class TransactionWindow extends JFrame implements ActionListener {
 	PreparedStatement preparedStatement;
 	Connection connect;
 	ResultSet rs;
-	private JTable table;
+	private JTable tableFilter;
 	private JTextField textField;
 	private JTextField filterField;
-	private JTable tableFilter;
-	DefaultTableModel modelFilter;
+	private DefaultTableModel modelFilter;
 	JComboBox<String> comboBoxBuyer;
 	private DefaultComboBoxModel<String> comboModel;
 
@@ -82,8 +81,9 @@ public class TransactionWindow extends JFrame implements ActionListener {
 	}
 
 	public TransactionWindow() {
+		setResizable(false);
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -122,7 +122,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 		JScrollPane scrollPane = new JScrollPane();
 
-		JLabel labelBuyer = new JLabel("Search Buyer:");
+		JLabel labelBuyer = new JLabel("Search Transaction:");
 
 		JComboBox comboBox = new JComboBox();
 
@@ -154,8 +154,6 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 		JLabel label_5 = new JLabel("Number:");
 
-		JScrollPane scrollPane_1 = new JScrollPane();
-
 		filterField = new JTextField();
 		filterField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -174,123 +172,150 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		JTextField text = (JTextField) comboBoxBuyer.getEditor().getEditorComponent();
 		text.setText("");
 		text.addKeyListener(new ComboKeyHandler(comboBoxBuyer));
+		
+		JLabel labelChooseBuyer = new JLabel("Choose Buyer:");
+		
+		JButton newBuyerButton = new JButton("New Buyer");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
-				.createSequentialGroup()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(18).addComponent(labelBuyer).addGap(18)
-								.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
-								.addGap(50).addComponent(comboBoxBuyer, GroupLayout.PREFERRED_SIZE, 283,
-										GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(18).addComponent(scrollPane,
-								GroupLayout.PREFERRED_SIZE, 636, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(20).addGroup(gl_contentPane
-								.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-										.createSequentialGroup()
-										.addComponent(label_3, GroupLayout.PREFERRED_SIZE, 65,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(18)
-										.addComponent(comboBox_4, GroupLayout.PREFERRED_SIZE, 225,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(28)
-										.addComponent(label, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-										.addGap(18).addComponent(comboBox, 0, 225, Short.MAX_VALUE))
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 78,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(4)
-												.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, 226,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(28)
-												.addComponent(labelTicketType, GroupLayout.PREFERRED_SIZE, 65,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(18).addComponent(comboBox_2, 0, 225, Short.MAX_VALUE))
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 65,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(18)
-												.addComponent(textField, GroupLayout.PREFERRED_SIZE, 225,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(28)
-												.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 45,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(38).addComponent(comboBox_3, 0, 225, Short.MAX_VALUE)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-										.addPreferredGap(ComponentPlacement.RELATED, 220, GroupLayout.PREFERRED_SIZE)
-										.addComponent(addButton).addGap(18).addComponent(editButton).addGap(18)
-										.addComponent(deleteButton).addGap(199))))
-						.addGroup(gl_contentPane.createSequentialGroup().addContainerGap().addComponent(scrollPane_1,
-								GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)))
-				.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(labelBuyer)
-						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboBoxBuyer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(13).addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(labelChooseBuyer)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(comboBoxBuyer, GroupLayout.PREFERRED_SIZE, 338, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(newBuyerButton)
+					.addGap(163))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+							.addComponent(label_3, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(comboBox_4, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
+							.addGap(28)
+							.addComponent(label, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(comboBox, 0, 237, Short.MAX_VALUE))
+						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+							.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+							.addGap(4)
+							.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE)
+							.addGap(28)
+							.addComponent(labelTicketType, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(comboBox_2, 0, 237, Short.MAX_VALUE))
+						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+							.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(textField, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
+							.addGap(28)
+							.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+							.addGap(38)
+							.addComponent(comboBox_3, 0, 237, Short.MAX_VALUE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED, 232, GroupLayout.PREFERRED_SIZE)
+							.addComponent(addButton)
+							.addGap(18)
+							.addComponent(editButton)
+							.addGap(18)
+							.addComponent(deleteButton)
+							.addGap(199)))
+					.addGap(20))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(28)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 636, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addContainerGap(216, Short.MAX_VALUE)
+					.addComponent(labelBuyer)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+					.addGap(186))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(labelChooseBuyer)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(comboBoxBuyer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(newBuyerButton)))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup().addGap(3).addComponent(label_3))
-								.addComponent(comboBox_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addGap(3)
+								.addComponent(label_3))
+							.addComponent(comboBox_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(label))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(3).addComponent(label_4))
-						.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(3)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(labelTicketType).addComponent(comboBox_2,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE))))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(6).addComponent(label_5))
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(3).addComponent(label_2))
-						.addComponent(comboBox_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addComponent(addButton)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(editButton)
-								.addComponent(deleteButton)))
-				.addGap(18).addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap()));
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { addButton, editButton, deleteButton });
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(label_4))
+						.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(labelTicketType)
+								.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(6)
+							.addComponent(label_5))
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(label_2))
+						.addComponent(comboBox_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(addButton)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(editButton)
+							.addComponent(deleteButton)))
+					.addGap(40)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelBuyer))
+					.addGap(18)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, editButton, deleteButton});
+		
+		
 		try {
 			connect = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
-					"root", "toor");
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
 		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		try {
-			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
 			rs = preparedStatement.executeQuery();
-		} catch (SQLException e) {
+		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
 		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
+		
 		tableFilter = new JTable();
 		tableFilter.setModel(modelFilter);
-		scrollPane_1.setViewportView(tableFilter);
-
-		table = new JTable();
-		scrollPane.setViewportView(table);
+		scrollPane.setViewportView(tableFilter);
 
 		contentPane.setLayout(gl_contentPane);
 	}
@@ -356,6 +381,9 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 	}
 
+	
+// METODA ODŚWIERZAJĄCA TABELE JTABLE
+	// MUSI ZOSTAĆ WYWOŁANA ZAWSZE NA KOŃCU W PRZYCISKACH: ADD, EDIT, DELETE
 	private void Update_table() {
 		try {
 			connect = DriverManager.getConnection(
@@ -364,7 +392,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
 			rs = preparedStatement.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			tableFilter.setModel(DbUtils.resultSetToTableModel(rs));
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e);
 		} finally {
@@ -379,6 +407,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		}
 	}
 
+	//METODA DO DYNAMICZNEGO WYSZUKIWANIA W TABELI
 	private void filter(String query) {
 
 		TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
@@ -387,6 +416,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		trs.setRowFilter(RowFilter.regexFilter(query));
 	}
 
+ // METODA WYPEŁNIAJĄCA COMBOBOX DANYMI Z BAZY
 	private void fillComboBoxBuyer() {
 		try {
 			connect = DriverManager.getConnection(
@@ -414,6 +444,8 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		}
 	}
 	
+	
+ // METODA UMOŻLIWIAJĄCA PORÓWNYWANIE WYBRANEGO Z COMBOBOX TEKSTU DO WARTOSCI W BAZIE W CELU POBRANIA OBCEGO ID
 	private String compare() {
 		try {
 			connect = DriverManager.getConnection(

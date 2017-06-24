@@ -13,14 +13,15 @@ public class StartWindow extends JFrame implements ActionListener
   
 	private static final long serialVersionUID = 1L;
 	
-	JLabel labelWindow=new JLabel("Welcome To Bus Management System by ITS CODERS & PABLO IT ");
+	JLabel labelWindow=new JLabel("<html><center>Welcome To Bus Management System<br>\r\nITS CODERS & PABLO IT</center></html>");
 	JButton move =new JButton("Move forward");
 	JFrame frame = new JFrame();
 		
 	
 	public StartWindow() {
+		setResizable(false);
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,16 +44,18 @@ public class StartWindow extends JFrame implements ActionListener
 		setVisible(true);
 		getContentPane().setLayout(null);
 		setLocationRelativeTo(null);
+		labelWindow.setToolTipText("");
+		labelWindow.setHorizontalAlignment(SwingConstants.CENTER);
 	
 
-		labelWindow.setBounds(125,100,325,50);
+		labelWindow.setBounds(90,63,403,120);
 		getContentPane().add(labelWindow);
 		labelWindow.setPreferredSize(new Dimension(150, 100));
 		labelWindow.setFont(new Font("Courier New", Font.BOLD, 20));
 		labelWindow.setForeground(Color.DARK_GRAY);
 		
 		
-		move.setBounds(200,350,175,50);
+		move.setBounds(204,350,175,50);
 		getContentPane().add(move);
 		move.setBackground(Color.LIGHT_GRAY);
 		move.addActionListener(this);

@@ -3,6 +3,8 @@ package pl.psk.projekt.bms.ui;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -19,6 +21,7 @@ import java.awt.Rectangle;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -32,6 +35,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -57,7 +61,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 	private JTextField emailField;
 	private JLabel labelCity;
 	private JTextField houseNumberField;
-	private JTable table;
+	private JTable tableFilter;
 	private JButton addButton;
 	private JButton editButton;
 	private JButton deleteButton;
@@ -70,6 +74,9 @@ public class BuyerWindow extends JFrame implements ActionListener {
     private JTextField streetField;
     private JTextField cityField;
     private JTextField surnameField;
+    private JTextField filterField;
+    private DefaultTableModel modelFilter;
+    private JLabel label;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -85,8 +92,9 @@ public class BuyerWindow extends JFrame implements ActionListener {
 	}
 
 	public BuyerWindow() {
+		setResizable(false);
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -103,7 +111,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 		SwingUtilities.updateComponentTreeUI(this);
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setTitle("Worker - Bus Management");
+		setTitle("Buyer - Bus Management");
 		setBounds(new Rectangle(100, 100, 700, 500));
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
@@ -168,55 +176,71 @@ public class BuyerWindow extends JFrame implements ActionListener {
 		
 		surnameField = new JTextField();
 		surnameField.setColumns(10);
+		
+		filterField = new JTextField();
+		filterField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				String query = filterField.getText();
+				filter(query);
+			}
+		});
+		filterField.setColumns(10);
+		
+		label = new JLabel("Search Buyer:");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(addButton)
-							.addGap(18)
-							.addComponent(editButton)
-							.addGap(18)
-							.addComponent(deleteButton)
-							.addGap(219))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-								.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_contentPane.createSequentialGroup()
-											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(labelName)
-												.addComponent(labelBirthday))
-											.addGap(18)
-											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(nameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
-												.addComponent(birthdayField, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)))
-										.addGroup(gl_contentPane.createSequentialGroup()
-											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(labelHouseNumber)
-												.addComponent(labelCity)
-												.addComponent(labelMobilePhone))
-											.addGap(18)
-											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(cityField, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
-												.addComponent(mobilePhoneField, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
-												.addComponent(houseNumberField, 202, 202, 202))))
-									.addGap(28)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(labelPostCode)
-										.addComponent(labelSurname)
-										.addComponent(labelEmail)
-										.addComponent(labelStreet))
-									.addGap(18)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(surnameField)
-										.addComponent(streetField)
-										.addComponent(emailField)
-										.addComponent(postCodeField))))
-							.addGap(30))))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+							.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+								.addComponent(addButton)
+								.addGap(18)
+								.addComponent(editButton)
+								.addGap(18)
+								.addComponent(deleteButton)
+								.addGap(219))
+							.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_contentPane.createSequentialGroup()
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+											.addComponent(labelName)
+											.addComponent(labelBirthday))
+										.addGap(18)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+											.addComponent(nameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+											.addComponent(birthdayField, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)))
+									.addGroup(gl_contentPane.createSequentialGroup()
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+											.addComponent(labelHouseNumber)
+											.addComponent(labelCity)
+											.addComponent(labelMobilePhone))
+										.addGap(18)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+											.addComponent(cityField, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+											.addComponent(mobilePhoneField, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+											.addComponent(houseNumberField, 202, 202, 202))))
+								.addGap(28)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+									.addComponent(labelPostCode)
+									.addComponent(labelSurname)
+									.addComponent(labelEmail)
+									.addComponent(labelStreet))
+								.addGap(18)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(surnameField)
+									.addComponent(streetField)
+									.addComponent(emailField)
+									.addComponent(postCodeField))
+								.addGap(30)))
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addComponent(label, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
+							.addGap(10)
+							.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+							.addGap(194))))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -261,24 +285,48 @@ public class BuyerWindow extends JFrame implements ActionListener {
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 							.addComponent(editButton)
 							.addComponent(deleteButton)))
-					.addPreferredGap(ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(label))
+						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, editButton, deleteButton});
 		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {nameField, postCodeField, emailField, houseNumberField});
 		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelName, labelBirthday, labelMobilePhone, labelHouseNumber, labelSurname, labelEmail, labelStreet, labelPostCode, labelCity});
 
-		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(new String[] {"ID", "Name", "Surname", "Birthday",
-				"Email", "Mobile Phone", "Street", "Apt/House Number", "Post Code", "City" });
-		table = new JTable();
-		table.setSelectionForeground(Color.WHITE);
-		table.setBackground(Color.WHITE);
-		table.setModel(model);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		try {
+			connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			rs = preparedStatement.executeQuery();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
-		scrollPane.setViewportView(table);
+		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
+		
+		tableFilter = new JTable();
+		tableFilter.setModel(modelFilter);
+		
+		scrollPane.setViewportView(tableFilter);
 		scrollPane.setHorizontalScrollBarPolicy(
 	                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setVerticalScrollBarPolicy(
@@ -367,32 +415,39 @@ public class BuyerWindow extends JFrame implements ActionListener {
 
 	}
 	
-    private void Update_table() {
- try{
-     try {
-			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+	// METODA ODŚWIERZAJĄCA TABELE JTABLE
+		// MUSI ZOSTAĆ WYWOŁANA ZAWSZE NA KOŃCU W PRZYCISKACH: ADD, EDIT, DELETE
+		private void Update_table() {
+			try {
+				connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+
+				preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+				rs = preparedStatement.executeQuery();
+				tableFilter.setModel(DbUtils.resultSetToTableModel(rs));
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			} finally {
+
+				try {
+					rs.close();
+					preparedStatement.close();
+
+				} catch (Exception e) {
+
+				}
+			}
 		}
-	 preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
- 	 rs = preparedStatement.executeQuery();
-     table.setModel(DbUtils.resultSetToTableModel(rs));
- }
- catch(Exception e){
- JOptionPane.showMessageDialog(null, e);
- }
- finally {
-         
-         try{
-             rs.close();
-             preparedStatement.close();
-             
-         }
-         catch(Exception e){
-             
-         }
-     }
- }
+
+		//METODA DO DYNAMICZNEGO WYSZUKIWANIA W TABELI
+		private void filter(String query) {
+
+			TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
+			tableFilter.setRowSorter(trs);
+
+			trs.setRowFilter(RowFilter.regexFilter(query));
+		}
     
 }
 
