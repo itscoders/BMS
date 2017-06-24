@@ -2,53 +2,55 @@ package pl.psk.projekt.bms.dbobjects;
 
 public class Scheduler {
 	
-	private int SchedulerRecordID;
+	private int schedulerRecordID;
     private String depertureTime;
     private String arrivalTime; 
-    private String IdBus;
-    private String IdDriver;
-    private String IdLine;
+    private int idBus;
+    private int idDriver;
+    private int idLine;
     
-	public Scheduler(int schedulerRecordID, String idBus, String idDriver, String idLine, String depertureTime, String arrivalTime) {
+	public Scheduler(int idBus, int idDriver, int idLine, String depertureTime, String arrivalTime) {
 		super();
-		SchedulerRecordID = schedulerRecordID;
-		IdBus = idBus;
-		IdDriver = idDriver;
-		IdLine = idLine;
+		
+		this.idBus = idBus;
+		this.idDriver = idDriver;
+		this.idLine = idLine;
 		this.depertureTime = depertureTime;
 		this.arrivalTime = arrivalTime;
 	}
 
+	public Scheduler() {}
+
 	public int getSchedulerRecordID() {
-		return SchedulerRecordID;
+		return schedulerRecordID;
 	}
 
 	public void setSchedulerRecordID(int schedulerRecordID) {
-		SchedulerRecordID = schedulerRecordID;
+		this.schedulerRecordID = schedulerRecordID;
 	}
 
-	public String getIdBus() {
-		return IdBus;
+	public int getIdBus() {
+		return idBus;
 	}
 
-	public void setIdBus(String idBus) {
-		IdBus = idBus;
+	public void setIdBus(int idBus) {
+		this.idBus = idBus;
 	}
 
-	public String getIdDriver() {
-		return IdDriver;
+	public int getIdDriver() {
+		return idDriver;
 	}
 
-	public void setIdDriver(String idDriver) {
-		IdDriver = idDriver;
+	public void setIdDriver(int idDriver) {
+		this.idDriver = idDriver;
 	}
 
-	public String getIdLine() {
-		return IdLine;
+	public int getIdLine() {
+		return idLine;
 	}
 
-	public void setIdLine(String idLine) {
-		IdLine = idLine;
+	public void setIdLine(int idLine) {
+		this.idLine = idLine;
 	}
 
 	public String getDepertureTime() {

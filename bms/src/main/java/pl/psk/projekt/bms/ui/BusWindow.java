@@ -204,7 +204,7 @@ public class BusWindow extends JFrame implements ActionListener {
 		}
 
 		try {
-			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+			preparedStatement = connect.prepareStatement("SELECT * FROM BUS");
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -288,12 +288,9 @@ public class BusWindow extends JFrame implements ActionListener {
 
 		if (e.getSource() == editButton) {
 			
-			if (e.getSource() == addButton) {
-				
-			}
 				String busName = busNameField.getText();
-				int seat = Integer.parseInt((String) comboBoxSeat.getSelectedItem());
-				int value = Integer.parseInt((String) tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()));
+				int seat = Integer.parseInt(comboBoxSeat.getSelectedItem().toString());
+				int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()).toString());
 				
 				try {
 					BusJDBC bj = new BusJDBC();
@@ -310,7 +307,7 @@ public class BusWindow extends JFrame implements ActionListener {
 
 		if (e.getSource() == deleteButton) {
 			
-			int value = Integer.parseInt((String) tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()));
+			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()).toString());
 			try {
 				BusJDBC bj = new BusJDBC();
 				Bus b = new Bus();
@@ -333,7 +330,7 @@ public class BusWindow extends JFrame implements ActionListener {
 						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
 						"root", "toor");
 
-				preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+				preparedStatement = connect.prepareStatement("SELECT * FROM BUS");
 				rs = preparedStatement.executeQuery();
 				tableFilter.setModel(DbUtils.resultSetToTableModel(rs));
 			} catch (Exception e) {

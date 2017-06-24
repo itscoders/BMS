@@ -179,7 +179,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		JTextField textBusLine = (JTextField) comboBoxBusLine.getEditor().getEditorComponent();
 		textBusLine.setText("");
 		comboBoxBusLine.addActionListener(this);
-		textBusLine.addKeyListener(new ComboKeyHandler(comboBoxBuyer));
+		textBusLine.addKeyListener(new ComboKeyHandler(comboBoxBusLine));
 
 		String[] ticketType = { "Monthly", "One-way" };
 
@@ -324,59 +324,17 @@ public class TransactionWindow extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == addButton) {
-			/*
-			 * String name = nameField.getText(); String surname =
-			 * surnameField.getText(); String birthday = ((JTextField)
-			 * birthdayField.getDateEditor().getUiComponent()).getText(); String
-			 * email = emailField.getText(); String mobilePhone =
-			 * mobilePhoneField.getText(); String street =
-			 * streetField.getText(); String houseNumber =
-			 * houseNumberField.getText(); String postCode =
-			 * postCodeField.getText(); String city = cityField.getText();
-			 * 
-			 * boolean valid = true; String invalid = "";
-			 * 
-			 * try { SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-			 * Date dd = sdf.parse(birthday); Calendar cal =
-			 * Calendar.getInstance(); String today = sdf.format(cal.getTime());
-			 * Date tod = sdf.parse(today);
-			 * 
-			 * if (dd.after(tod)) valid = false; invalid =
-			 * "Birthday Cannot be furture date"; } catch (Exception ex) {
-			 * JOptionPane.showMessageDialog(this, "Fail to compare Date"); }
-			 * 
-			 * 
-			 * // Handphone validation if (mobilePhone.length() != 9) { valid =
-			 * false; invalid = "Handphone number should have 9 number"; } for
-			 * (int a = 0; a < mobilePhone.length(); a++) { char temp1 =
-			 * mobilePhone.charAt(a); if (Character.isLetter(temp1) == true) {
-			 * valid = false; invalid = "Please insert proper handphone number";
-			 * } }
-			 * 
-			 * if (valid) { try { try { BuyerJDBC wj = new BuyerJDBC(); Buyer w
-			 * = new Buyer(name, surname, birthday, email, mobilePhone, street,
-			 * houseNumber, postCode, city); wj.createBuyer(w); } catch
-			 * (SQLException e1) {
-			 * 
-			 * e1.printStackTrace(); } JOptionPane.showMessageDialog(this,
-			 * "New Buyer: " + name + surname + " had added."); // dispose(); //
-			 * staffSelect ss = new staffSelect(); // ss.setVisible(true); }
-			 * catch (Exception ex) { JOptionPane.showMessageDialog(this,
-			 * ex.getMessage()); } } else JOptionPane.showMessageDialog(null,
-			 * invalid);
-			 * 
-			 * Update_table();
-			 */
+			
 		}
 
 		if (e.getSource() == editButton) {
 
-			// startWindow.setVisible(true);
+			
 		}
 
 		if (e.getSource() == deleteButton) {
 
-			// startWindow.setVisible(true);
+			
 		}
 		
 		if(e.getSource() == comboBoxBusLine){
@@ -393,31 +351,8 @@ public class TransactionWindow extends JFrame implements ActionListener {
 			if(comboBoxTicketType.getSelectedIndex() == 1 ){ 
 				
 				spinnerDepartureTime.setEnabled(true);
+				//int i = comparBusLine();
 				
-				try {
-					connect = DriverManager.getConnection(
-							"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
-							"root", "toor");
-
-					preparedStatement = connect.prepareStatement("SELECT * FROM BusLine WHERE busLineName = "+ comboBoxBusLine.getSelectedItem() +"AND busLineType ="+comboBoxBusLine.getSelectedItem());
-					rs = preparedStatement.executeQuery();
-					comboModelBuyerD = new DefaultComboBoxModel<String>();
-					while (rs.next()) {
-						String name = rs.getString("name") + " " + rs.getString("surname");
-						comboModelBuyerD.addElement(name);
-					}
-				} catch (Exception ey) {
-					JOptionPane.showMessageDialog(null, ey);
-				} finally {
-
-					try {
-						rs.close();
-						preparedStatement.close();
-
-					} catch (Exception en) {
-
-					}
-				}
 			
 			}
 				else{ 
@@ -495,7 +430,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 	// METODA UMOŻLIWIAJĄCA PORÓWNYWANIE WYBRANEGO Z COMBOBOX TEKSTU DO WARTOSCI
 	// W BAZIE W CELU POBRANIA OBCEGO ID
-	private String comparBuyer() {
+	private int comparBuyer() {
 		try {
 			connect = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
@@ -508,7 +443,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 				String name = rs.getString("name") + " " + rs.getString("surname");
 
 				if (name.equals(comboBoxBuyer.getSelectedItem())) {
-					return rs.getString("buyerId");
+					return Integer.parseInt(rs.getString("buyerId"));
 				}
 			}
 		} catch (Exception e) {
@@ -523,7 +458,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 			}
 		}
-		return null;
+		return (Integer) null;
 	}
 
 	// METODA WYPEŁNIAJĄCA COMBOBOX DANYMI Z BAZY
@@ -556,7 +491,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 	// METODA UMOŻLIWIAJĄCA PORÓWNYWANIE WYBRANEGO Z COMBOBOX TEKSTU DO WARTOSCI
 	// W BAZIE W CELU POBRANIA OBCEGO ID
-	private String comparBusLine() {
+	private int comparBusLine() {
 		try {
 			connect = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
@@ -569,7 +504,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 				String name = rs.getString("busLineName") + " - " + rs.getString("busLineType");
 
 				if (name.equals(comboBoxBuyer.getSelectedItem())) {
-					return rs.getString("busLineID");
+					return Integer.parseInt(rs.getString("busLineID"));
 				}
 			}
 		} catch (Exception e) {
@@ -584,6 +519,67 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 			}
 		}
-		return null;
+		return (Integer) null;
 	}
+	
+	// METODA WYPEŁNIAJĄCA COMBOBOX DANYMI Z BAZY
+		private void fillComboBoxScheduler() {
+			try {
+				connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+
+				preparedStatement = connect.prepareStatement("SELECT * FROM SCHEDULER");
+				rs = preparedStatement.executeQuery();
+				comboModelBusLineD = new DefaultComboBoxModel<String>();
+				while (rs.next()) {
+					String name ="id: "+" "+ rs.getString("SchedulerRecordID")+ rs.getString("depertureTime") + " - " + rs.getString("arrivalTime");
+					comboModelBusLineD.addElement(name);
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			} finally {
+
+				try {
+					rs.close();
+					preparedStatement.close();
+
+				} catch (Exception e) {
+
+				}
+			}
+		}
+
+		// METODA UMOŻLIWIAJĄCA PORÓWNYWANIE WYBRANEGO Z COMBOBOX TEKSTU DO WARTOSCI
+		// W BAZIE W CELU POBRANIA OBCEGO ID
+		private int comparScheduler() {
+			try {
+				connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+
+				preparedStatement = connect.prepareStatement("SELECT * FROM BUSLINE");
+				rs = preparedStatement.executeQuery();
+				comboModelBuyerD = new DefaultComboBoxModel<String>();
+				while (rs.next()) {
+					String name ="id: "+" "+ rs.getString("SchedulerRecordID")+ rs.getString("depertureTime") + " - " + rs.getString("arrivalTime");
+
+					if (name.equals(comboBoxBuyer.getSelectedItem())) {
+						return Integer.parseInt(rs.getString("busLineID"));
+					}
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			} finally {
+
+				try {
+					rs.close();
+					preparedStatement.close();
+
+				} catch (Exception e) {
+
+				}
+			}
+			return (Integer) null;
+		}
 }

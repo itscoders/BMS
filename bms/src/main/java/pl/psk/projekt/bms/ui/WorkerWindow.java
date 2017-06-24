@@ -482,7 +482,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			String invalid = "";
 
 			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("DD-MM-YYYY");
+				SimpleDateFormat sdf = new SimpleDateFormat("DD-MMM-YYYY");
 				Date dd = sdf.parse(birthday);
 				Calendar cal = Calendar.getInstance();
 				String today = sdf.format(cal.getTime());

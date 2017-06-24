@@ -17,6 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Rectangle;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
@@ -34,6 +36,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import net.proteanit.sql.DbUtils;
+import pl.psk.projekt.bms.component.ComboKeyHandler;
+import pl.psk.projekt.bms.dbobjects.Scheduler;
+import pl.psk.projekt.bms.jdbc.SchedulerJDBC;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -53,10 +58,19 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 	private JButton deleteButton;
 	private JTextField filterField;
 	private DefaultTableModel modelFilter;
+	private JComboBox<String> comboBoxDriverId;
+	private JComboBox<String> comboBoxBusId; 
+	private JComboBox<String> comboBoxLineId;
 	PreparedStatement preparedStatement;
 	Connection connect;
 	ResultSet rs;
 
+	private DefaultComboBoxModel<String> comboModelDriverIdD;
+	private DefaultComboBoxModel<String> comboModelBusLineD;
+	private DefaultComboBoxModel<String> comboModelBusD;
+	private JSpinner spinnerDepartureTimeStart;
+	private JSpinner spinnerArrivalTimeStop;
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -107,18 +121,38 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 		JLabel labelArrivalTime = new JLabel("Arrival Time:");
 
 		JLabel labelIdLine = new JLabel("Line ID:");
+		
+		fillComboBoxDriver();
+		comboBoxDriverId = new JComboBox<String>();
+		comboBoxDriverId.setModel(comboModelDriverIdD);
+		JTextField textDriver = (JTextField) comboBoxDriverId.getEditor().getEditorComponent();
+		textDriver.setText("");
+		textDriver.addKeyListener(new ComboKeyHandler(comboBoxDriverId));
+		
+		
+		fillComboBoxBus();
+		comboBoxBusId = new JComboBox<String>();
+		comboBoxBusId.setModel(comboModelBusD);
+		JTextField textBus = (JTextField) comboBoxBusId.getEditor().getEditorComponent();
+		textBus.setText("");
+		textBus.addKeyListener(new ComboKeyHandler(comboBoxBusId));
+		
+		fillComboBoxBusLine();
+		comboBoxLineId = new JComboBox<String>();
+		comboBoxLineId.setModel(comboModelBusLineD);
+		JTextField textLine = (JTextField) comboBoxLineId.getEditor().getEditorComponent();
+		textLine.setText("");
+		textLine.addKeyListener(new ComboKeyHandler(comboBoxLineId));
 
-		JComboBox comboBoxDriverId = new JComboBox();
-
-		JButton addButton = new JButton("Add");
+		addButton = new JButton("Add");
 		addButton.setBackground(Color.LIGHT_GRAY);
 		addButton.addActionListener(this);
 
-		JButton editButton = new JButton("Edit");
+		editButton = new JButton("Edit");
 		editButton.setBackground(Color.LIGHT_GRAY);
 		editButton.addActionListener(this);
 
-		JButton deleteButton = new JButton("Delete");
+		deleteButton = new JButton("Delete");
 		deleteButton.setBackground(Color.LIGHT_GRAY);
 		deleteButton.addActionListener(this);
 
@@ -126,20 +160,16 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 
 		Date startDate = new Date();
 		SpinnerDateModel sm = new SpinnerDateModel(startDate, null, null, Calendar.HOUR_OF_DAY);
-		JSpinner spinnerDepartureTime = new JSpinner(sm);
-		spinnerDepartureTime.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		JSpinner.DateEditor de_spinnerDepartureTime = new JSpinner.DateEditor(spinnerDepartureTime, "HH:mm:ss");
-		spinnerDepartureTime.setEditor(de_spinnerDepartureTime);
+		spinnerDepartureTimeStart = new JSpinner(sm);
+		spinnerDepartureTimeStart.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		JSpinner.DateEditor de_spinnerDepartureTime = new JSpinner.DateEditor(spinnerDepartureTimeStart, "HH:mm:ss");
+		spinnerDepartureTimeStart.setEditor(de_spinnerDepartureTime);
 
 		Date stopDate = new Date();
 		SpinnerDateModel sm2 = new SpinnerDateModel(stopDate, null, null, Calendar.HOUR_OF_DAY);
-		JSpinner spinnerArrivalTime = new JSpinner(sm2);
-		JSpinner.DateEditor de_spinnerArrivalTime = new JSpinner.DateEditor(spinnerArrivalTime, "HH:mm:ss");
-		spinnerArrivalTime.setEditor(de_spinnerArrivalTime);
-
-		JComboBox comboBoxBusId = new JComboBox();
-
-		JComboBox comboBoxLineId = new JComboBox();
+		spinnerArrivalTimeStop = new JSpinner(sm2);
+		JSpinner.DateEditor de_spinnerArrivalTime = new JSpinner.DateEditor(spinnerArrivalTimeStop, "HH:mm:ss");
+		spinnerArrivalTimeStop.setEditor(de_spinnerArrivalTime);
 		
 		filterField = new JTextField();
 		filterField.addKeyListener(new KeyAdapter() {
@@ -150,6 +180,8 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 			}
 		});
 		filterField.setColumns(10);
+		
+		
 		
 		JLabel lblSearchSchedule = new JLabel("Search Schedule:");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -181,7 +213,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 										.addComponent(labelIdBus))
 									.addGap(18)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(spinnerDepartureTimeStart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(comboBoxBusId, 0, 190, Short.MAX_VALUE)))
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(labelIdDriver)
@@ -193,7 +225,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 								.addComponent(labelIdLine))
 							.addGap(18)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(spinnerArrivalTime, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+								.addComponent(spinnerArrivalTimeStop, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
 								.addComponent(comboBoxLineId, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
 					.addGap(30))
 		);
@@ -204,8 +236,8 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(labelDepartureTime)
 						.addComponent(labelArrivalTime)
-						.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(spinnerArrivalTime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(spinnerDepartureTimeStart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(spinnerArrivalTimeStop, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(labelIdBus)
@@ -239,20 +271,20 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
 						"root", "toor");
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 
 		try {
-			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+			preparedStatement = connect.prepareStatement("SELECT * FROM SCHEDULER");
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		try {
 			rs = preparedStatement.executeQuery();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		
@@ -268,32 +300,75 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == addButton) {
-			dispose();
-			// WorkerWindow wd = new Worker();
-			// wd.setVisible(true);
+			
+			int driver = comparDriver();
+			int bus = comparBus();
+			int line = comparBusLine();
+			String startTime = spinnerDepartureTimeStart.toString();
+			String stopTime = spinnerArrivalTimeStop.toString();
+			
+			try {
+				SchedulerJDBC sj = new SchedulerJDBC();
+				Scheduler s = new Scheduler(bus,driver,line, startTime,stopTime);
+				sj.addSchedulerRecord(s);
+				updateTable();
+			} catch (SQLException e1) {
+				
+				e1.printStackTrace();
+			}
+			
 		}
 
 		if (e.getSource() == editButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			
+				
+				int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()).toString());
+				System.out.println(value);
+				int driver = comparDriver();
+				int bus = comparBus();
+				int line = comparBusLine();
+				String startTime = spinnerDepartureTimeStart.toString();
+				String stopTime = spinnerArrivalTimeStop.toString();
+				
+				try {
+					SchedulerJDBC sj = new SchedulerJDBC();
+					Scheduler s = new Scheduler(bus,driver,line,startTime,stopTime);
+					s.setSchedulerRecordID(value);
+					System.out.println(s.getSchedulerRecordID());
+					sj.updateSchedulerRecord(s);
+					updateTable();
+				} catch (SQLException e1) {
+					
+					e1.printStackTrace();
+				}
+				
+			
 		}
 
 		if (e.getSource() == deleteButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			
+			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()).toString());
+			
+			try {
+				SchedulerJDBC sj = new SchedulerJDBC();
+				sj.deleteSchedulerRecord(value);
+				updateTable();
+			} catch (SQLException e1) {
+				
+				e1.printStackTrace();
+			}
 		}
 
 	}
 	
-	// METODA ODŚWIERZAJĄCA TABELE JTABLE
-		// MUSI ZOSTAĆ WYWOŁANA ZAWSZE NA KOŃCU W PRZYCISKACH: ADD, EDIT, DELETE
-		private void Update_table() {
+	
+		private void updateTable() {
 			try {
 				connect = DriverManager.getConnection(
 						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
 						"root", "toor");
 
-				preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+				preparedStatement = connect.prepareStatement("SELECT * FROM SCHEDULER");
 				rs = preparedStatement.executeQuery();
 				tableFilter.setModel(DbUtils.resultSetToTableModel(rs));
 			} catch (Exception e) {
@@ -310,12 +385,191 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 			}
 		}
 
-		//METODA DO DYNAMICZNEGO WYSZUKIWANIA W TABELI
+
 		private void filter(String query) {
 
 			TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
 			tableFilter.setRowSorter(trs);
 
 			trs.setRowFilter(RowFilter.regexFilter(query));
+		}
+		
+		
+		private void fillComboBoxDriver() {
+			try {
+				connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+
+				preparedStatement = connect.prepareStatement("SELECT * FROM Workers WHERE possition = 'Driver'");
+				rs = preparedStatement.executeQuery();
+				comboModelDriverIdD = new DefaultComboBoxModel<String>();
+				while (rs.next()) {
+					String name ="id:"+" "+ rs.getString("workerId")+"  "+ rs.getString("name") + " - " + rs.getString("surname");
+					comboModelDriverIdD.addElement(name);
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			} finally {
+
+				try {
+					rs.close();
+					preparedStatement.close();
+
+				} catch (Exception e) {
+
+				}
+			}
+		}
+		
+		private int comparDriver() {
+			try {
+				connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+
+				preparedStatement = connect.prepareStatement("SELECT * FROM Workers WHERE possition = 'Driver'");
+				rs = preparedStatement.executeQuery();
+				
+				while (rs.next()) {
+					String name ="id:"+" "+ rs.getString("workerId")+"  "+ rs.getString("name") + " - " + rs.getString("surname");
+					System.err.println(name);
+					System.err.println(comboModelDriverIdD.getSelectedItem().toString());
+					if (name.equals(comboModelDriverIdD.getSelectedItem().toString())) {
+						return Integer.parseInt(rs.getString("workerId"));
+					}
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			} finally {
+
+				try {
+					rs.close();
+					preparedStatement.close();
+
+				} catch (Exception e) {
+
+				}
+			}
+			return 0;
+		}
+		
+		private void fillComboBoxBus() {
+			try {
+				connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+
+				preparedStatement = connect.prepareStatement("SELECT * FROM BUS");
+				rs = preparedStatement.executeQuery();
+				comboModelBusD = new DefaultComboBoxModel<String>();
+				while (rs.next()) {
+					String name ="id:"+" "+ rs.getString("busID")+" - "+ rs.getString("busName");
+					comboModelBusD.addElement(name);
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			} finally {
+
+				try {
+					rs.close();
+					preparedStatement.close();
+
+				} catch (Exception e) {
+
+				}
+			}
+		}
+		
+		private int comparBus() {
+			try {
+				connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+
+				preparedStatement = connect.prepareStatement("SELECT * FROM Bus");
+				rs = preparedStatement.executeQuery();
+				
+				while (rs.next()) {
+					String name ="id:"+" "+ rs.getString("busID")+" - "+ rs.getString("busName");
+					System.err.println(name);
+					System.err.println(comboModelBusD.getSelectedItem().toString());
+					if (name.equals(comboModelBusD.getSelectedItem().toString())) {
+						return Integer.parseInt(rs.getString("busID"));
+					}
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			} finally {
+
+				try {
+					rs.close();
+					preparedStatement.close();
+
+				} catch (Exception e) {
+
+				}
+			}
+			return 0;
+		}
+		
+		
+		private void fillComboBoxBusLine() {
+			try {
+				connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+
+				preparedStatement = connect.prepareStatement("SELECT * FROM BUSLINE");
+				rs = preparedStatement.executeQuery();
+				comboModelBusLineD = new DefaultComboBoxModel<String>();
+				while (rs.next()) {
+					String name = "id:"+" "+ rs.getString("busLineID")+ " "+rs.getString("busLineName") + " - " + rs.getString("busLineType");
+					comboModelBusLineD.addElement(name);
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			} finally {
+
+				try {
+					rs.close();
+					preparedStatement.close();
+
+				} catch (Exception e) {
+
+				}
+			}
+		}
+		
+		private int comparBusLine() {
+			try {
+				connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+
+				preparedStatement = connect.prepareStatement("SELECT * FROM BUSLINE");
+				rs = preparedStatement.executeQuery();
+				
+				while (rs.next()) {
+					String name = "id:"+" "+ rs.getString("busLineID")+" "+rs.getString("busLineName") + " - " + rs.getString("busLineType");
+					System.err.println(name);
+					System.err.println(comboModelBusLineD.getSelectedItem().toString());
+					if (name.equals(comboModelBusLineD.getSelectedItem().toString())) {
+						return Integer.parseInt(rs.getString("busLineID"));
+					}
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			} finally {
+
+				try {
+					rs.close();
+					preparedStatement.close();
+
+				} catch (Exception e) {
+
+				}
+			}
+			return 0;
 		}
 }
