@@ -22,7 +22,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.Color;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class ManagementWindow extends JFrame implements ActionListener {
 
@@ -126,7 +125,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(124, Short.MAX_VALUE)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addComponent(workerButton)
 					.addGap(18)
 					.addComponent(scheduleButton)
@@ -139,10 +138,10 @@ public class ManagementWindow extends JFrame implements ActionListener {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(btnLine)
 							.addGap(18)
-							.addComponent(ticketButton))
+							.addComponent(ticketButton)
+							.addGap(18)
+							.addComponent(buyerButton))
 						.addComponent(databaseCreateButton))
-					.addGap(18)
-					.addComponent(buyerButton)
 					.addGap(18)
 					.addComponent(transactionButton)
 					.addGap(18)
@@ -166,10 +165,10 @@ public class ManagementWindow extends JFrame implements ActionListener {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(databaseDropButton)
 						.addComponent(databaseCreateButton))
-					.addContainerGap(536, Short.MAX_VALUE))
+					.addContainerGap(436, Short.MAX_VALUE))
 		);
-		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, buyerButton, raportButton, btnLine, databaseCreateButton, databaseDropButton, transactionButton});
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {workerButton, scheduleButton, busButton, ticketButton, buyerButton, raportButton, btnLine, databaseCreateButton, databaseDropButton, transactionButton});
+		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {raportButton, btnLine, databaseCreateButton, databaseDropButton, transactionButton, workerButton, scheduleButton, busButton, ticketButton, buyerButton});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {raportButton, btnLine, databaseCreateButton, databaseDropButton, transactionButton, workerButton, scheduleButton, busButton, ticketButton, buyerButton});
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -212,13 +211,12 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == raportButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			
 		}
 
 		if (e.getSource() == databaseCreateButton) {
 			try {
-				CreateDB c = new CreateDB();
+				new CreateDB();
 			} catch (SQLException e1) {
 				
 				e1.printStackTrace();
@@ -227,7 +225,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		
 		if (e.getSource() == databaseDropButton) {
 			try {
-				DropDB d = new DropDB();
+				new DropDB();
 			} catch (SQLException e1) {
 				
 				e1.printStackTrace();

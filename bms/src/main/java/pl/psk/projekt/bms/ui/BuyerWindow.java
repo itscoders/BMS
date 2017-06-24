@@ -353,7 +353,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			String invalid = "";
 
 			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 				Date dd = sdf.parse(birthday);
 				Calendar cal = Calendar.getInstance();
 				String today = sdf.format(cal.getTime());

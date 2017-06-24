@@ -7,15 +7,19 @@ public class BusLine {
     private String busLineType;
     private String startStation;
     private String endStation;
-    private int  price;
+    private double  priceMonthly;
+    private double  priceOneWay;
     
-	public BusLine(String busLineName, String busLineType, String startStation, String endStation, int price) {
+
+	public BusLine(String busLineName, String busLineType, String startStation, String endStation,  double priceOneWay, double priceMonthly) {
+		super();
 		
 		this.busLineName = busLineName;
 		this.busLineType = busLineType;
 		this.startStation = startStation;
 		this.endStation = endStation;
-		this.price = price;
+		this.priceMonthly = priceMonthly;
+		this.priceOneWay = priceOneWay;
 	}
 
 	public BusLine() {}
@@ -60,12 +64,20 @@ public class BusLine {
 		this.endStation = endStation;
 	}
 
-	public int getPrice() {
-		return price;
+	public double getPriceMonthly() {
+		return priceMonthly;
 	}
 
-	public void setPrice(int price) {
-		this.price = price;
+	public void setPriceMonthly(double priceMonthly) {
+		this.priceMonthly = priceMonthly;
+	}
+
+	public double getPriceOneWay() {
+		return priceOneWay;
+	}
+
+	public void setPriceOneWay(double priceOneWay) {
+		this.priceOneWay = priceOneWay;
 	}
     
 	

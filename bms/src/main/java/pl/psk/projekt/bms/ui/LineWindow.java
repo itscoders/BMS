@@ -27,7 +27,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.Component;
-import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -39,6 +38,7 @@ import net.proteanit.sql.DbUtils;
 import pl.psk.projekt.bms.dbobjects.BusLine;
 import pl.psk.projekt.bms.jdbc.BusLineJDBC;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
 
 public class LineWindow extends JFrame implements ActionListener {
 
@@ -59,6 +59,8 @@ public class LineWindow extends JFrame implements ActionListener {
     private JTextField filterField;
     private DefaultTableModel modelFilter;
     private JLabel lblSearchLine;
+    private JTextField textFieldPirceOneWay;
+    private JTextField textFieldPriceMonthly;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -113,7 +115,7 @@ public class LineWindow extends JFrame implements ActionListener {
 
 		JLabel labelType = new JLabel("Type:");
 
-		JLabel labelStopStation = new JLabel("Stop Station");
+		JLabel labelStopStation = new JLabel("Stop Station:");
 
 		stopStationField = new JTextField();
 		stopStationField.setColumns(10);
@@ -146,23 +148,19 @@ public class LineWindow extends JFrame implements ActionListener {
 		filterField.setColumns(10);
 		
 		lblSearchLine = new JLabel("Search Line:");
+		
+		textFieldPirceOneWay = new JTextField();
+		textFieldPirceOneWay.setColumns(10);
+		
+		textFieldPriceMonthly = new JTextField();
+		textFieldPriceMonthly.setColumns(10);
+		
+		JLabel labelPriceMonthly = new JLabel("Price Monthly:");
+		
+		JLabel labelPirceOneWay = new JLabel("Pirce OneWay:");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(252, Short.MAX_VALUE)
-					.addComponent(addButton)
-					.addGap(18)
-					.addComponent(editButton)
-					.addGap(18)
-					.addComponent(deleteButton)
-					.addGap(231))
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-					.addContainerGap(212, Short.MAX_VALUE)
-					.addComponent(lblSearchLine, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-					.addGap(10)
-					.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
-					.addGap(188))
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(42)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -170,20 +168,42 @@ public class LineWindow extends JFrame implements ActionListener {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(labelLineName)
-								.addComponent(labelStartStation))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lineNameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
-								.addComponent(startStationField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE))
+								.addComponent(labelStartStation)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(labelPirceOneWay, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+									.addComponent(lineNameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+									.addComponent(startStationField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE))
+								.addComponent(textFieldPirceOneWay, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE))
 							.addGap(30)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(labelType)
-								.addComponent(labelStopStation))
-							.addGap(18)
+								.addComponent(labelStopStation)
+								.addComponent(labelPriceMonthly, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(comboBoxType, 0, 212, Short.MAX_VALUE)
-								.addComponent(stopStationField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+								.addComponent(textFieldPriceMonthly, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+									.addComponent(comboBoxType, 0, 212, Short.MAX_VALUE)
+									.addComponent(stopStationField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
 					.addGap(32))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap(182, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblSearchLine, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(addButton)
+							.addGap(18)
+							.addComponent(editButton)
+							.addGap(18)
+							.addComponent(deleteButton)))
+					.addGap(231))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -200,23 +220,27 @@ public class LineWindow extends JFrame implements ActionListener {
 						.addComponent(labelStartStation)
 						.addComponent(labelStopStation)
 						.addComponent(stopStationField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(36)
+					.addGap(10)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textFieldPriceMonthly, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelPriceMonthly)
+						.addComponent(labelPirceOneWay)
+						.addComponent(textFieldPirceOneWay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(addButton)
 						.addComponent(editButton)
 						.addComponent(deleteButton))
 					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(3)
-							.addComponent(lblSearchLine))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblSearchLine)
 						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
 					.addContainerGap())
 		);
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelLineName, labelStartStation, labelType, labelStopStation});
 		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {lineNameField, startStationField, stopStationField});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelLineName, labelStartStation, labelType, labelStopStation});
 		
 		try {
 			connect = DriverManager.getConnection(
@@ -228,7 +252,7 @@ public class LineWindow extends JFrame implements ActionListener {
 		}
 
 		try {
-			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+			preparedStatement = connect.prepareStatement("SELECT * FROM BUSLINE");
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -309,20 +333,22 @@ public class LineWindow extends JFrame implements ActionListener {
 		if (e.getSource() == addButton) {
 			String busLineName = lineNameField.getText();
 			String startStation = startStationField.getText();
-			String stopStationField = startStationField.getText();
-			
+			String stopStation = startStationField.getText();
+			double pirceOneWay = Double.parseDouble(textFieldPirceOneWay.getText());
+			double priceMonthly = Double.parseDouble(textFieldPriceMonthly.getText());
 			String busLineType = (String) comboBoxType.getSelectedItem();
+			
 			
 			try {
 				BusLineJDBC bj = new BusLineJDBC();
-				BusLine b = new BusLine(busLineName, busLineType, startStation, stopStationField, 20);
+				BusLine b = new BusLine(busLineName, busLineType, startStation, stopStation, pirceOneWay, priceMonthly);
 				bj.createBusLine(b);
 			} catch (SQLException e1) {
 				
 				e1.printStackTrace();
 			}
 			
-			Update_table();
+			updateTable();
 		}
 
 		if (e.getSource() == editButton) {
@@ -330,20 +356,21 @@ public class LineWindow extends JFrame implements ActionListener {
 			int value = Integer.parseInt((String) tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()));
 			String busLineName = lineNameField.getText();
 			String startStation = startStationField.getText();
-			String stopStationField = startStationField.getText();
-			
+			String stopStation = startStationField.getText();
+			double pirceOneWay = Double.parseDouble(textFieldPirceOneWay.getText());
+			double priceMonthly = Double.parseDouble(textFieldPriceMonthly.getText());
 			String busLineType = (String) comboBoxType.getSelectedItem();
 			
 			try {
 				BusLineJDBC bj = new BusLineJDBC();
-				BusLine b = new BusLine(busLineName, busLineType, startStation, stopStationField, 20);
+				BusLine b = new BusLine(busLineName, busLineType, startStation, stopStation, pirceOneWay, priceMonthly);
 				b.setBusLineID(value);
 				bj.updateBusLine(b);
 			} catch (SQLException e1) {
 				
 				e1.printStackTrace();
 			}
-			Update_table();
+			updateTable();
 		}
 
 		if (e.getSource() == deleteButton) {
@@ -360,19 +387,19 @@ public class LineWindow extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
-		Update_table();
+		updateTable();
 
 	}
 	
-	// METODA ODŚWIERZAJĄCA TABELE JTABLE
+		// METODA ODŚWIERZAJĄCA TABELE JTABLE
 		// MUSI ZOSTAĆ WYWOŁANA ZAWSZE NA KOŃCU W PRZYCISKACH: ADD, EDIT, DELETE
-		private void Update_table() {
+		private void updateTable() {
 			try {
 				connect = DriverManager.getConnection(
 						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
 						"root", "toor");
 
-				preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+				preparedStatement = connect.prepareStatement("SELECT * FROM BUSLINE");
 				rs = preparedStatement.executeQuery();
 				tableFilter.setModel(DbUtils.resultSetToTableModel(rs));
 			} catch (Exception e) {

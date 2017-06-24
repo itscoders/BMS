@@ -28,13 +28,14 @@ public class BusLineJDBC {
     
     
     public boolean createBusLine(BusLine b)throws SQLException{
-    String sql="INSERT INTO BusLine (busLineName, busLineType, startStation, endStation, price) values(?,?,?,?,?)";
+    String sql="INSERT INTO BusLine (busLineName, busLineType, startStation, endStation, priceOneWay, priceMonthly) values(?,?,?,?,?,?)";
     preparedStatement=connect.prepareStatement(sql);
     preparedStatement.setString(1,b.getBusLineName());
     preparedStatement.setString(2,b.getBusLineType());
     preparedStatement.setString(3,b.getBusLineName());
     preparedStatement.setString(4,b.getBusLineType());
-    preparedStatement.setInt(5,b.getPrice());
+    preparedStatement.setDouble(5,b.getPriceOneWay());
+    preparedStatement.setDouble(6,b.getPriceMonthly());
     int result = preparedStatement.executeUpdate();
         if(result > 0)
             return true;
@@ -54,13 +55,15 @@ public class BusLineJDBC {
     }
     
     public boolean updateBusLine(BusLine b) throws SQLException{
-    String sql="update BusLine set busLineName=?, busLineType=?, startStation=?, endStation=? where busLineID=? ";
+    String sql="update BusLine set busLineName=?, busLineType=?, startStation=?, endStation=?, priceOneWay=?, priceMonthly=? where busLineID=? ";
     preparedStatement=connect.prepareStatement(sql);
     preparedStatement.setString(1,b.getBusLineName());
     preparedStatement.setString(2,b.getBusLineType());
     preparedStatement.setString(3,b.getBusLineName());
     preparedStatement.setString(4,b.getBusLineType());
-    preparedStatement.setInt(5,b.getBusLineID());
+    preparedStatement.setDouble(5,b.getPriceOneWay());
+    preparedStatement.setDouble(6,b.getPriceMonthly());
+    preparedStatement.setInt(7,b.getBusLineID());
    
         int result = preparedStatement.executeUpdate();
         if(result > 0)

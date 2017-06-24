@@ -58,7 +58,8 @@ public class CreateDB {
               				"busLineType varchar(255),"+
               				"startStation varchar(255),"+
               				"endStation varchar(255),"+
-              				"price int);";
+              				"priceOneWay DECIMAL(5,2),"+
+              				"priceMonthly DECIMAL(5,2));";
             
 	            statement.execute(create);
 	            
@@ -112,16 +113,6 @@ public class CreateDB {
 					}
 	 }
 	    
-	 public static void main( String[] args )
-	    {
-	    	try {
-				new CreateDB();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	       
-	    }
-	
+
 	
 }

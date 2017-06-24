@@ -48,7 +48,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-
 public class WorkerWindow extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -60,7 +59,15 @@ public class WorkerWindow extends JFrame implements ActionListener {
 	private JTextField surnameField;
 	private JLabel labelAdress;
 	private JLabel labelSalary;
+	private JLabel labelUserName;
+	private JLabel labelName;
+	private JLabel lblNewLabel_2;
+	private JLabel labelBirthday;
+	private JLabel labelPassword;
+	private JLabel labelSurname;
 	private JTextField salaryField;
+	private JLabel labelPosition;
+	private JLabel labelMobilePhone;
 	private JPasswordField passwordField;
 	private JTable tableFilter;
 	private JButton addButton;
@@ -70,12 +77,12 @@ public class WorkerWindow extends JFrame implements ActionListener {
 	private JComboBox<String> comboBoxPosition;
 	private JDateChooser birthdayField;
 	private JTextArea adressField;
-	
-	PreparedStatement  preparedStatement;
-    Connection connect;
-    ResultSet rs;
-    private JTextField filterField;
-    private DefaultTableModel modelFilter;
+
+	PreparedStatement preparedStatement;
+	Connection connect;
+	ResultSet rs;
+	private JTextField filterField;
+	private DefaultTableModel modelFilter;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -121,27 +128,27 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		userNameField = new JTextField();
 		userNameField.setColumns(10);
 
-		JLabel labelUserName = new JLabel("User Name:");
+		labelUserName = new JLabel("User Name:");
 
-		JLabel labelName = new JLabel("Name:");
+		labelName = new JLabel("Name:");
 
 		nameField = new JTextField();
 		nameField.setColumns(10);
 
-		JLabel lblNewLabel_2 = new JLabel("Type:");
+		lblNewLabel_2 = new JLabel("Type:");
 
-		JLabel labelBirthday = new JLabel("Birthday:");
+		labelBirthday = new JLabel("Birthday:");
 
-		JLabel labelPassword = new JLabel("Password:");
+		labelPassword = new JLabel("Password:");
 
-		JLabel labelSurname = new JLabel("Surname:");
+		labelSurname = new JLabel("Surname:");
 
 		mobilePhoneField = new JTextField();
 		mobilePhoneField.setColumns(10);
 
-		JLabel labelPosition = new JLabel("Position:");
+		labelPosition = new JLabel("Position:");
 
-		JLabel labelMobilePhone = new JLabel("Mobile Phone:");
+		labelMobilePhone = new JLabel("Mobile Phone:");
 
 		surnameField = new JTextField();
 		surnameField.setColumns(10);
@@ -154,14 +161,14 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		salaryField.setColumns(10);
 
 		passwordField = new JPasswordField();
-		
+
 		String[] typeString = { "Administrator", "Driver", "Seller" };
 
-		comboBoxType = new JComboBox<String>();
+		comboBoxType = new JComboBox<String>(typeString);
 
 		String[] positionString = { "Administrator", "Driver", "Seller" };
 
-		comboBoxPosition = new JComboBox<String>();
+		comboBoxPosition = new JComboBox<String>(positionString);
 
 		addButton = new JButton("Add");
 		addButton.setBackground(Color.LIGHT_GRAY);
@@ -180,33 +187,29 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		birthdayField = new JDateChooser();
 
 		JScrollPane scrollPane_1 = new JScrollPane();
-		
+
 		JLabel labelFilter = new JLabel("Search Worker:");
-		
+
 		try {
 			connect = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
-						"root", "toor");
+					"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+					"root", "toor");
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
 		try {
-			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
+			preparedStatement = connect.prepareStatement("SELECT * FROM Workers");
 			rs = preparedStatement.executeQuery();
+			
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+
 			e1.printStackTrace();
 		}
-		
+
 		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
-		
+
 		filterField = new JTextField();
 		filterField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -217,119 +220,117 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		});
 		filterField.setColumns(10);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(240, Short.MAX_VALUE)
-					.addComponent(addButton)
-					.addGap(18)
-					.addComponent(editButton)
-					.addGap(18)
-					.addComponent(deleteButton)
-					.addGap(219))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(40)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+		gl_contentPane
+				.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(240, Short.MAX_VALUE)
+								.addComponent(addButton).addGap(18)
+								.addComponent(editButton).addGap(
+										18)
+								.addComponent(deleteButton).addGap(219))
+						.addGroup(gl_contentPane.createSequentialGroup().addGap(40).addGroup(gl_contentPane
+								.createParallelGroup(Alignment.TRAILING)
+								.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 614,
+										Short.MAX_VALUE)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(labelUserName)
-										.addComponent(labelName))
-									.addGap(18)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-										.addComponent(userNameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
-										.addComponent(nameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)))
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+												.addGroup(gl_contentPane.createSequentialGroup()
+														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+																.addComponent(labelUserName).addComponent(labelName))
+														.addGap(18)
+														.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+																.addComponent(userNameField, GroupLayout.PREFERRED_SIZE,
+																		202, GroupLayout.PREFERRED_SIZE)
+																.addComponent(nameField, GroupLayout.PREFERRED_SIZE,
+																		202, GroupLayout.PREFERRED_SIZE)))
+												.addGroup(gl_contentPane.createSequentialGroup()
+														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+																.addComponent(labelBirthday).addComponent(labelAdress)
+																.addComponent(lblNewLabel_2))
+														.addGap(18)
+														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+																.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE,
+																		214, Short.MAX_VALUE)
+																.addComponent(birthdayField, GroupLayout.DEFAULT_SIZE,
+																		214, Short.MAX_VALUE)
+																.addComponent(comboBoxType, 0, 214, Short.MAX_VALUE))))
+										.addGap(28)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+												.addComponent(labelMobilePhone).addComponent(labelPassword)
+												.addComponent(labelSurname).addComponent(labelSalary)
+												.addComponent(labelPosition))
+										.addGap(18)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+												.addComponent(salaryField).addComponent(surnameField)
+												.addComponent(passwordField, 103, 103, Short.MAX_VALUE)
+												.addComponent(mobilePhoneField).addComponent(comboBoxPosition, 0,
+														GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+								.addGap(30))
+						.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(199, Short.MAX_VALUE)
+								.addComponent(labelFilter, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+								.addGap(188)));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(labelUserName)
+								.addComponent(userNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(labelPassword).addComponent(passwordField, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(18)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(nameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(labelName).addComponent(labelSurname).addComponent(surnameField,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(18)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(labelBirthday)
-										.addComponent(labelAdress)
-										.addComponent(lblNewLabel_2))
-									.addGap(18)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
-										.addComponent(birthdayField, GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
-										.addComponent(comboBoxType, 0, 214, Short.MAX_VALUE))))
-							.addGap(28)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(labelMobilePhone)
-								.addComponent(labelPassword)
-								.addComponent(labelSurname)
-								.addComponent(labelSalary)
-								.addComponent(labelPosition))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(salaryField)
-								.addComponent(surnameField)
-								.addComponent(passwordField, 103, 103, Short.MAX_VALUE)
-								.addComponent(mobilePhoneField)
-								.addComponent(comboBoxPosition, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-					.addGap(30))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(199, Short.MAX_VALUE)
-					.addComponent(labelFilter, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
-					.addGap(188))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(labelUserName)
-						.addComponent(userNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelPassword)
-						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(nameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelName)
-						.addComponent(labelSurname)
-						.addComponent(surnameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(labelPosition)
-								.addComponent(comboBoxPosition, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(labelMobilePhone)
-								.addComponent(mobilePhoneField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(labelSalary)
-								.addComponent(salaryField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_2)
-								.addComponent(comboBoxType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(labelBirthday)
-								.addComponent(birthdayField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelAdress))))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(addButton)
-						.addComponent(editButton)
-						.addComponent(deleteButton))
-					.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(labelFilter)
-						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(7)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
-		);
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelUserName, labelName, lblNewLabel_2, labelBirthday, labelPassword, labelSurname, labelPosition, labelMobilePhone, labelAdress, labelSalary});
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {userNameField, nameField, mobilePhoneField, surnameField, salaryField, passwordField});
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, editButton, deleteButton});
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+												.addComponent(labelPosition).addComponent(comboBoxPosition,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+												.addComponent(labelMobilePhone).addComponent(mobilePhoneField,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(gl_contentPane
+												.createParallelGroup(Alignment.LEADING).addComponent(labelSalary)
+												.addComponent(salaryField, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(gl_contentPane.createSequentialGroup()
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+												.addComponent(lblNewLabel_2).addComponent(comboBoxType,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+												.addComponent(labelBirthday).addComponent(birthdayField,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+												.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 63,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(labelAdress))))
+						.addGap(18)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(addButton)
+								.addComponent(editButton).addComponent(deleteButton))
+						.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(labelFilter)
+								.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(7).addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap()));
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL,
+				new Component[] { labelUserName, labelName, lblNewLabel_2, labelBirthday, labelPassword, labelSurname,
+						labelPosition, labelMobilePhone, labelAdress, labelSalary });
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { userNameField, nameField, mobilePhoneField,
+				surnameField, salaryField, passwordField });
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { addButton, editButton, deleteButton });
 
 		adressField = new JTextArea();
 		adressField.setColumns(20);
@@ -338,84 +339,54 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 		try {
 			connect = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
-						"root", "toor");
+					"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+					"root", "toor");
+			preparedStatement = connect.prepareStatement("SELECT * FROM Workers");
+			rs = preparedStatement.executeQuery();
+			
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		try {
-			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			rs = preparedStatement.executeQuery();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
+
 		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
-		
+
 		tableFilter = new JTable();
 		tableFilter.setModel(modelFilter);
-		
+
 		scrollPane.setViewportView(tableFilter);
-		scrollPane.setHorizontalScrollBarPolicy(
-	                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		/*String workerId = "";
-		String username = "";
-		String password = "";
-		String name = "";
-		String surname = "";
-		String type = "";
-		String position = "";
-		String birthday = "";
-		String mobilePhone = "";
-		String adress = "";
-		String salaryy = "";
-     
-        try {
-			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-        
-        
-        try {
-        	preparedStatement = connect.prepareStatement("SELECT * FROM Workers");
-        	ResultSet rs = preparedStatement.executeQuery();
-            int i = 0;
-            while (rs.next()) {
-            	workerId = rs.getString("workerId");
-            	username = rs.getString("username");
-    			name = rs.getString("name");
-    			surname = rs.getString("surname");
-    			type = rs.getString("accountType");
-    			position = rs.getString("possition");
-    			birthday = rs.getString("birthday");
-    			mobilePhone = rs.getString("mobile");
-    			adress = rs.getString("address");
-    			salaryy = rs.getString("salary");
-                model.addRow(new Object[]{workerId, username, name, surname, type, position, birthday, mobilePhone, adress, salaryy});
-                i++;
-            }
-            if (i < 1) {
-                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            if (i == 1) {
-                System.out.println(i + " Record Found");
-            } else {
-                System.out.println(i + " Records Found");
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }*/
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		/*
+		 * String workerId = ""; String username = ""; String password = "";
+		 * String name = ""; String surname = ""; String type = ""; String
+		 * position = ""; String birthday = ""; String mobilePhone = ""; String
+		 * adress = ""; String salaryy = "";
+		 * 
+		 * try { connect = DriverManager.getConnection(
+		 * "jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+		 * "root", "toor"); } catch (SQLException e1) { e1.printStackTrace(); }
+		 * 
+		 * 
+		 * try { preparedStatement =
+		 * connect.prepareStatement("SELECT * FROM Workers"); ResultSet rs =
+		 * preparedStatement.executeQuery(); int i = 0; while (rs.next()) {
+		 * workerId = rs.getString("workerId"); username =
+		 * rs.getString("username"); name = rs.getString("name"); surname =
+		 * rs.getString("surname"); type = rs.getString("accountType"); position
+		 * = rs.getString("possition"); birthday = rs.getString("birthday");
+		 * mobilePhone = rs.getString("mobile"); adress =
+		 * rs.getString("address"); salaryy = rs.getString("salary");
+		 * model.addRow(new Object[]{workerId, username, name, surname, type,
+		 * position, birthday, mobilePhone, adress, salaryy}); i++; } if (i < 1)
+		 * { JOptionPane.showMessageDialog(null, "No Record Found", "Error",
+		 * JOptionPane.ERROR_MESSAGE); } if (i == 1) { System.out.println(i +
+		 * " Record Found"); } else { System.out.println(i + " Records Found");
+		 * } } catch (Exception ex) { JOptionPane.showMessageDialog(null,
+		 * ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); }
+		 */
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -424,7 +395,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 		if (e.getSource() == addButton) {
 			String username = userNameField.getText();
-			String password = passwordField.getText();
+			String password = passwordField.getPassword().toString();
 			String name = nameField.getText();
 			String surname = surnameField.getText();
 			String type = (String) comboBoxType.getSelectedItem();
@@ -438,7 +409,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			String invalid = "";
 
 			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+				SimpleDateFormat sdf = new SimpleDateFormat("DD-MM-YYYY");
 				Date dd = sdf.parse(birthday);
 				Calendar cal = Calendar.getInstance();
 				String today = sdf.format(cal.getTime());
@@ -477,18 +448,15 @@ public class WorkerWindow extends JFrame implements ActionListener {
 					double salary = Double.parseDouble(salaryy);
 					try {
 						WorkersJDBC wj = new WorkersJDBC();
-						Workers w = new Workers(type, username, password, name, surname, position, mobilePhone, adress,
-								birthday, salary);
-						;
+						Workers w = new Workers(type, username, password, name, surname, position, mobilePhone, adress,birthday, salary);
 						wj.createWorker(w);
 					} catch (SQLException e1) {
 
 						e1.printStackTrace();
 					}
 					JOptionPane.showMessageDialog(this, "New worker ID:" + username + " had added.");
-					// dispose();
-					// staffSelect ss = new staffSelect();
-					// ss.setVisible(true);
+					updateTable();
+					
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, ex.getMessage());
 				}
@@ -497,48 +465,116 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == editButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			
+			
+			String username = userNameField.getText();
+			String password = passwordField.getPassword().toString();
+			String name = nameField.getText();
+			String surname = surnameField.getText();
+			String type = (String) comboBoxType.getSelectedItem();
+			String position = (String) comboBoxPosition.getSelectedItem();
+			String birthday = birthdayField.getDateFormatString();
+			String mobilePhone = mobilePhoneField.getText();
+			String adress = adressField.getText();
+			String salary = salaryField.getText();
+
+			boolean valid = true;
+			String invalid = "";
+
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("DD-MM-YYYY");
+				Date dd = sdf.parse(birthday);
+				Calendar cal = Calendar.getInstance();
+				String today = sdf.format(cal.getTime());
+				Date tod = sdf.parse(today);
+
+				if (dd.after(tod))
+					valid = false;
+				invalid = "Birthday Cannot be furture date";
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(this, "Fail to compare Date");
+			}
+
+			for (int i = 0; i < salary.length(); i++) {
+				char temp = salary.charAt(i);
+				if (Character.isLetter(temp) == true) {
+					valid = false;
+					invalid = "Please insert number only for salary";
+				}
+			}
+
+			// Handphone validation
+			if (mobilePhone.length() != 9) {
+				valid = false;
+				invalid = "Handphone number should have 9 number";
+			}
+			for (int a = 0; a < mobilePhone.length(); a++) {
+				char temp1 = mobilePhone.charAt(a);
+				if (Character.isLetter(temp1) == true) {
+					valid = false;
+					invalid = "Please insert proper handphone number";
+				}
+			}
+
+			if (valid) {
+				try {
+					double dSalary = Double.parseDouble(salary);
+					try {
+						WorkersJDBC wj = new WorkersJDBC();
+						Workers w = new Workers(type, username, password, name, surname, position, mobilePhone, adress,birthday, dSalary);
+						wj.createWorker(w);
+					} catch (SQLException e1) {
+
+						e1.printStackTrace();
+					}
+					JOptionPane.showMessageDialog(this, "New worker ID:" + username + " had added.");
+					updateTable();
+					
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(this, ex.getMessage());
+				}
+			} else
+				JOptionPane.showMessageDialog(null, invalid);
 		}
 
 		if (e.getSource() == deleteButton) {
-			dispose();
+			
 			// startWindow.setVisible(true);
 		}
 
 	}
-	
+
 	// METODA ODŚWIERZAJĄCA TABELE JTABLE
-		// MUSI ZOSTAĆ WYWOŁANA ZAWSZE NA KOŃCU W PRZYCISKACH: ADD, EDIT, DELETE
-		private void Update_table() {
+	// MUSI ZOSTAĆ WYWOŁANA ZAWSZE NA KOŃCU W PRZYCISKACH: ADD, EDIT, DELETE
+	private void updateTable() {
+		try {
+			connect = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+					"root", "toor");
+
+			preparedStatement = connect.prepareStatement("SELECT * FROM Workers");
+			rs = preparedStatement.executeQuery();
+			tableFilter.setModel(DbUtils.resultSetToTableModel(rs));
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		} finally {
+
 			try {
-				connect = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
-						"root", "toor");
+				rs.close();
+				preparedStatement.close();
 
-				preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
-				rs = preparedStatement.executeQuery();
-				tableFilter.setModel(DbUtils.resultSetToTableModel(rs));
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, e);
-			} finally {
 
-				try {
-					rs.close();
-					preparedStatement.close();
-
-				} catch (Exception e) {
-
-				}
 			}
 		}
+	}
 
-		//METODA DO DYNAMICZNEGO WYSZUKIWANIA W TABELI
-		private void filter(String query) {
+	// METODA DO DYNAMICZNEGO WYSZUKIWANIA W TABELI
+	private void filter(String query) {
 
-			TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
-			tableFilter.setRowSorter(trs);
+		TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
+		tableFilter.setRowSorter(trs);
 
-			trs.setRowFilter(RowFilter.regexFilter(query));
-		}
+		trs.setRowFilter(RowFilter.regexFilter(query));
+	}
 }

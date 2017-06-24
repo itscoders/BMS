@@ -12,7 +12,9 @@ public class DropDB {
         Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
         Statement   statement = connect.createStatement();  
        
-        
+        	drop = 		"DROP TABLE IF EXISTS Transaction";
+            statement.execute(drop);
+            
         	drop =   	"DROP TABLE IF EXISTS Scheduler";
         	statement.execute(drop);
         
@@ -21,30 +23,18 @@ public class DropDB {
             
             drop = 		"DROP TABLE IF EXISTS Bus"; 
             statement.execute(drop);
-            
-            drop = 		"DROP TABLE IF EXISTS BusLine";
-            statement.execute(drop);
-            
+           
             drop = 		"DROP TABLE IF EXISTS Buyer";
             statement.execute(drop);
             
             drop = 		"DROP TABLE IF EXISTS Ticket";
             statement.execute(drop);
             
-            drop = 		"DROP TABLE IF EXISTS Transaction";
+            drop = 		"DROP TABLE IF EXISTS BusLine";
             statement.execute(drop);
                   
             
  }
 	
-	 public static void main( String[] args )
-	    {
-	    	try {
-				new DropDB();
-			} catch (SQLException e) {
-				
-				e.printStackTrace();
-			}
-	       
-	    }
+
 }

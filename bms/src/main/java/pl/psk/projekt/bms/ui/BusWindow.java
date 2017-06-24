@@ -27,7 +27,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.Component;
-import java.awt.Color;
+
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -39,7 +39,6 @@ import net.proteanit.sql.DbUtils;
 import pl.psk.projekt.bms.dbobjects.Bus;
 import pl.psk.projekt.bms.jdbc.BusJDBC;
 
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class BusWindow extends JFrame implements ActionListener {
 
@@ -279,6 +278,7 @@ public class BusWindow extends JFrame implements ActionListener {
 				BusJDBC bj = new BusJDBC();
 				Bus b = new Bus(busName, seat);
 				bj.createBus(b);
+				updateTable();
 			} catch (SQLException e1) {
 				
 				e1.printStackTrace();
@@ -300,6 +300,7 @@ public class BusWindow extends JFrame implements ActionListener {
 					Bus b = new Bus(busName, seat);
 					b.setBusID(value);
 					bj.updateBus(b);
+					updateTable();
 				} catch (SQLException e1) {
 					
 					e1.printStackTrace();
@@ -315,6 +316,7 @@ public class BusWindow extends JFrame implements ActionListener {
 				Bus b = new Bus();
 				b.setBusID(value);
 				bj.deleteBus(b);
+				updateTable();
 			} catch (SQLException e1) {
 				
 				e1.printStackTrace();
@@ -325,7 +327,7 @@ public class BusWindow extends JFrame implements ActionListener {
 	
 	// METODA ODŚWIERZAJĄCA TABELE JTABLE
 		// MUSI ZOSTAĆ WYWOŁANA ZAWSZE NA KOŃCU W PRZYCISKACH: ADD, EDIT, DELETE
-		private void Update_table() {
+		private void updateTable() {
 			try {
 				connect = DriverManager.getConnection(
 						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",

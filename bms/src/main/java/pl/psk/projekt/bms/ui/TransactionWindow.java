@@ -44,7 +44,6 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.JToggleButton;
 import pl.psk.projekt.bms.component.ComboKeyHandler;
 import javax.swing.DefaultComboBoxModel;
 
@@ -56,7 +55,8 @@ public class TransactionWindow extends JFrame implements ActionListener {
 	private JButton addButton;
 	private JButton editButton;
 	private JButton deleteButton;
-
+	private JButton newBuyerButton;
+	private JSpinner spinnerDepartureTime;
 	PreparedStatement preparedStatement;
 	Connection connect;
 	ResultSet rs;
@@ -65,13 +65,20 @@ public class TransactionWindow extends JFrame implements ActionListener {
 	private JTextField filterField;
 	private DefaultTableModel modelFilter;
 	JComboBox<String> comboBoxBuyer;
-	private DefaultComboBoxModel<String> comboModel;
-
+	JComboBox<String> comboBoxBusLine;
+	JComboBox<String> comboBoxTicketType;
+	JComboBox<String> comboBoxDiscount;
+	JComboBox<String> comboBoxScheduler;
+	private DefaultComboBoxModel<String> comboModelBuyerD;
+	private DefaultComboBoxModel<String> comboModelBusLineD;
+	private DefaultComboBoxModel<String> comboBoxSchedulerD;
+	double monthlyPrice;
+	double onewayPrice;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					WorkerWindow frame = new WorkerWindow();
+					TransactionWindow frame = new TransactionWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -124,31 +131,22 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 		JLabel labelBuyer = new JLabel("Search Transaction:");
 
-		JComboBox comboBox = new JComboBox();
+		JLabel lblTicketType = new JLabel("Ticket Type:");
 
-		JComboBox comboBox_2 = new JComboBox();
-
-		JLabel label = new JLabel("Stop Station:");
-
-		JLabel labelTicketType = new JLabel("Ticket Type:");
-
-		JComboBox comboBox_3 = new JComboBox();
-
-		JLabel label_2 = new JLabel("Discount:");
+		JLabel labelTicketType = new JLabel("Discount:");
 
 		textField = new JTextField();
 		textField.setColumns(10);
 
 		Date startDate = new Date();
 		SpinnerDateModel sm = new SpinnerDateModel(startDate, null, null, Calendar.HOUR_OF_DAY);
-		JSpinner spinnerDepartureTime = new JSpinner(sm);
+		spinnerDepartureTime = new JSpinner(sm);
 		spinnerDepartureTime.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		JSpinner.DateEditor de_spinnerDepartureTime = new JSpinner.DateEditor(spinnerDepartureTime, "HH:mm:ss");
 		spinnerDepartureTime.setEditor(de_spinnerDepartureTime);
+		spinnerDepartureTime.setEnabled(false);
 
-		JComboBox comboBox_4 = new JComboBox();
-
-		JLabel label_3 = new JLabel("Start Station:");
+		JLabel lblBusLine = new JLabel("Bus Line:");
 
 		JLabel label_4 = new JLabel("Departure Time:");
 
@@ -164,143 +162,145 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		});
 		filterField.setColumns(10);
 
-
 		fillComboBoxBuyer();
 		comboBoxBuyer = new JComboBox<String>();
-		comboBoxBuyer.setModel(comboModel);
-		comboBoxBuyer.setEditable(true);
-		JTextField text = (JTextField) comboBoxBuyer.getEditor().getEditorComponent();
-		text.setText("");
-		text.addKeyListener(new ComboKeyHandler(comboBoxBuyer));
-		
+		comboBoxBuyer.setModel(comboModelBuyerD);
+		JTextField textBuyer = (JTextField) comboBoxBuyer.getEditor().getEditorComponent();
+		textBuyer.setText("");
+		textBuyer.addKeyListener(new ComboKeyHandler(comboBoxBuyer));
+
 		JLabel labelChooseBuyer = new JLabel("Choose Buyer:");
-		
-		JButton newBuyerButton = new JButton("New Buyer");
+
+		newBuyerButton = new JButton("New Buyer");
+
+		fillComboBoxBusLine();
+		comboBoxBusLine = new JComboBox<String>();
+		comboBoxBusLine.setModel(comboModelBusLineD);
+		JTextField textBusLine = (JTextField) comboBoxBusLine.getEditor().getEditorComponent();
+		textBusLine.setText("");
+		comboBoxBusLine.addActionListener(this);
+		textBusLine.addKeyListener(new ComboKeyHandler(comboBoxBuyer));
+
+		String[] ticketType = { "Monthly", "One-way" };
+
+		comboBoxTicketType = new JComboBox<String>(ticketType);
+		comboBoxTicketType.addActionListener(this);
+		comboBoxTicketType.setEnabled(false);
+
+		comboBoxDiscount = new JComboBox<String>();
+		comboBoxDiscount.setEnabled(false);
+
+		comboBoxScheduler = new JComboBox<String>();
+		comboBoxScheduler.setEnabled(false);
+
+		JLabel labelScheduler = new JLabel("Scheduler:");
+
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(labelChooseBuyer)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(comboBoxBuyer, GroupLayout.PREFERRED_SIZE, 338, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(newBuyerButton)
-					.addGap(163))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-							.addComponent(label_3, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(comboBox_4, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
-							.addGap(28)
-							.addComponent(label, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(comboBox, 0, 237, Short.MAX_VALUE))
-						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-							.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
-							.addGap(4)
-							.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE)
-							.addGap(28)
-							.addComponent(labelTicketType, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(comboBox_2, 0, 237, Short.MAX_VALUE))
-						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-							.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
-							.addGap(28)
-							.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
-							.addGap(38)
-							.addComponent(comboBox_3, 0, 237, Short.MAX_VALUE))
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addComponent(labelChooseBuyer).addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(comboBoxBuyer,
+								GroupLayout.PREFERRED_SIZE, 338, GroupLayout.PREFERRED_SIZE)
+						.addGap(18).addComponent(newBuyerButton).addGap(163))
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap().addGroup(gl_contentPane
+						.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED, 232, GroupLayout.PREFERRED_SIZE)
-							.addComponent(addButton)
-							.addGap(18)
-							.addComponent(editButton)
-							.addGap(18)
-							.addComponent(deleteButton)
-							.addGap(199)))
-					.addGap(20))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(28)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 636, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-					.addContainerGap(216, Short.MAX_VALUE)
-					.addComponent(labelBuyer)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
-					.addGap(186))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(labelChooseBuyer)
+								.addComponent(lblBusLine, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+								.addGap(18)
+								.addComponent(comboBoxBusLine, GroupLayout.PREFERRED_SIZE, 225,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(28)
+								.addComponent(lblTicketType, GroupLayout.PREFERRED_SIZE, 65,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(18).addComponent(comboBoxTicketType, 0, 237, Short.MAX_VALUE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+								.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+								.addGap(4)
+								.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, 226,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(28)
+								.addComponent(labelTicketType, GroupLayout.PREFERRED_SIZE, 65,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(18).addComponent(comboBoxDiscount, 0, 237, Short.MAX_VALUE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+								.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+								.addGap(18)
+								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+								.addComponent(labelScheduler, GroupLayout.PREFERRED_SIZE, 65,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(18).addComponent(comboBoxScheduler, GroupLayout.PREFERRED_SIZE, 237,
+										GroupLayout.PREFERRED_SIZE)))
+						.addGap(20))
+				.addGroup(gl_contentPane.createSequentialGroup().addGap(28)
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 636, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap())
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(188, Short.MAX_VALUE)
+						.addComponent(labelBuyer).addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+						.addGap(186))
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(252, Short.MAX_VALUE)
+						.addComponent(addButton).addGap(18).addComponent(editButton).addGap(18)
+						.addComponent(deleteButton).addGap(209)));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
+				.createSequentialGroup().addContainerGap()
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addComponent(labelChooseBuyer)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(comboBoxBuyer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(newBuyerButton)))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(comboBoxBuyer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(newBuyerButton)))
+				.addGap(18)
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_contentPane.createSequentialGroup()
-								.addGap(3)
-								.addComponent(label_3))
-							.addComponent(comboBox_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(label))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(3)
-							.addComponent(label_4))
-						.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(3)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(labelTicketType)
-								.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(6)
-							.addComponent(label_5))
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(3)
-							.addComponent(label_2))
-						.addComponent(comboBox_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(addButton)
+								.addGroup(gl_contentPane.createSequentialGroup().addGap(3).addComponent(lblBusLine))
+								.addComponent(comboBoxBusLine, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(comboBoxTicketType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblTicketType))
+				.addGap(18)
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup().addGap(3).addComponent(label_4))
+						.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup().addGap(3)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+										.addComponent(labelTicketType).addComponent(comboBoxDiscount,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE))))
+				.addGap(18)
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup().addGap(6).addComponent(label_5))
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(editButton)
-							.addComponent(deleteButton)))
-					.addGap(40)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(comboBoxScheduler, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(labelScheduler)))
+				.addGap(18)
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addComponent(addButton)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(editButton)
+								.addComponent(deleteButton)))
+				.addGap(43)
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelBuyer))
-					.addGap(18)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, editButton, deleteButton});
-		
-		
+				.addGap(18).addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+				.addContainerGap()));
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { addButton, editButton, deleteButton });
+
 		try {
 			connect = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
-						"root", "toor");
+					"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+					"root", "toor");
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
 		try {
-			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+			preparedStatement = connect.prepareStatement("SELECT * FROM TRANSACTION");
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -312,7 +312,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 			e1.printStackTrace();
 		}
 		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
-		
+
 		tableFilter = new JTable();
 		tableFilter.setModel(modelFilter);
 		scrollPane.setViewportView(tableFilter);
@@ -370,27 +370,76 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == editButton) {
-			dispose();
+
 			// startWindow.setVisible(true);
 		}
 
 		if (e.getSource() == deleteButton) {
-			dispose();
+
 			// startWindow.setVisible(true);
 		}
+		
+		if(e.getSource() == comboBoxBusLine){
+			
+			if(comboBoxBusLine.getSelectedItem() != null) comboBoxTicketType.setEnabled(true);
+				else comboBoxTicketType.setEnabled(false);
+			
+			if(comboBoxBusLine.getSelectedItem() == null) comboBoxTicketType.setEnabled(false);
+		}
+		
+		if(e.getSource() == comboBoxTicketType){
+			
+		
+			if(comboBoxTicketType.getSelectedIndex() == 1 ){ 
+				
+				spinnerDepartureTime.setEnabled(true);
+				
+				try {
+					connect = DriverManager.getConnection(
+							"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+							"root", "toor");
 
+					preparedStatement = connect.prepareStatement("SELECT * FROM BusLine WHERE busLineName = "+ comboBoxBusLine.getSelectedItem() +"AND busLineType ="+comboBoxBusLine.getSelectedItem());
+					rs = preparedStatement.executeQuery();
+					comboModelBuyerD = new DefaultComboBoxModel<String>();
+					while (rs.next()) {
+						String name = rs.getString("name") + " " + rs.getString("surname");
+						comboModelBuyerD.addElement(name);
+					}
+				} catch (Exception ey) {
+					JOptionPane.showMessageDialog(null, ey);
+				} finally {
+
+					try {
+						rs.close();
+						preparedStatement.close();
+
+					} catch (Exception en) {
+
+					}
+				}
+			
+			}
+				else{ 
+					
+					spinnerDepartureTime.setEnabled(false);
+					//comboBoxDiscount.addItem();
+				
+				}
+				
+			
+		}
 	}
 
-	
-// METODA ODŚWIERZAJĄCA TABELE JTABLE
+	// METODA ODŚWIERZAJĄCA TABELE JTABLE
 	// MUSI ZOSTAĆ WYWOŁANA ZAWSZE NA KOŃCU W PRZYCISKACH: ADD, EDIT, DELETE
-	private void Update_table() {
+	private void updateTable() {
 		try {
 			connect = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
 					"root", "toor");
 
-			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
+			preparedStatement = connect.prepareStatement("SELECT * FROM TRANSACTION");
 			rs = preparedStatement.executeQuery();
 			tableFilter.setModel(DbUtils.resultSetToTableModel(rs));
 		} catch (Exception e) {
@@ -407,7 +456,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		}
 	}
 
-	//METODA DO DYNAMICZNEGO WYSZUKIWANIA W TABELI
+	// METODA DO DYNAMICZNEGO WYSZUKIWANIA W TABELI
 	private void filter(String query) {
 
 		TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
@@ -416,7 +465,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		trs.setRowFilter(RowFilter.regexFilter(query));
 	}
 
- // METODA WYPEŁNIAJĄCA COMBOBOX DANYMI Z BAZY
+	// METODA WYPEŁNIAJĄCA COMBOBOX DANYMI Z BAZY
 	private void fillComboBoxBuyer() {
 		try {
 			connect = DriverManager.getConnection(
@@ -425,10 +474,10 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
 			rs = preparedStatement.executeQuery();
-			comboModel = new DefaultComboBoxModel<String>();
-			while(rs.next()) {
+			comboModelBuyerD = new DefaultComboBoxModel<String>();
+			while (rs.next()) {
 				String name = rs.getString("name") + " " + rs.getString("surname");
-				comboModel.addElement(name);
+				comboModelBuyerD.addElement(name);
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e);
@@ -443,10 +492,10 @@ public class TransactionWindow extends JFrame implements ActionListener {
 			}
 		}
 	}
-	
-	
- // METODA UMOŻLIWIAJĄCA PORÓWNYWANIE WYBRANEGO Z COMBOBOX TEKSTU DO WARTOSCI W BAZIE W CELU POBRANIA OBCEGO ID
-	private String compare() {
+
+	// METODA UMOŻLIWIAJĄCA PORÓWNYWANIE WYBRANEGO Z COMBOBOX TEKSTU DO WARTOSCI
+	// W BAZIE W CELU POBRANIA OBCEGO ID
+	private String comparBuyer() {
 		try {
 			connect = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
@@ -454,12 +503,73 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 			preparedStatement = connect.prepareStatement("SELECT * FROM Buyer");
 			rs = preparedStatement.executeQuery();
-			comboModel = new DefaultComboBoxModel<String>();
-			while(rs.next()) {
+			comboModelBuyerD = new DefaultComboBoxModel<String>();
+			while (rs.next()) {
 				String name = rs.getString("name") + " " + rs.getString("surname");
-				
-				if(name.equals(comboBoxBuyer.getSelectedItem())) {
-					return  rs.getString("buyerId");
+
+				if (name.equals(comboBoxBuyer.getSelectedItem())) {
+					return rs.getString("buyerId");
+				}
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		} finally {
+
+			try {
+				rs.close();
+				preparedStatement.close();
+
+			} catch (Exception e) {
+
+			}
+		}
+		return null;
+	}
+
+	// METODA WYPEŁNIAJĄCA COMBOBOX DANYMI Z BAZY
+	private void fillComboBoxBusLine() {
+		try {
+			connect = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+					"root", "toor");
+
+			preparedStatement = connect.prepareStatement("SELECT * FROM BUSLINE");
+			rs = preparedStatement.executeQuery();
+			comboModelBusLineD = new DefaultComboBoxModel<String>();
+			while (rs.next()) {
+				String name = rs.getString("busLineName") + " - " + rs.getString("busLineType");
+				comboModelBusLineD.addElement(name);
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		} finally {
+
+			try {
+				rs.close();
+				preparedStatement.close();
+
+			} catch (Exception e) {
+
+			}
+		}
+	}
+
+	// METODA UMOŻLIWIAJĄCA PORÓWNYWANIE WYBRANEGO Z COMBOBOX TEKSTU DO WARTOSCI
+	// W BAZIE W CELU POBRANIA OBCEGO ID
+	private String comparBusLine() {
+		try {
+			connect = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+					"root", "toor");
+
+			preparedStatement = connect.prepareStatement("SELECT * FROM BUSLINE");
+			rs = preparedStatement.executeQuery();
+			comboModelBuyerD = new DefaultComboBoxModel<String>();
+			while (rs.next()) {
+				String name = rs.getString("busLineName") + " - " + rs.getString("busLineType");
+
+				if (name.equals(comboBoxBuyer.getSelectedItem())) {
+					return rs.getString("busLineID");
 				}
 			}
 		} catch (Exception e) {
