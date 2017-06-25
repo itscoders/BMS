@@ -205,7 +205,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		panel.setLayout(gl_panel);
 
 		JLabel background = new JLabel("");
-		background.setIcon(new ImageIcon(ManagementWindow.class.getResource("/pl/psk/projekt/bms/ui/bk2.jpg")));
+		background.setIcon(new ImageIcon(this.getClass().getResource("/bk2.jpg")));
 		background.setBounds(0, 0, 1000, 620);
 		contentPane.add(background);
 	}
