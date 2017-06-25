@@ -69,6 +69,8 @@
 	    private JTextField cityField;
 	    private JTextField surnameField;
 	    private DefaultTableModel modelFilter;
+	    private JLabel labelInsuranceNumber;
+	    private JTextField textFieldInsuranceNumber;
 
 		public static void main(String[] args) {
 			EventQueue.invokeLater(new Runnable() {
@@ -160,6 +162,11 @@
 			
 			surnameField = new JTextField();
 			surnameField.setColumns(10);
+			
+			labelInsuranceNumber = new JLabel("Insurance Number:");
+			
+			textFieldInsuranceNumber = new JTextField();
+			textFieldInsuranceNumber.setColumns(10);
 			GroupLayout gl_contentPane = new GroupLayout(contentPane);
 			gl_contentPane.setHorizontalGroup(
 				gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -191,16 +198,22 @@
 											.addComponent(houseNumberField, 202, 202, 202))))
 								.addGap(28)
 								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-									.addComponent(labelPostCode)
-									.addComponent(labelSurname)
-									.addComponent(labelEmail)
-									.addComponent(labelStreet))
-								.addGap(18)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(surnameField)
-									.addComponent(streetField)
-									.addComponent(emailField)
-									.addComponent(postCodeField))
+									.addGroup(gl_contentPane.createSequentialGroup()
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+											.addComponent(labelPostCode)
+											.addComponent(labelSurname)
+											.addComponent(labelEmail)
+											.addComponent(labelStreet))
+										.addGap(18)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+											.addComponent(surnameField)
+											.addComponent(streetField)
+											.addComponent(emailField)
+											.addComponent(postCodeField)))
+									.addGroup(gl_contentPane.createSequentialGroup()
+										.addComponent(labelInsuranceNumber, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+										.addGap(18)
+										.addComponent(textFieldInsuranceNumber, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)))
 								.addGap(30))))
 					.addGroup(gl_contentPane.createSequentialGroup()
 						.addGap(280)
@@ -233,7 +246,11 @@
 								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 									.addComponent(labelPostCode)
 									.addComponent(postCodeField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(houseNumberField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+									.addComponent(houseNumberField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(18)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+									.addComponent(labelInsuranceNumber)
+									.addComponent(textFieldInsuranceNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 							.addGroup(gl_contentPane.createSequentialGroup()
 								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 									.addComponent(labelMobilePhone)
@@ -250,8 +267,8 @@
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
 						.addContainerGap())
 			);
-			gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelName, labelBirthday, labelMobilePhone, labelHouseNumber, labelSurname, labelEmail, labelStreet, labelPostCode, labelCity});
 			gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {nameField, postCodeField, emailField, houseNumberField});
+			gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelName, labelBirthday, labelMobilePhone, labelHouseNumber, labelSurname, labelEmail, labelStreet, labelPostCode, labelCity});
 
 			try {
 				connect = DriverManager.getConnection(
@@ -302,6 +319,7 @@
 				String houseNumber = houseNumberField.getText();
 				String postCode = postCodeField.getText();
 				String city = cityField.getText();
+				String in = textFieldInsuranceNumber.getText();
 
 				boolean valid = true;
 				String invalid = "";
@@ -338,7 +356,7 @@
 					try {
 						try {
 							BuyerJDBC wj = new BuyerJDBC();
-							Buyer w = new Buyer(name, surname, birthday, email, mobilePhone, street, houseNumber, postCode, city);
+							Buyer w = new Buyer(name, surname, birthday, email, mobilePhone, street, houseNumber, postCode, city, in);
 							wj.createBuyer(w);
 						} catch (SQLException e1) {
 

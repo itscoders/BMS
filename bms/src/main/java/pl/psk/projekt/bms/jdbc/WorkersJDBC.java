@@ -27,17 +27,17 @@ public class WorkersJDBC {
     }
     
     
-    public boolean workersLog(Workers w)throws SQLException{
+    public Workers workersLog(Workers w)throws SQLException{
         
-    	String sql = "SELECT * FROM WORKERS WHERE USERNAME =? AND PASSWORD =?";
-    	
+    	String sql = "SELECT * FROM WORKERS WHERE USERNAME='?' AND PASSWORD ='?'";
+    	System.err.println("elo");
     	preparedStatement = connect.prepareStatement(sql);
     	preparedStatement.setString(1,w.getUsername());
     	preparedStatement.setString(2,w.getPassword());
         ResultSet rs = preparedStatement.executeQuery();
         
         while(rs.next()){
-        	
+        	System.err.println("elo2");
             w.setWorkerId(rs.getInt("workerId"));
             w.setPossition(rs.getString("possition"));
             w.setAddress(rs.getString("address"));
@@ -48,20 +48,22 @@ public class WorkersJDBC {
             w.setName(rs.getString("name"));
             w.setSurname(rs.getString("surname"));
             
+            
         }
-        return true;
+        return w;
                 
     }
     
-    public String workersLog(String username,String password)throws Exception{
+    public Workers workersLog(String username,String password)throws Exception{
         
         Workers w = new Workers();
         w.setUsername(username);
         w.setPassword(password);
+        System.err.println(username+password);
         
-        boolean success = this.workersLog(w);
-        if(success)
-            return w.getName() + "" + w.getSurname();
+        w = this.workersLog(w);
+        if(w.getName() != null)
+            return w;
         else
             return null;
         

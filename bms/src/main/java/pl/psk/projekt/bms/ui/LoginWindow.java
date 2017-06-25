@@ -2,7 +2,6 @@ package pl.psk.projekt.bms.ui;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.sql.*;
 import java.awt.Color;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -10,7 +9,6 @@ import pl.psk.projekt.bms.dbobjects.Workers;
 import pl.psk.projekt.bms.jdbc.WorkersJDBC;
 
 import java.awt.Font;
-import java.awt.Rectangle;
 
 public class LoginWindow extends JFrame implements ActionListener {
 
@@ -115,23 +113,40 @@ public class LoginWindow extends JFrame implements ActionListener {
 			
 			String username = userNameField.getText();
 	         String password = passwordField.getText();
-	          
+	         System.err.println(password); 
+	         
 	         try{
 	             WorkersJDBC wj = new WorkersJDBC();
 	             
 	             
-	             String name = wj.workersLog(username,password);
-                 if (name == null){
+	             Workers w = wj.workersLog(username,password);
+                 if (w.getName() == null){
                      JOptionPane.showMessageDialog(this, "Invalid Username or Password");
                  } else {
-                     JOptionPane.showMessageDialog(this, "Login Success\n\n Worker: "+ username);
+                     JOptionPane.showMessageDialog(this, "Login Success\n\n Worker: "+ w.getName() +" "+ w.getSurname());
                      dispose();
-                     ManagementWindow mw = new ManagementWindow();
+                     
+                     System.err.println(w.getAccountType());
+                     if(w.getAccountType().equals("Administrator")){
+                    	 System.err.println(w.getAccountType());
+                     ManagementWindow mw = new ManagementWindow(w);
                      mw.setVisible(true);
+                     }
+                     if(w.getAccountType().equals("Driver")){
+                    	 System.err.println(w.getAccountType());
+                    	 DriverWindow dw = new DriverWindow(w);
+                         dw.setVisible(true);
+                     }
+                     
+                     if(w.getAccountType().equals("Seller")){
+                    	 System.err.println(w.getAccountType());
+                    	 SellerWindow sw = new SellerWindow(w);
+                         sw.setVisible(true);
+                     }
 	                 }
 	                 
 	             } catch (Exception ex) {
-	                 JOptionPane.showMessageDialog(this, ex.getMessage());
+	                 JOptionPane.showMessageDialog(this, "halu");
 	             }
 			/*try {
 				Class.forName("com.mysql.jdbc.Driver");

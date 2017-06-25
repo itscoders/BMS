@@ -4,161 +4,80 @@ public class Transaction {
 	
 	private int transactionId;
     private String discount;
-    private int number; 
-    private double price;
     private String payment;
-    private String idScheduler;
-    private String idTicket;
-    private String idBuyer;
+    private String date;
+    private int idScheduler;
+    private int idSeller;
+    private int idBuyer;
     
-
-
-	public Transaction() {
-		
-	}
-	
-
-	public Transaction(int transactionId, String discount, int number, double price, String payment,
-			String idScheduler, String idTicket, String idBuyer) {
+	public Transaction(int transactionId, String discount, String payment, String date, int idScheduler, int idSeller,
+			int idBuyer) {
 		super();
 		this.transactionId = transactionId;
 		this.discount = discount;
-		this.number = number;
-		this.price = price;
 		this.payment = payment;
+		this.date = date;
 		this.idScheduler = idScheduler;
-		this.idTicket = idTicket;
+		this.idSeller = idSeller;
 		this.idBuyer = idBuyer;
 	}
-	
-	
-	public Transaction(String discount, int number, double price, String payment, String idScheduler, String idTicket, String idBuyer) {
+	public Transaction(String discount, String payment, String date, int idScheduler, int idSeller, int idBuyer) {
 		super();
 		this.discount = discount;
-		this.number = number;
-		this.price = price;
 		this.payment = payment;
+		this.date = date;
 		this.idScheduler = idScheduler;
-		this.idTicket = idTicket;
+		this.idSeller = idSeller;
 		this.idBuyer = idBuyer;
 	}
-
-
-
-
-
+	public Transaction() {
+		super();
+	}
 	public int getTransactionId() {
 		return transactionId;
 	}
-
-
-
-
-
 	public void setTransactionId(int transactionId) {
 		this.transactionId = transactionId;
 	}
-
-
-
-
-
 	public String getDiscount() {
 		return discount;
 	}
-
-
-
-
-
 	public void setDiscount(String discount) {
 		this.discount = discount;
 	}
-
-
-
-
-
-	public int getNumber() {
-		return number;
-	}
-
-
-
-
-
-	public void setNumber(int number) {
-		this.number = number;
-	}
-
-
-
-
-
-	public double getPrice() {
-		return price;
-	}
-
-
-
-
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-
-
-
-
 	public String getPayment() {
 		return payment;
 	}
-
-
-
-
-
 	public void setPayment(String payment) {
 		this.payment = payment;
 	}
-
-
-
-
-
-	public String getIdScheduler() {
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
+	public int getIdScheduler() {
 		return idScheduler;
 	}
-
-
-
-
-
-	public void setIdScheduler(String idScheduler) {
+	public void setIdScheduler(int idScheduler) {
 		this.idScheduler = idScheduler;
 	}
-
-
-	public String getIdTicket() {
-		return idTicket;
+	public int getIdSeller() {
+		return idSeller;
 	}
-
-
-	public void setIdTicket(String idTicket) {
-		this.idTicket = idTicket;
+	public void setIdSeller(int idSeller) {
+		this.idSeller = idSeller;
 	}
-
-
-	public String getIdBuyer() {
+	public int getIdBuyer() {
 		return idBuyer;
 	}
-
-
-	public void setIdBuyer(String idBuyer) {
+	public void setIdBuyer(int idBuyer) {
 		this.idBuyer = idBuyer;
 	}
-	
-	
+    
+    
+
+
 
 }

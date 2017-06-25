@@ -53,7 +53,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 			public void run() {
 				try {
 					Workers w = new Workers();
-					ManagementWindow frame = new ManagementWindow();
+					ManagementWindow frame = new ManagementWindow(w);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -62,8 +62,9 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		});
 	}
 
-	public ManagementWindow() {
+	public ManagementWindow(Workers w) {
 		
+		this.w=w;
 
 		setVisible(true);
 

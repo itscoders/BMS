@@ -39,15 +39,16 @@ import javax.swing.table.TableRowSorter;
 import com.toedter.calendar.JDateChooser;
 
 import net.proteanit.sql.DbUtils;
-import pl.psk.projekt.bms.dbobjects.BusLine;
 import pl.psk.projekt.bms.dbobjects.Buyer;
-import pl.psk.projekt.bms.jdbc.BusLineJDBC;
 import pl.psk.projekt.bms.jdbc.BuyerJDBC;
+
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+
 
 public class BuyerWindow extends JFrame implements ActionListener {
 
@@ -64,17 +65,19 @@ public class BuyerWindow extends JFrame implements ActionListener {
 	private JButton editButton;
 	private JButton deleteButton;
 	private JDateChooser birthdayField;
-
-	PreparedStatement preparedStatement;
-	Connection connect;
-	ResultSet rs;
-	private JTextField mobilePhoneField;
-	private JTextField streetField;
-	private JTextField cityField;
-	private JTextField surnameField;
-	private JTextField filterField;
-	private DefaultTableModel modelFilter;
-	private JLabel label;
+	
+	PreparedStatement  preparedStatement;
+    Connection connect;
+    ResultSet rs;
+    private JTextField mobilePhoneField;
+    private JTextField streetField;
+    private JTextField cityField;
+    private JTextField surnameField;
+    private JTextField filterField;
+    private DefaultTableModel modelFilter;
+    private JLabel label;
+    private JTextField textFieldInsuranceNumber;
+    private JLabel labelInsuranceNumber;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -164,19 +167,19 @@ public class BuyerWindow extends JFrame implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane();
 
 		birthdayField = new JDateChooser();
-
+		
 		mobilePhoneField = new JTextField();
 		mobilePhoneField.setColumns(10);
-
+		
 		streetField = new JTextField();
 		streetField.setColumns(10);
-
+		
 		cityField = new JTextField();
 		cityField.setColumns(10);
-
+		
 		surnameField = new JTextField();
 		surnameField.setColumns(10);
-
+		
 		filterField = new JTextField();
 		filterField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -186,113 +189,135 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			}
 		});
 		filterField.setColumns(10);
-
+		
 		label = new JLabel("Search Buyer:");
+		
+		textFieldInsuranceNumber = new JTextField();
+		textFieldInsuranceNumber.setColumns(10);
+		
+		labelInsuranceNumber = new JLabel("Insurance Number :");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-										.addComponent(addButton).addGap(18).addComponent(editButton).addGap(18)
-										.addComponent(deleteButton).addGap(219))
-								.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-										.addGroup(gl_contentPane
-												.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-														.createSequentialGroup()
-														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-																.addComponent(labelName).addComponent(labelBirthday))
-														.addGap(18)
-														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-																.addComponent(nameField, GroupLayout.PREFERRED_SIZE,
-																		202, GroupLayout.PREFERRED_SIZE)
-																.addComponent(birthdayField, GroupLayout.DEFAULT_SIZE,
-																		202, Short.MAX_VALUE)))
-												.addGroup(gl_contentPane.createSequentialGroup()
-														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-																.addComponent(labelHouseNumber).addComponent(labelCity)
-																.addComponent(labelMobilePhone))
-														.addGap(18)
-														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-																.addComponent(cityField, GroupLayout.DEFAULT_SIZE, 202,
-																		Short.MAX_VALUE)
-																.addComponent(mobilePhoneField,
-																		GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
-																.addComponent(houseNumberField, 202, 202, 202))))
-										.addGap(28)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(labelPostCode).addComponent(labelSurname)
-												.addComponent(labelEmail).addComponent(labelStreet))
-										.addGap(18)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-												.addComponent(surnameField).addComponent(streetField)
-												.addComponent(emailField).addComponent(postCodeField))
-										.addGap(30)))
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-								.addComponent(label, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-								.addGap(10)
-								.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
-								.addGap(194)))));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(labelName)
-								.addComponent(nameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelSurname).addComponent(surnameField, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(labelBirthday).addComponent(labelEmail).addComponent(emailField,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE))
-								.addComponent(birthdayField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-								.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(labelStreet).addComponent(streetField, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(18)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(labelPostCode)
-										.addComponent(postCodeField, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(houseNumberField, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(addButton)
+							.addGap(18)
+							.addComponent(editButton)
+							.addGap(18)
+							.addComponent(deleteButton)
+							.addGap(219))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-												.addComponent(labelMobilePhone).addComponent(mobilePhoneField,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-										.addGap(18).addComponent(labelHouseNumber).addGap(24)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-												.addComponent(labelCity).addComponent(cityField,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))))
-						.addGap(18)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addComponent(addButton)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(editButton).addComponent(deleteButton)))
-						.addGap(18)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup().addGap(3).addComponent(label))
-								.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(18).addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-						.addContainerGap()));
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { addButton, editButton, deleteButton });
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL,
-				new Component[] { nameField, postCodeField, emailField, houseNumberField });
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { labelName, labelBirthday, labelMobilePhone,
-				labelHouseNumber, labelSurname, labelEmail, labelStreet, labelPostCode, labelCity });
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(labelName)
+										.addComponent(labelBirthday))
+									.addGap(18)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(nameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+										.addComponent(birthdayField, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(labelHouseNumber)
+										.addComponent(labelCity)
+										.addComponent(labelMobilePhone))
+									.addGap(18)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(cityField, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+										.addComponent(mobilePhoneField, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+										.addComponent(houseNumberField, 202, 202, 202))))
+							.addGap(28)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+									.addComponent(labelPostCode)
+									.addComponent(labelSurname)
+									.addComponent(labelEmail)
+									.addComponent(labelStreet))
+								.addComponent(labelInsuranceNumber, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(surnameField)
+									.addComponent(streetField)
+									.addComponent(emailField)
+									.addComponent(postCodeField))
+								.addComponent(textFieldInsuranceNumber, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE))
+							.addGap(30))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(label, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
+							.addGap(10)
+							.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+							.addGap(194))))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(labelName)
+						.addComponent(nameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelSurname)
+						.addComponent(surnameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(labelBirthday)
+							.addComponent(labelEmail)
+							.addComponent(emailField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(birthdayField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(labelStreet)
+								.addComponent(streetField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(labelPostCode)
+								.addComponent(postCodeField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(houseNumberField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(textFieldInsuranceNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(labelInsuranceNumber)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(labelMobilePhone)
+								.addComponent(mobilePhoneField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addComponent(labelHouseNumber)
+							.addGap(24)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(labelCity)
+								.addComponent(cityField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(addButton)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(editButton)
+							.addComponent(deleteButton)))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(label))
+						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelName, labelBirthday, labelMobilePhone, labelHouseNumber, labelSurname, labelEmail, labelStreet, labelPostCode, labelCity});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {nameField, postCodeField, emailField, houseNumberField});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, editButton, deleteButton});
 
 		try {
 			connect = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
-					"root", "toor");
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -310,10 +335,12 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
+		
 		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
-
+		
 		tableFilter = new JTable();
+		tableFilter.setModel(modelFilter);
+
 		tableFilter.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -321,13 +348,16 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			}
 		});
 		tableFilter.setModel(modelFilter);
-
+		
 		scrollPane.setViewportView(tableFilter);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(
+	                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		contentPane.setLayout(gl_contentPane);
 	}
+
 
 	private void tableFilterMouseClicked(MouseEvent e) {
 		editButton.setEnabled(true);
@@ -344,6 +374,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 		String houseNumber = tableFilter.getValueAt(index, 7).toString();
 		String postCode = tableFilter.getValueAt(index, 8).toString();
 		String city = tableFilter.getValueAt(index, 9).toString();
+		String in = tableFilter.getValueAt(index, 10).toString();
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 		Date date = null;
@@ -363,6 +394,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 		houseNumberField.setText(houseNumber);
 		postCodeField.setText(postCode);
 		cityField.setText(city);
+		textFieldInsuranceNumber.setText(in);
 	}
 
 	@Override
@@ -378,6 +410,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			String houseNumber = houseNumberField.getText();
 			String postCode = postCodeField.getText();
 			String city = cityField.getText();
+			String in = textFieldInsuranceNumber.getText();
 
 			boolean valid = true;
 			String invalid = "";
@@ -395,6 +428,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(this, "Fail to compare Date");
 			}
+
 
 			// Handphone validation
 			if (mobilePhone.length() != 9) {
@@ -413,8 +447,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 				try {
 					try {
 						BuyerJDBC wj = new BuyerJDBC();
-						Buyer w = new Buyer(name, surname, birthday, email, mobilePhone, street, houseNumber, postCode,
-								city);
+						Buyer w = new Buyer(name, surname, birthday, email, mobilePhone, street, houseNumber, postCode, city,in);
 						wj.createBuyer(w);
 					} catch (SQLException e1) {
 
@@ -427,7 +460,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 				}
 			} else
 				JOptionPane.showMessageDialog(null, invalid);
-
+		
 			updateTable();
 		}
 
@@ -441,12 +474,13 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			String houseNumber = houseNumberField.getText();
 			String postCode = postCodeField.getText();
 			String city = cityField.getText();
-
+			String in = textFieldInsuranceNumber.getText();
+			
 			boolean valid = true;
 			String invalid = "";
 
 			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 				Date dd = sdf.parse(birthday);
 				Calendar cal = Calendar.getInstance();
 				String today = sdf.format(cal.getTime());
@@ -458,6 +492,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(this, "Fail to compare Date");
 			}
+
 
 			// Handphone validation
 			if (mobilePhone.length() != 9) {
@@ -477,22 +512,21 @@ public class BuyerWindow extends JFrame implements ActionListener {
 				try {
 					try {
 						BuyerJDBC wj = new BuyerJDBC();
-						Buyer w = new Buyer(name, surname, birthday, email, mobilePhone, street, houseNumber, postCode,
-								city);
+						Buyer w = new Buyer(name, surname, birthday, email, mobilePhone, street, houseNumber, postCode, city, in);
 						w.setBuyerId(value);
 						wj.updateBuyer(w);
 					} catch (SQLException e1) {
 
 						e1.printStackTrace();
 					}
-					JOptionPane.showMessageDialog(this, "Buyer: " + name + surname + " was edited.");
+					JOptionPane.showMessageDialog(this, "New Buyer: " + name + surname + " had added.");
 
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, ex.getMessage());
 				}
 			} else
 				JOptionPane.showMessageDialog(null, invalid);
-
+		
 			updateTable();
 		}
 
@@ -518,7 +552,8 @@ public class BuyerWindow extends JFrame implements ActionListener {
 		}
 
 	}
-
+	
+	
 	private void updateTable() {
 		try {
 			connect = DriverManager.getConnection(
@@ -542,6 +577,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 		}
 	}
 
+		
 	private void filter(String query) {
 
 		TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
@@ -549,5 +585,6 @@ public class BuyerWindow extends JFrame implements ActionListener {
 
 		trs.setRowFilter(RowFilter.regexFilter(query));
 	}
-
+    
 }
+

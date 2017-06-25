@@ -12,6 +12,7 @@ public class Buyer {
 	private String houseNumber;
 	private String postCode;
 	private String city;
+	private String insuranceNumber;
 
 	
 	public Buyer() {
@@ -21,7 +22,7 @@ public class Buyer {
 	
 
 	public Buyer(String name, String surname, String birthday, String email, String mobile, String street,
-			String houseNumber, String postCode, String city) {
+			String houseNumber, String postCode, String city, String insuranceNumber) {
 		super();
 		this.name = name;
 		this.surname = surname;
@@ -32,6 +33,7 @@ public class Buyer {
 		this.houseNumber = houseNumber;
 		this.postCode = postCode;
 		this.city = city;
+		this.insuranceNumber = insuranceNumber;
 	}
 
 
@@ -168,6 +170,18 @@ public class Buyer {
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+
+
+
+	public String getInsuranceNumber() {
+		return insuranceNumber;
+	}
+
+
+
+	public void setInsuranceNumber(String insuranceNumber) {
+		this.insuranceNumber = insuranceNumber;
 	}
 	
 	

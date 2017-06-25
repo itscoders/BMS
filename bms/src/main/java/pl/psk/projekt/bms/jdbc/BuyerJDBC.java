@@ -5,7 +5,6 @@ package pl.psk.projekt.bms.jdbc;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import pl.psk.projekt.bms.dbobjects.Buyer;
@@ -28,7 +27,7 @@ public class BuyerJDBC {
     
     
     public boolean createBuyer(Buyer b)throws SQLException{
-    String sql="INSERT INTO Buyer (name, surname, birthday, email, mobile, street, houseNumber, postCode, city) values(?,?,?,?,?,?,?,?,?)";
+    String sql="INSERT INTO Buyer (name, surname, birthday, email, mobile, street, houseNumber, postCode, city, insuranceNumber) values(?,?,?,?,?,?,?,?,?,?)";
     preparedStatement=connect.prepareStatement(sql);
   
     preparedStatement.setString(1,b.getName());
@@ -40,6 +39,7 @@ public class BuyerJDBC {
     preparedStatement.setString(7,b.getHouseNumber());
     preparedStatement.setString(8,b.getPostCode());
     preparedStatement.setString(9,b.getCity());
+    preparedStatement.setString(10,b.getInsuranceNumber());
     
         
     int result = preparedStatement.executeUpdate();
@@ -53,7 +53,7 @@ public class BuyerJDBC {
     
     
     public boolean updateBuyer(Buyer b)throws SQLException{
-    String sql ="UPDATE Buyer SET NAME=?, SURNAME=?, BIRTHDAY=?, EMAIL=?, MOBILE=?, STREET=?, HOUSENUMBER=?, POSTCODE=?, CITY=? WHERE BUYERID=?";
+    String sql ="UPDATE Buyer SET NAME=?, SURNAME=?, BIRTHDAY=?, EMAIL=?, MOBILE=?, STREET=?, HOUSENUMBER=?, POSTCODE=?, CITY=?, INSURENCENUMBER=? WHERE BUYERID=?";
     preparedStatement=connect.prepareStatement(sql);
     
     preparedStatement.setString(1,b.getName());
@@ -65,7 +65,8 @@ public class BuyerJDBC {
     preparedStatement.setString(7,b.getHouseNumber());
     preparedStatement.setString(8,b.getPostCode());
     preparedStatement.setString(9,b.getCity());
-    preparedStatement.setInt(10,b.getBuyerId());
+    preparedStatement.setString(10,b.getInsuranceNumber());
+    preparedStatement.setInt(11,b.getBuyerId());
         
     int result = preparedStatement.executeUpdate();
         if(result > 0)

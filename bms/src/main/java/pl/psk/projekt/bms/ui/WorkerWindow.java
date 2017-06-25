@@ -421,7 +421,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 		if (e.getSource() == addButton) {
 			String username = userNameField.getText();
-			String password = passwordField.getPassword().toString();
+			String password = passwordField.getText();
 			String name = nameField.getText();
 			String surname = surnameField.getText();
 			String type = (String) comboBoxType.getSelectedItem();
@@ -497,7 +497,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			
 			
 			String username = userNameField.getText();
-			String password = passwordField.getPassword().toString();
+			String password = passwordField.getText();
 			String name = nameField.getText();
 			String surname = surnameField.getText();
 			String type = (String) comboBoxType.getSelectedItem();

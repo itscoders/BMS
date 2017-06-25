@@ -49,6 +49,7 @@ public class DriverWindow extends JFrame implements ActionListener {
 	private JButton logoutButton;
 	private JLabel logLabel;
 
+
 	PreparedStatement preparedStatement;
 	Connection connect;
 	ResultSet rs;

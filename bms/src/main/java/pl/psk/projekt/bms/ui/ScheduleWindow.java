@@ -70,6 +70,8 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 	private DefaultComboBoxModel<String> comboModelBusD;
 	private JSpinner spinnerDepartureTimeStart;
 	private JSpinner spinnerArrivalTimeStop;
+	JSpinner.DateEditor de_spinnerArrivalTime;
+	JSpinner.DateEditor de_spinnerDepartureTime;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -162,13 +164,13 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 		SpinnerDateModel sm = new SpinnerDateModel(startDate, null, null, Calendar.HOUR_OF_DAY);
 		spinnerDepartureTimeStart = new JSpinner(sm);
 		spinnerDepartureTimeStart.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		JSpinner.DateEditor de_spinnerDepartureTime = new JSpinner.DateEditor(spinnerDepartureTimeStart, "HH:mm:ss");
+		de_spinnerDepartureTime = new JSpinner.DateEditor(spinnerDepartureTimeStart, "HH:mm:ss");
 		spinnerDepartureTimeStart.setEditor(de_spinnerDepartureTime);
 
 		Date stopDate = new Date();
 		SpinnerDateModel sm2 = new SpinnerDateModel(stopDate, null, null, Calendar.HOUR_OF_DAY);
 		spinnerArrivalTimeStop = new JSpinner(sm2);
-		JSpinner.DateEditor de_spinnerArrivalTime = new JSpinner.DateEditor(spinnerArrivalTimeStop, "HH:mm:ss");
+		de_spinnerArrivalTime = new JSpinner.DateEditor(spinnerArrivalTimeStop, "HH:mm:ss");
 		spinnerArrivalTimeStop.setEditor(de_spinnerArrivalTime);
 		
 		filterField = new JTextField();
@@ -304,8 +306,9 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 			int driver = comparDriver();
 			int bus = comparBus();
 			int line = comparBusLine();
-			String startTime = spinnerDepartureTimeStart.toString();
-			String stopTime = spinnerArrivalTimeStop.toString();
+			String startTime = de_spinnerDepartureTime.getFormat().format(spinnerDepartureTimeStart.getValue());
+			String stopTime = de_spinnerArrivalTime.getFormat().format(spinnerArrivalTimeStop.getValue());
+			
 			
 			try {
 				SchedulerJDBC sj = new SchedulerJDBC();
@@ -327,8 +330,9 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 				int driver = comparDriver();
 				int bus = comparBus();
 				int line = comparBusLine();
-				String startTime = spinnerDepartureTimeStart.toString();
-				String stopTime = spinnerArrivalTimeStop.toString();
+				String startTime = de_spinnerDepartureTime.getFormat().format(spinnerDepartureTimeStart.getValue());
+				String stopTime = de_spinnerArrivalTime.getFormat().format(spinnerArrivalTimeStop.getValue());
+				
 				
 				try {
 					SchedulerJDBC sj = new SchedulerJDBC();

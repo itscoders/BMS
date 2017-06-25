@@ -29,15 +29,14 @@ public class TransactionJDBC {
    
         
     public boolean addTransaction(Transaction sc)throws SQLException{
-        String sql = "insert into scheduler(discount, number, price, payment, IdScheduler, IdTicket, IdBuyer) values(?,?,?,?,?,?)";
+        String sql = "insert into Transaction (discount, payment, date, IdScheduler, IdSeller, IdBuyer) values(?,?,?,?,?,?)";
         preparedStatement = connect.prepareStatement(sql);
-        preparedStatement.setInt(1,sc.getTransactionId());
-        preparedStatement.setInt(2,sc.getNumber());
-        preparedStatement.setDouble(3,sc.getPrice());
-        preparedStatement.setString(4,sc.getPayment());
-        preparedStatement.setString(5,sc.getIdScheduler());
-        preparedStatement.setString(6,sc.getIdTicket());
-        preparedStatement.setString(7,sc.getIdBuyer());
+        preparedStatement.setString(1,sc.getDiscount());
+        preparedStatement.setString(2,sc.getPayment());
+        preparedStatement.setString(3,sc.getDate());
+        preparedStatement.setInt(4,sc.getIdScheduler());
+        preparedStatement.setInt(5,sc.getIdSeller());
+        preparedStatement.setInt(6,sc.getIdBuyer());
         
         int result= preparedStatement.executeUpdate();
               
@@ -61,7 +60,7 @@ public class TransactionJDBC {
     }    
     
     public boolean updateTransaction(Transaction s)throws SQLException{
-        String sql = "update Transaction set "+"',discount='"+s.getDiscount()+"',number='"+s.getNumber()+"',price='"+s.getPrice()+"',payment='"+s.getPayment()+"',IdScheduler='"+s.getIdScheduler()+"',IdTicket='"+s.getIdTicket()+"',IdBuyer='"+s.getIdBuyer()+"' where transactionId='"+s.getTransactionId()+"'";
+        String sql = "update Transaction set "+"',discount='"+s.getDiscount()+"',payment='"+s.getPayment()+"',date = '"+s.getDate()+"',IdScheduler='"+s.getIdScheduler()+"',IdSeller='"+s.getIdSeller()+"',IdBuyer='"+s.getIdBuyer()+"' where transactionId='"+s.getTransactionId()+"'";
         int result = preparedStatement.executeUpdate(sql);
         
         if (result > 0)

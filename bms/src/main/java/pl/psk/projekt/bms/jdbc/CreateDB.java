@@ -85,28 +85,21 @@ public class CreateDB {
           					"street varchar(255),"+
           					"houseNumber varchar(255),"+
           					"postCode varchar(255),"+
-          					"city varchar(255));";
+          					"city varchar(255),"+
+          					"insuranceNumber varchar(255));";
 	            statement.execute(create);
                 
-	            create = 		"CREATE TABLE IF NOT EXISTS Ticket ("+
-        						"ticketId int AUTO_INCREMENT PRIMARY KEY,"+
-        						"type varchar(255),"+
-        						"price double,"+
-        						"IdBusLine int,"+
-        						"FOREIGN KEY (IdBusLine) REFERENCES BusLine(busLineID));"; 
-	            statement.execute(create);
 	            
 	            create = 	"CREATE TABLE IF NOT EXISTS Transaction ("+
 							"transactionId int AUTO_INCREMENT PRIMARY KEY,"+
 							"discount varchar(255),"+
-							"number int,"+
-							"price double,"+
 							"payment varchar(255),"+
+							"date varchar(255),"+
 							"IdScheduler int,"+
-							"IdTicket int,"+
+							"IdSeller int,"+
 							"IdBuyer int,"+
 							"FOREIGN KEY (IdScheduler) REFERENCES Scheduler(schedulerID),"+ 
-							"FOREIGN KEY (IdTicket) REFERENCES Ticket(ticketId),"+
+							"FOREIGN KEY (IdSeller) REFERENCES Workers(workerId),"+
 							"FOREIGN KEY (IdBuyer) REFERENCES Buyer(buyerId));"; 
         statement.execute(create);
 	            
