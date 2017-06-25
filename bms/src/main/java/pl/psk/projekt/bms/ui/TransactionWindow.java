@@ -71,7 +71,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 	JComboBox<String> comboBoxScheduler;
 	private DefaultComboBoxModel<String> comboModelBuyerD;
 	private DefaultComboBoxModel<String> comboModelBusLineD;
-	private DefaultComboBoxModel<String> comboBoxSchedulerD;
+	//private DefaultComboBoxModel<String> comboBoxSchedulerD;
 	double monthlyPrice;
 	double onewayPrice;
 	public static void main(String[] args) {
@@ -172,6 +172,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		JLabel labelChooseBuyer = new JLabel("Choose Buyer:");
 
 		newBuyerButton = new JButton("New Buyer");
+		newBuyerButton.addActionListener(this);
 
 		fillComboBoxBusLine();
 		comboBoxBusLine = new JComboBox<String>();
@@ -363,6 +364,20 @@ public class TransactionWindow extends JFrame implements ActionListener {
 				}
 				
 			
+		}
+		
+		if(e.getSource() == newBuyerButton){
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						NewBuyerWindow nbw = new NewBuyerWindow();
+						nbw.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+
 		}
 	}
 

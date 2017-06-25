@@ -24,13 +24,11 @@ import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import java.awt.Component;
 import java.awt.Color;
-import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -41,14 +39,12 @@ import com.toedter.calendar.JDateChooser;
 
 import net.proteanit.sql.DbUtils;
 import pl.psk.projekt.bms.dbobjects.Buyer;
-import pl.psk.projekt.bms.dbobjects.Workers;
 import pl.psk.projekt.bms.jdbc.BuyerJDBC;
-import pl.psk.projekt.bms.jdbc.WorkersJDBC;
 
-import javax.swing.JTextArea;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.LayoutStyle.ComponentPlacement;
+
 
 
 public class BuyerWindow extends JFrame implements ActionListener {

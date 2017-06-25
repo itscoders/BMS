@@ -41,6 +41,7 @@ import com.toedter.calendar.JDateChooser;
 
 import net.proteanit.sql.DbUtils;
 import pl.psk.projekt.bms.dbobjects.Workers;
+import pl.psk.projekt.bms.jdbc.SchedulerJDBC;
 import pl.psk.projekt.bms.jdbc.WorkersJDBC;
 
 import javax.swing.JTextArea;
@@ -482,7 +483,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			String invalid = "";
 
 			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("DD-MMM-YYYY");
+				SimpleDateFormat sdf = new SimpleDateFormat("DD-MM-YYYY");
 				Date dd = sdf.parse(birthday);
 				Calendar cal = Calendar.getInstance();
 				String today = sdf.format(cal.getTime());
@@ -518,11 +519,13 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 			if (valid) {
 				try {
+					int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()).toString());
 					double dSalary = Double.parseDouble(salary);
 					try {
 						WorkersJDBC wj = new WorkersJDBC();
 						Workers w = new Workers(type, username, password, name, surname, position, mobilePhone, adress,birthday, dSalary);
-						wj.createWorker(w);
+						w.setWorkerId(value);
+						wj.updateWorker(w);
 					} catch (SQLException e1) {
 
 						e1.printStackTrace();
@@ -539,7 +542,16 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 		if (e.getSource() == deleteButton) {
 			
-			// startWindow.setVisible(true);
+			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()).toString());
+			
+			try {
+				SchedulerJDBC sj = new SchedulerJDBC();
+				sj.deleteSchedulerRecord(value);
+				updateTable();
+			} catch (SQLException e1) {
+				
+				e1.printStackTrace();
+			}
 		}
 
 	}
