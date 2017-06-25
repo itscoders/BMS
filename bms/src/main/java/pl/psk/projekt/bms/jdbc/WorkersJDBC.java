@@ -135,7 +135,7 @@ public class WorkersJDBC {
 
     
     public boolean deleteWorker(Workers w) throws SQLException{
-              String sql = "DELETE FROM WORKERS WHERE WHERE WORKERID=?";
+              String sql = "DELETE FROM WORKERS WHERE WORKERID=?";
               preparedStatement = connect.prepareStatement(sql);
               preparedStatement.setInt(1,w.getWorkerId());
               int result = preparedStatement.executeUpdate();

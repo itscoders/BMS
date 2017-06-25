@@ -353,7 +353,7 @@ public class LineWindow extends JFrame implements ActionListener {
 
 		if (e.getSource() == editButton) {
 			
-			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()).toString());
+			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
 			String busLineName = lineNameField.getText();
 			String startStation = startStationField.getText();
 			String stopStation = startStationField.getText();
@@ -374,7 +374,7 @@ public class LineWindow extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == deleteButton) {
-			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()).toString());
+			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
 			
 			
 			try {

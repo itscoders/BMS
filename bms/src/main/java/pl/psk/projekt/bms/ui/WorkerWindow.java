@@ -401,26 +401,28 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			String surname = surnameField.getText();
 			String type = (String) comboBoxType.getSelectedItem();
 			String position = (String) comboBoxPosition.getSelectedItem();
-			String birthday = birthdayField.getDateFormatString();
+			String birthday = ((JTextField) birthdayField.getDateEditor().getUiComponent()).getText();
 			String mobilePhone = mobilePhoneField.getText();
 			String adress = adressField.getText();
 			String salaryy = salaryField.getText();
 
 			boolean valid = true;
-			String invalid = "";
+			String invalid = "Date correct";
 
 			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("DD-MM-YYYY");
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 				Date dd = sdf.parse(birthday);
 				Calendar cal = Calendar.getInstance();
-				String today = sdf.format(cal.getTime());
+				String today = sdf.format(new Date());
 				Date tod = sdf.parse(today);
 
-				if (dd.after(tod))
+				if (dd.compareTo(tod) > 0){
 					valid = false;
 				invalid = "Birthday Cannot be furture date";
+				}
 			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(this, "Fail to compare Date");
+				JOptionPane.showMessageDialog(this, invalid );
+				
 			}
 
 			for (int i = 0; i < salaryy.length(); i++) {
@@ -474,27 +476,31 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			String surname = surnameField.getText();
 			String type = (String) comboBoxType.getSelectedItem();
 			String position = (String) comboBoxPosition.getSelectedItem();
-			String birthday = birthdayField.getDateFormatString();
+			String birthday = (birthdayField.getDateEditor().getUiComponent()).toString();
 			String mobilePhone = mobilePhoneField.getText();
 			String adress = adressField.getText();
 			String salary = salaryField.getText();
 
+			
 			boolean valid = true;
 			String invalid = "";
 
 			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("DD-MM-YYYY");
-				Date dd = sdf.parse(birthday);
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+				Date dd = (Date) sdf.parseObject(birthday);
 				Calendar cal = Calendar.getInstance();
 				String today = sdf.format(cal.getTime());
-				Date tod = sdf.parse(today);
-
-				if (dd.after(tod))
+				Date tod = (Date) sdf.parseObject(today);
+				System.err.println(dd+" -- "+tod);
+				System.out.println(dd+" -- "+tod);
+				invalid = dd+" -- "+tod;
+				if (dd.compareTo(tod) > 0)
 					valid = false;
 				invalid = "Birthday Cannot be furture date";
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(this, "Fail to compare Date");
 			}
+			
 
 			for (int i = 0; i < salary.length(); i++) {
 				char temp = salary.charAt(i);
@@ -519,7 +525,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 			if (valid) {
 				try {
-					int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()).toString());
+					int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
 					double dSalary = Double.parseDouble(salary);
 					try {
 						WorkersJDBC wj = new WorkersJDBC();
@@ -542,11 +548,13 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 		if (e.getSource() == deleteButton) {
 			
-			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()).toString());
+			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
 			
 			try {
-				SchedulerJDBC sj = new SchedulerJDBC();
-				sj.deleteSchedulerRecord(value);
+				WorkersJDBC wj = new WorkersJDBC();
+				Workers w = new Workers();
+				w.setWorkerId(value);
+				wj.deleteWorker(w);
 				updateTable();
 			} catch (SQLException e1) {
 				

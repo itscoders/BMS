@@ -38,7 +38,9 @@ import javax.swing.table.TableRowSorter;
 import com.toedter.calendar.JDateChooser;
 
 import net.proteanit.sql.DbUtils;
+import pl.psk.projekt.bms.dbobjects.BusLine;
 import pl.psk.projekt.bms.dbobjects.Buyer;
+import pl.psk.projekt.bms.jdbc.BusLineJDBC;
 import pl.psk.projekt.bms.jdbc.BuyerJDBC;
 
 
@@ -78,7 +80,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					WorkerWindow frame = new WorkerWindow();
+					BuyerWindow frame = new BuyerWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -387,33 +389,104 @@ public class BuyerWindow extends JFrame implements ActionListener {
 						e1.printStackTrace();
 					}
 					JOptionPane.showMessageDialog(this, "New Buyer: " + name + surname + " had added.");
-					// dispose();
-					// staffSelect ss = new staffSelect();
-					// ss.setVisible(true);
+
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, ex.getMessage());
 				}
 			} else
 				JOptionPane.showMessageDialog(null, invalid);
 		
-			Update_table();
+			updateTable();
 		}
 
 		if (e.getSource() == editButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			String name = nameField.getText();
+			String surname = surnameField.getText();
+			String birthday = ((JTextField) birthdayField.getDateEditor().getUiComponent()).getText();
+			String email = emailField.getText();
+			String mobilePhone = mobilePhoneField.getText();
+			String street = streetField.getText();
+			String houseNumber = houseNumberField.getText();
+			String postCode = postCodeField.getText();
+			String city = cityField.getText();
+
+			boolean valid = true;
+			String invalid = "";
+
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+				Date dd = sdf.parse(birthday);
+				Calendar cal = Calendar.getInstance();
+				String today = sdf.format(cal.getTime());
+				Date tod = sdf.parse(today);
+
+				if (dd.after(tod))
+					valid = false;
+				invalid = "Birthday Cannot be furture date";
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(this, "Fail to compare Date");
+			}
+
+
+			// Handphone validation
+			if (mobilePhone.length() != 9) {
+				valid = false;
+				invalid = "Handphone number should have 9 number";
+			}
+			for (int a = 0; a < mobilePhone.length(); a++) {
+				char temp1 = mobilePhone.charAt(a);
+				if (Character.isLetter(temp1) == true) {
+					valid = false;
+					invalid = "Please insert proper handphone number";
+				}
+			}
+
+			if (valid) {
+				int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
+				try {
+					try {
+						BuyerJDBC wj = new BuyerJDBC();
+						Buyer w = new Buyer(name, surname, birthday, email, mobilePhone, street, houseNumber, postCode, city);
+						w.setBuyerId(value);
+						wj.updateBuyer(w);
+					} catch (SQLException e1) {
+
+						e1.printStackTrace();
+					}
+					JOptionPane.showMessageDialog(this, "New Buyer: " + name + surname + " had added.");
+
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(this, ex.getMessage());
+				}
+			} else
+				JOptionPane.showMessageDialog(null, invalid);
+		
+			updateTable();
 		}
 
 		if (e.getSource() == deleteButton) {
-			dispose();
-			// startWindow.setVisible(true);
+			
+		int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
+			
+			
+			try {
+				BuyerJDBC wj = new BuyerJDBC();
+				Buyer w = new Buyer();
+				w.setBuyerId(value);
+				wj.deleteBuyer(w);
+			} catch (SQLException e1) {
+				
+				e1.printStackTrace();
+			}
+		
+		updateTable();
+			
 		}
 
 	}
 	
-	// METODA ODŚWIERZAJĄCA TABELE JTABLE
-		// MUSI ZOSTAĆ WYWOŁANA ZAWSZE NA KOŃCU W PRZYCISKACH: ADD, EDIT, DELETE
-		private void Update_table() {
+	
+		private void updateTable() {
 			try {
 				connect = DriverManager.getConnection(
 						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
@@ -436,7 +509,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			}
 		}
 
-		//METODA DO DYNAMICZNEGO WYSZUKIWANIA W TABELI
+		
 		private void filter(String query) {
 
 			TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);

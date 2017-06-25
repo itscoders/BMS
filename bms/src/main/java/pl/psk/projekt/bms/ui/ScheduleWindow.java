@@ -322,7 +322,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 		if (e.getSource() == editButton) {
 			
 				
-				int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()).toString());
+				int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
 				System.out.println(value);
 				int driver = comparDriver();
 				int bus = comparBus();
@@ -347,7 +347,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 
 		if (e.getSource() == deleteButton) {
 			
-			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), tableFilter.getSelectedColumn()).toString());
+			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
 			
 			try {
 				SchedulerJDBC sj = new SchedulerJDBC();
