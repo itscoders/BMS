@@ -26,7 +26,7 @@ public class LoginWindow extends JFrame implements ActionListener {
 
 	StartWindow startWindow;
 
-	public LoginWindow(StartWindow startWindow) {
+	public LoginWindow() {
 		setResizable(false);
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -47,7 +47,6 @@ public class LoginWindow extends JFrame implements ActionListener {
 		
 		setTitle("Login - Bus Management");
 
-		this.startWindow = startWindow;
 
 		setSize(500, 400);
 		setVisible(true);
@@ -149,8 +148,9 @@ public class LoginWindow extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == prevButton) {
-			this.setVisible(false);
-			startWindow.setVisible(true);
+			StartWindow st = new StartWindow();
+			st.setVisible(true);
+			this.dispose();
 		}
 
 		if (e.getSource() == forgetButton) {

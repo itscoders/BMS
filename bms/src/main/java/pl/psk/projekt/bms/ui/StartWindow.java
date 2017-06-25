@@ -68,7 +68,7 @@ public class StartWindow extends JFrame implements ActionListener
 		if(e.getSource() == move)
 		{
 			
-			LoginWindow l = new LoginWindow(this);
+			LoginWindow l = new LoginWindow();
 			this.setVisible(false);
 		}
 			

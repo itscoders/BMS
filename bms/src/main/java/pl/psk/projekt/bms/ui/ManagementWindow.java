@@ -2,9 +2,12 @@ package pl.psk.projekt.bms.ui;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import pl.psk.projekt.bms.dbobjects.Workers;
 import pl.psk.projekt.bms.jdbc.CreateDB;
 import pl.psk.projekt.bms.jdbc.DropDB;
 
@@ -22,27 +25,34 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.Color;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ImageIcon;
+import java.awt.Font;
 
 public class ManagementWindow extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
-	private JButton workerButton;
+	private JPanel panel;
+	private JButton logoutButton;
 	private JButton scheduleButton;
 	private JButton busButton;
-	private JButton btnLine;
-	private JButton ticketButton;
-	private JButton buyerButton;
+	private JButton lineButton;
+	private JButton workerButton;
 	private JButton raportButton;
-	private JButton databaseCreateButton;
-	private JButton databaseDropButton;
 	private JButton transactionButton;
+	private JButton buyerButton;
+	private JButton databaseDropButton;
+	private JButton databaseCreateButton;
+	private JLabel logLabel;
+	private Workers w;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					Workers w = new Workers();
 					ManagementWindow frame = new ManagementWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -53,37 +63,46 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	}
 
 	public ManagementWindow() {
+		
 
-			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (UnsupportedLookAndFeelException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		setVisible(true);
+
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		SwingUtilities.updateComponentTreeUI(this);
 		setTitle("Management - Bus Management");
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setBounds(new Rectangle(50, 100, 1300, 650));
+		setBounds(new Rectangle(50, 100, 1000, 650));
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		contentPane.setLayout(null);
 
-		workerButton = new JButton("Worker");
-		workerButton.addActionListener(this);
-		workerButton.setBackground(Color.LIGHT_GRAY);
+		panel = new JPanel();
+		panel.setOpaque(true);
+		panel.setBackground(new Color(0, 0, 0, 0));
+		panel.setBounds(0, 0, 1000, 620);
+		contentPane.add(panel);
+
+		logoutButton = new JButton("Logout");
+		logoutButton.addActionListener(this);
 
 		scheduleButton = new JButton("Schedule");
 		scheduleButton.addActionListener(this);
@@ -93,83 +112,101 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		busButton.addActionListener(this);
 		busButton.setBackground(Color.LIGHT_GRAY);
 
-		ticketButton = new JButton("Ticket");
-		ticketButton.addActionListener(this);
-		ticketButton.setBackground(Color.LIGHT_GRAY);
+		lineButton = new JButton("Line");
+		lineButton.addActionListener(this);
+		lineButton.setBackground(Color.LIGHT_GRAY);
+
+		raportButton = new JButton("Raport");
+		raportButton.addActionListener(this);
+		raportButton.setBackground(Color.LIGHT_GRAY);
+
+		workerButton = new JButton("Worker");
+		workerButton.addActionListener(this);
+		workerButton.setBackground(Color.LIGHT_GRAY);
+
+		transactionButton = new JButton("Transaction");
+		transactionButton.addActionListener(this);
+		transactionButton.setBackground(Color.LIGHT_GRAY);
 
 		buyerButton = new JButton("Buyer");
 		buyerButton.addActionListener(this);
 		buyerButton.setBackground(Color.LIGHT_GRAY);
 
-		raportButton = new JButton("Raport");
-		raportButton.setBackground(Color.LIGHT_GRAY);
-		raportButton.addActionListener(this);
-
-		btnLine = new JButton("Line");
-		btnLine.setBackground(Color.LIGHT_GRAY);
-		btnLine.addActionListener(this);
-		
 		databaseCreateButton = new JButton("Database Create");
 		databaseCreateButton.addActionListener(this);
 		databaseCreateButton.setBackground(Color.LIGHT_GRAY);
-		
+
 		databaseDropButton = new JButton("Database Drop");
 		databaseDropButton.addActionListener(this);
 		databaseDropButton.setBackground(Color.LIGHT_GRAY);
 		
-		transactionButton = new JButton("Transaction");
-		transactionButton.addActionListener(this);
-		transactionButton.setBackground(Color.LIGHT_GRAY);
-		
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(workerButton)
+		logLabel = new JLabel();
+		logLabel.setForeground(Color.WHITE);
+		logLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+		welcomeLabel();
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(raportButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addGroup(gl_panel.createSequentialGroup()
+								.addComponent(databaseCreateButton)
+								.addGap(18)
+								.addComponent(databaseDropButton))
+							.addGroup(gl_panel.createSequentialGroup()
+								.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+									.addComponent(workerButton, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+									.addComponent(busButton, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+									.addComponent(buyerButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+								.addGap(18)
+								.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(lineButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(transactionButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(scheduleButton, Alignment.TRAILING))))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(logLabel)
+							.addPreferredGap(ComponentPlacement.RELATED, 716, Short.MAX_VALUE)
+							.addComponent(logoutButton)))
+					.addGap(28))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(logoutButton)
+						.addComponent(logLabel))
+					.addPreferredGap(ComponentPlacement.RELATED, 312, Short.MAX_VALUE)
+					.addComponent(raportButton, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
-					.addComponent(scheduleButton)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(scheduleButton)
+						.addComponent(workerButton))
 					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(databaseDropButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lineButton)
 						.addComponent(busButton))
 					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnLine)
-							.addGap(18)
-							.addComponent(ticketButton)
-							.addGap(18)
-							.addComponent(buyerButton))
-						.addComponent(databaseCreateButton))
-					.addGap(18)
-					.addComponent(transactionButton)
-					.addGap(18)
-					.addComponent(raportButton)
-					.addGap(114))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(workerButton)
-						.addComponent(scheduleButton)
-						.addComponent(busButton)
-						.addComponent(btnLine)
-						.addComponent(ticketButton)
-						.addComponent(buyerButton)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(transactionButton)
-						.addComponent(raportButton))
+						.addComponent(buyerButton))
 					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(databaseDropButton)
 						.addComponent(databaseCreateButton))
-					.addContainerGap(436, Short.MAX_VALUE))
+					.addGap(22))
 		);
-		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {raportButton, btnLine, databaseCreateButton, databaseDropButton, transactionButton, workerButton, scheduleButton, busButton, ticketButton, buyerButton});
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {raportButton, btnLine, databaseCreateButton, databaseDropButton, transactionButton, workerButton, scheduleButton, busButton, ticketButton, buyerButton});
-		contentPane.setLayout(gl_contentPane);
+		gl_panel.linkSize(SwingConstants.VERTICAL, new Component[] {scheduleButton, busButton, lineButton, raportButton, workerButton, transactionButton, buyerButton, databaseCreateButton, databaseDropButton});
+		gl_panel.linkSize(SwingConstants.HORIZONTAL, new Component[] {scheduleButton, busButton, lineButton, workerButton, transactionButton, buyerButton, databaseCreateButton, databaseDropButton});
+		panel.setLayout(gl_panel);
+
+		JLabel background = new JLabel("");
+		background.setIcon(new ImageIcon(ManagementWindow.class.getResource("/pl/psk/projekt/bms/ui/bk2.jpg")));
+		background.setBounds(0, 0, 1000, 620);
+		contentPane.add(background);
 	}
 
 	@Override
@@ -190,47 +227,56 @@ public class ManagementWindow extends JFrame implements ActionListener {
 			bw.setVisible(true);
 		}
 
-		if (e.getSource() == btnLine) {
+		if (e.getSource() == lineButton) {
 			LineWindow lw = new LineWindow();
 			lw.setVisible(true);
-		}
-
-		if (e.getSource() == ticketButton) {
-			TicketWindow tw = new TicketWindow();
-			tw.setVisible(true);
 		}
 
 		if (e.getSource() == buyerButton) {
 			BuyerWindow bw = new BuyerWindow();
 			bw.setVisible(true);
 		}
-		
+
 		if (e.getSource() == transactionButton) {
 			TransactionWindow tw = new TransactionWindow();
 			tw.setVisible(true);
 		}
+		
+		if (e.getSource() == logoutButton) {
+			String username = w.getUsername();
+			JOptionPane.showMessageDialog(this, "Worker: " + username + " was successfully logged out.");
+			LoginWindow lw = new LoginWindow();
+			lw.setVisible(true);
+			this.dispose();
+		}
 
 		if (e.getSource() == raportButton) {
-			
+
 		}
 
 		if (e.getSource() == databaseCreateButton) {
 			try {
 				new CreateDB();
 			} catch (SQLException e1) {
-				
-				e1.printStackTrace();
-			}
-		}
-		
-		if (e.getSource() == databaseDropButton) {
-			try {
-				new DropDB();
-			} catch (SQLException e1) {
-				
+
 				e1.printStackTrace();
 			}
 		}
 
+		if (e.getSource() == databaseDropButton) {
+			try {
+				new DropDB();
+			} catch (SQLException e1) {
+
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	public void welcomeLabel() {
+		String name = w.getName();
+		String surname = w.getSurname();
+		logLabel.setText("Welcome " + name + " " + surname);
+		
 	}
 }
