@@ -58,6 +58,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import pl.psk.projekt.bms.component.ComboKeyHandler;
+import pl.psk.projekt.bms.component.Mail;
 import pl.psk.projekt.bms.dbobjects.Transaction;
 import pl.psk.projekt.bms.jdbc.TransactionJDBC;
 
@@ -359,7 +360,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 	private void generateSlip(String discount, String date, int buyer) {
 
-		String name = "", surname="";
+		String name = "", surname="", mail="";
 		String nameLine = comboBoxBusLine.getSelectedItem().toString();
 
 		try {
@@ -371,6 +372,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 			while (rs.next()) {
 			name = rs.getString("name");
 			surname = rs.getString("surname");
+			mail = rs.getString("email");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -389,7 +391,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 					PdfWriter myWriter = PdfWriter.getInstance(myDocument, new FileOutputStream(filePath));
 				myDocument.open();
 
-				myDocument.add(new Paragraph("PAY SLIP", FontFactory.getFont(FontFactory.TIMES_BOLD, 20, Font.BOLD)));
+				myDocument.add(new Paragraph("BILL SLIP", FontFactory.getFont(FontFactory.TIMES_BOLD, 20, Font.BOLD)));
 				myDocument.add(new Paragraph(date));
 				myDocument.add(new Paragraph(
 						"-------------------------------------------------------------------------------------------"));
@@ -420,6 +422,11 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 				myDocument.newPage();
 				myDocument.close();
+				
+				Mail m = new Mail();
+				
+				m.sendMail(mail, "BILL SLIP FOR "+ nameLine + " TICKET", "In the attachment you will find a receipt for your ticket", filePath, name +"_"+ surname + "_salary_slip_" + date + ".pdf");
+				
 				JOptionPane.showMessageDialog(null, "Report was successfully generated");
 } catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block

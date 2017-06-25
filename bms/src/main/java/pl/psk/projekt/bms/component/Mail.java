@@ -17,6 +17,12 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 public class Mail {
+	
+	
+
+	public Mail() {
+		super();
+	}
 
 	public void sendMail(String mail, String title, String content, String pathAttachment, String nameAttachment) {
 
@@ -45,6 +51,9 @@ public class Mail {
 			message.setSubject(title);
 			message.setText(content);
 			
+
+			MimeBodyPart messageContent = new MimeBodyPart();
+		
 			Multipart multipart = new MimeMultipart();
 			MimeBodyPart messageBodyPart = new MimeBodyPart();
 	        String file = pathAttachment;
@@ -52,13 +61,15 @@ public class Mail {
 	        DataSource source = new FileDataSource(file);
 	        messageBodyPart.setDataHandler(new DataHandler(source));
 	        messageBodyPart.setFileName(fileName);
+	        messageContent.setText(content);
+			multipart.addBodyPart(messageContent);
 	        multipart.addBodyPart(messageBodyPart);
+	        
 
 	        message.setContent(multipart);
 
 			Transport.send(message);
 
-			System.out.println("Done");
 
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
