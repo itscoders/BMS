@@ -29,15 +29,14 @@ public class WorkersJDBC {
     
     public Workers workersLog(Workers w)throws SQLException{
         
-    	String sql = "SELECT * FROM WORKERS WHERE USERNAME='?' AND PASSWORD ='?'";
-    	System.err.println("elo");
+    	String sql = "SELECT * FROM WORKERS WHERE USERNAME=? AND PASSWORD =?";
     	preparedStatement = connect.prepareStatement(sql);
     	preparedStatement.setString(1,w.getUsername());
     	preparedStatement.setString(2,w.getPassword());
         ResultSet rs = preparedStatement.executeQuery();
         
         while(rs.next()){
-        	System.err.println("elo2");
+        	
             w.setWorkerId(rs.getInt("workerId"));
             w.setPossition(rs.getString("possition"));
             w.setAddress(rs.getString("address"));
@@ -47,7 +46,6 @@ public class WorkersJDBC {
             w.setAccountType(rs.getString("accountType"));
             w.setName(rs.getString("name"));
             w.setSurname(rs.getString("surname"));
-            
             
         }
         return w;
@@ -59,7 +57,7 @@ public class WorkersJDBC {
         Workers w = new Workers();
         w.setUsername(username);
         w.setPassword(password);
-        System.err.println(username+password);
+        
         
         w = this.workersLog(w);
         if(w.getName() != null)
@@ -86,7 +84,7 @@ public class WorkersJDBC {
 
     
     public boolean createWorker(Workers w)throws SQLException{
-    String sql="INSERT INTO WORKERS (accountType,username, password, name, surname, possition, mobile, address, birthday, salary) values(?,?,?,?,?,?,?,?,?,?)";
+    String sql="INSERT INTO WORKERS (accountType, username, password, name, surname, possition, mobile, address, birthday, salary) values(?,?,?,?,?,?,?,?,?,?)";
     preparedStatement=connect.prepareStatement(sql);
   
     preparedStatement.setString(1,w.getAccountType());

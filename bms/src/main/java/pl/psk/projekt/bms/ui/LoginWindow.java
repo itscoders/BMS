@@ -113,7 +113,7 @@ public class LoginWindow extends JFrame implements ActionListener {
 			
 			String username = userNameField.getText();
 	         String password = passwordField.getText();
-	         System.err.println(password); 
+	        
 	         
 	         try{
 	             WorkersJDBC wj = new WorkersJDBC();
