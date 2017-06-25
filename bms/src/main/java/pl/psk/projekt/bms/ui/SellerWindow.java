@@ -25,6 +25,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 
 public class SellerWindow extends JFrame implements ActionListener {
@@ -107,6 +109,7 @@ public class SellerWindow extends JFrame implements ActionListener {
 		JLabel lebelSearch = new JLabel("Search in your transaction:");
 
 		logoutButton = new JButton("Logout");
+		logoutButton.addActionListener(this);
 
 		logLabel = new JLabel();
 		logLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -174,6 +177,15 @@ public class SellerWindow extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == raportButton) {
+
+		}
+		
+		if (e.getSource() == logoutButton) {
+			String username = w.getUsername();
+			JOptionPane.showMessageDialog(this, "Worker: " + username + " was successfully logged out.");
+			LoginWindow lw = new LoginWindow();
+			lw.setVisible(true);
+			this.dispose();
 
 		}
 
