@@ -4,6 +4,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import net.proteanit.sql.DbUtils;
+import pl.psk.projekt.bms.dbobjects.Workers;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -17,6 +21,11 @@ import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.Color;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
@@ -31,14 +40,22 @@ public class DriverWindow  extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private JButton raportButton;
 	private JScrollPane scrollPane;
-	private JTable table;
+	private JTable tableFilter;
+	private DefaultTableModel modelFilter;
 	private JTextField textField;
+	private Workers w;
+	
+	PreparedStatement  preparedStatement;
+    Connection connect;
+    ResultSet rs;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DriverWindow frame = new DriverWindow();
+					Workers w = new Workers();
+					w.setWorkerId(4);
+					DriverWindow frame = new DriverWindow(w);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,8 +64,10 @@ public class DriverWindow  extends JFrame implements ActionListener {
 		});
 	}
 
-	public DriverWindow() {
-
+	public DriverWindow(Workers w) {
+			
+		this.w = w;
+			
 			try {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch (ClassNotFoundException e) {
@@ -120,8 +139,38 @@ public class DriverWindow  extends JFrame implements ActionListener {
 					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE))
 		);
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
+		try {
+			connect = DriverManager.getConnection(
+						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
+						"root", "toor");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			preparedStatement = connect.prepareStatement("SELECT * FROM SCHEDULER WHERE IdDriver="+w.getWorkerId());
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			rs = preparedStatement.executeQuery();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
+		
+		tableFilter = new JTable();
+		tableFilter.setModel(modelFilter);
+		
+		scrollPane.setViewportView(tableFilter);
+		scrollPane.setHorizontalScrollBarPolicy(
+	                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		contentPane.setLayout(gl_contentPane);
 	}
 
