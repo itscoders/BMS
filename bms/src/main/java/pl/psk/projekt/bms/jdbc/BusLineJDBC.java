@@ -32,8 +32,8 @@ public class BusLineJDBC {
     preparedStatement=connect.prepareStatement(sql);
     preparedStatement.setString(1,b.getBusLineName());
     preparedStatement.setString(2,b.getBusLineType());
-    preparedStatement.setString(3,b.getBusLineName());
-    preparedStatement.setString(4,b.getBusLineType());
+    preparedStatement.setString(3,b.getStartStation());
+    preparedStatement.setString(4,b.getEndStation());
     preparedStatement.setDouble(5,b.getPriceOneWay());
     preparedStatement.setDouble(6,b.getPriceMonthly());
     int result = preparedStatement.executeUpdate();
@@ -59,8 +59,8 @@ public class BusLineJDBC {
     preparedStatement=connect.prepareStatement(sql);
     preparedStatement.setString(1,b.getBusLineName());
     preparedStatement.setString(2,b.getBusLineType());
-    preparedStatement.setString(3,b.getBusLineName());
-    preparedStatement.setString(4,b.getBusLineType());
+    preparedStatement.setString(3,b.getStartStation());
+    preparedStatement.setString(4,b.getEndStation());
     preparedStatement.setDouble(5,b.getPriceOneWay());
     preparedStatement.setDouble(6,b.getPriceMonthly());
     preparedStatement.setInt(7,b.getBusLineID());

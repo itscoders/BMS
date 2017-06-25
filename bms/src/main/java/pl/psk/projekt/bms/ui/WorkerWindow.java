@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,6 +49,9 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class WorkerWindow extends JFrame implements ActionListener {
 
@@ -163,13 +167,11 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 		passwordField = new JPasswordField();
 
-		String[] typeString = { "Administrator", "Driver", "Seller" };
+		comboBoxType = new JComboBox<String>();
+		comboBoxType.setModel(new DefaultComboBoxModel<String>(new String[] {"Administrator", "Driver", "Seller"}));
 
-		comboBoxType = new JComboBox<String>(typeString);
-
-		String[] positionString = { "Administrator", "Driver", "Seller" };
-
-		comboBoxPosition = new JComboBox<String>(positionString);
+		comboBoxPosition = new JComboBox<String>();
+		comboBoxPosition.setModel(new DefaultComboBoxModel<String>(new String[] {"Administrator", "Driver", "Seller"}));
 
 		addButton = new JButton("Add");
 		addButton.setBackground(Color.LIGHT_GRAY);
@@ -178,10 +180,12 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		editButton = new JButton("Edit");
 		editButton.setBackground(Color.LIGHT_GRAY);
 		editButton.addActionListener(this);
+		editButton.setEnabled(false);
 
 		deleteButton = new JButton("Delete");
 		deleteButton.setBackground(Color.LIGHT_GRAY);
 		deleteButton.addActionListener(this);
+		deleteButton.setEnabled(false);
 
 		JScrollPane scrollPane = new JScrollPane();
 
@@ -221,117 +225,119 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		});
 		filterField.setColumns(10);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane
-				.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(240, Short.MAX_VALUE)
-								.addComponent(addButton).addGap(18)
-								.addComponent(editButton).addGap(
-										18)
-								.addComponent(deleteButton).addGap(219))
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(40).addGroup(gl_contentPane
-								.createParallelGroup(Alignment.TRAILING)
-								.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 614,
-										Short.MAX_VALUE)
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap(240, Short.MAX_VALUE)
+					.addComponent(addButton)
+					.addGap(18)
+					.addComponent(editButton)
+					.addGap(18)
+					.addComponent(deleteButton)
+					.addGap(219))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(40)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addGroup(gl_contentPane.createSequentialGroup()
-														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-																.addComponent(labelUserName).addComponent(labelName))
-														.addGap(18)
-														.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-																.addComponent(userNameField, GroupLayout.PREFERRED_SIZE,
-																		202, GroupLayout.PREFERRED_SIZE)
-																.addComponent(nameField, GroupLayout.PREFERRED_SIZE,
-																		202, GroupLayout.PREFERRED_SIZE)))
-												.addGroup(gl_contentPane.createSequentialGroup()
-														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-																.addComponent(labelBirthday).addComponent(labelAdress)
-																.addComponent(lblNewLabel_2))
-														.addGap(18)
-														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-																.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE,
-																		214, Short.MAX_VALUE)
-																.addComponent(birthdayField, GroupLayout.DEFAULT_SIZE,
-																		214, Short.MAX_VALUE)
-																.addComponent(comboBoxType, 0, 214, Short.MAX_VALUE))))
-										.addGap(28)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(labelMobilePhone).addComponent(labelPassword)
-												.addComponent(labelSurname).addComponent(labelSalary)
-												.addComponent(labelPosition))
-										.addGap(18)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-												.addComponent(salaryField).addComponent(surnameField)
-												.addComponent(passwordField, 103, 103, Short.MAX_VALUE)
-												.addComponent(mobilePhoneField).addComponent(comboBoxPosition, 0,
-														GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-								.addGap(30))
-						.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(199, Short.MAX_VALUE)
-								.addComponent(labelFilter, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
-								.addGap(188)));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(labelUserName)
-								.addComponent(userNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelPassword).addComponent(passwordField, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(nameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelName).addComponent(labelSurname).addComponent(surnameField,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(labelUserName)
+										.addComponent(labelName))
+									.addGap(18)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(nameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+										.addComponent(userNameField, GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)))
 								.addGroup(gl_contentPane.createSequentialGroup()
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-												.addComponent(labelPosition).addComponent(comboBoxPosition,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-												.addComponent(labelMobilePhone).addComponent(mobilePhoneField,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addGroup(gl_contentPane
-												.createParallelGroup(Alignment.LEADING).addComponent(labelSalary)
-												.addComponent(salaryField, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-												.addComponent(lblNewLabel_2).addComponent(comboBoxType,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(labelBirthday).addComponent(birthdayField,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 63,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(labelAdress))))
-						.addGap(18)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(addButton)
-								.addComponent(editButton).addComponent(deleteButton))
-						.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(labelFilter)
-								.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(7).addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap()));
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL,
-				new Component[] { labelUserName, labelName, lblNewLabel_2, labelBirthday, labelPassword, labelSurname,
-						labelPosition, labelMobilePhone, labelAdress, labelSalary });
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { userNameField, nameField, mobilePhoneField,
-				surnameField, salaryField, passwordField });
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { addButton, editButton, deleteButton });
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(labelBirthday)
+										.addComponent(labelAdress)
+										.addComponent(lblNewLabel_2))
+									.addGap(18)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+										.addComponent(birthdayField, GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+										.addComponent(comboBoxType, 0, 214, Short.MAX_VALUE))))
+							.addGap(28)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(labelMobilePhone)
+								.addComponent(labelPassword)
+								.addComponent(labelSurname)
+								.addComponent(labelSalary)
+								.addComponent(labelPosition))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(salaryField)
+								.addComponent(surnameField)
+								.addComponent(passwordField, 103, 103, Short.MAX_VALUE)
+								.addComponent(mobilePhoneField)
+								.addComponent(comboBoxPosition, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+					.addGap(30))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap(199, Short.MAX_VALUE)
+					.addComponent(labelFilter, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+					.addGap(188))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(labelUserName)
+						.addComponent(userNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelPassword)
+						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(nameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelName)
+						.addComponent(labelSurname)
+						.addComponent(surnameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(labelPosition)
+								.addComponent(comboBoxPosition, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(labelMobilePhone)
+								.addComponent(mobilePhoneField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(labelSalary)
+								.addComponent(salaryField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblNewLabel_2)
+								.addComponent(comboBoxType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(labelBirthday)
+								.addComponent(birthdayField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+								.addComponent(labelAdress))))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addButton)
+						.addComponent(editButton)
+						.addComponent(deleteButton))
+					.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(labelFilter)
+						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(7)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, editButton, deleteButton});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {nameField, mobilePhoneField, surnameField, salaryField, passwordField});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelUserName, labelName, lblNewLabel_2, labelBirthday, labelPassword, labelSurname, labelPosition, labelMobilePhone, labelAdress, labelSalary});
 
 		adressField = new JTextArea();
 		adressField.setColumns(20);
@@ -355,40 +361,59 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
 
 		tableFilter = new JTable();
+		tableFilter.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				tableFilterMouseClicked(e);
+			}
+		});
 		tableFilter.setModel(modelFilter);
 
 		scrollPane.setViewportView(tableFilter);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		/*
-		 * String workerId = ""; String username = ""; String password = "";
-		 * String name = ""; String surname = ""; String type = ""; String
-		 * position = ""; String birthday = ""; String mobilePhone = ""; String
-		 * adress = ""; String salaryy = "";
-		 * 
-		 * try { connect = DriverManager.getConnection(
-		 * "jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
-		 * "root", "toor"); } catch (SQLException e1) { e1.printStackTrace(); }
-		 * 
-		 * 
-		 * try { preparedStatement =
-		 * connect.prepareStatement("SELECT * FROM Workers"); ResultSet rs =
-		 * preparedStatement.executeQuery(); int i = 0; while (rs.next()) {
-		 * workerId = rs.getString("workerId"); username =
-		 * rs.getString("username"); name = rs.getString("name"); surname =
-		 * rs.getString("surname"); type = rs.getString("accountType"); position
-		 * = rs.getString("possition"); birthday = rs.getString("birthday");
-		 * mobilePhone = rs.getString("mobile"); adress =
-		 * rs.getString("address"); salaryy = rs.getString("salary");
-		 * model.addRow(new Object[]{workerId, username, name, surname, type,
-		 * position, birthday, mobilePhone, adress, salaryy}); i++; } if (i < 1)
-		 * { JOptionPane.showMessageDialog(null, "No Record Found", "Error",
-		 * JOptionPane.ERROR_MESSAGE); } if (i == 1) { System.out.println(i +
-		 * " Record Found"); } else { System.out.println(i + " Records Found");
-		 * } } catch (Exception ex) { JOptionPane.showMessageDialog(null,
-		 * ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); }
-		 */
+
 		contentPane.setLayout(gl_contentPane);
+	}
+	
+	
+	private void tableFilterMouseClicked(MouseEvent e) {
+		deleteButton.setEnabled(true);
+		editButton.setEnabled(true);
+		int index = tableFilter.getSelectedRow();
+		
+		String username = tableFilter.getValueAt(index, 2).toString();
+		String password = tableFilter.getValueAt(index, 3).toString();
+		String name = tableFilter.getValueAt(index, 4).toString();
+		String surname = tableFilter.getValueAt(index, 5).toString();
+		String type = tableFilter.getValueAt(index, 1).toString();
+		String position = tableFilter.getValueAt(index, 6).toString();
+		String birthday = tableFilter.getValueAt(index, 9).toString();
+		String mobilePhone = tableFilter.getValueAt(index, 7).toString();
+		String adress = tableFilter.getValueAt(index, 8).toString();
+		String salaryy = tableFilter.getValueAt(index, 10).toString();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+		Date date = null;
+		try {
+			date = sdf.parse(birthday);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		System.out.println(date);
+						
+		userNameField.setText(username);
+		passwordField.setText(password);
+		nameField.setText(name);
+		surnameField.setText(surname);
+		comboBoxType.setSelectedItem(type);
+		comboBoxPosition.setSelectedItem(position);
+		birthdayField.setDate(date);
+		mobilePhoneField.setText(mobilePhone);
+		adressField.setText(adress);
+		salaryField.setText(salaryy);
 	}
 
 	@Override
@@ -405,15 +430,16 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			String mobilePhone = mobilePhoneField.getText();
 			String adress = adressField.getText();
 			String salaryy = salaryField.getText();
+			
 
 			boolean valid = true;
-			String invalid = "Date correct";
+			String invalid = "";
 
 			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 				Date dd = sdf.parse(birthday);
 				Calendar cal = Calendar.getInstance();
-				String today = sdf.format(new Date());
+				String today = sdf.format(cal.getTime());
 				Date tod = sdf.parse(today);
 
 				if (dd.compareTo(tod) > 0){
@@ -457,7 +483,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 						e1.printStackTrace();
 					}
-					JOptionPane.showMessageDialog(this, "New worker ID:" + username + " had added.");
+					JOptionPane.showMessageDialog(this, "New worker :" + username + " had added.");
 					updateTable();
 					
 				} catch (Exception ex) {
@@ -476,7 +502,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			String surname = surnameField.getText();
 			String type = (String) comboBoxType.getSelectedItem();
 			String position = (String) comboBoxPosition.getSelectedItem();
-			String birthday = (birthdayField.getDateEditor().getUiComponent()).toString();
+			String birthday = ((JTextField) birthdayField.getDateEditor().getUiComponent()).getText();
 			String mobilePhone = mobilePhoneField.getText();
 			String adress = adressField.getText();
 			String salary = salaryField.getText();
@@ -486,21 +512,19 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			String invalid = "";
 
 			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-				Date dd = (Date) sdf.parseObject(birthday);
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+				Date dd = sdf.parse(birthday);
 				Calendar cal = Calendar.getInstance();
 				String today = sdf.format(cal.getTime());
-				Date tod = (Date) sdf.parseObject(today);
-				System.err.println(dd+" -- "+tod);
-				System.out.println(dd+" -- "+tod);
-				invalid = dd+" -- "+tod;
-				if (dd.compareTo(tod) > 0)
+				Date tod = sdf.parse(today);
+				if (dd.compareTo(tod) > 0) {
 					valid = false;
 				invalid = "Birthday Cannot be furture date";
+				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(this, "Fail to compare Date");
 			}
-			
+
 
 			for (int i = 0; i < salary.length(); i++) {
 				char temp = salary.charAt(i);
@@ -536,7 +560,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 						e1.printStackTrace();
 					}
-					JOptionPane.showMessageDialog(this, "New worker ID:" + username + " had added.");
+					JOptionPane.showMessageDialog(this, "Worker: " + username + " was edited.");
 					updateTable();
 					
 				} catch (Exception ex) {
@@ -548,6 +572,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 		if (e.getSource() == deleteButton) {
 			
+			String username = userNameField.getText();
 			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
 			
 			try {
@@ -560,6 +585,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 				
 				e1.printStackTrace();
 			}
+			JOptionPane.showMessageDialog(this, "Worker: " + username + " was deleted.");
 		}
 
 	}

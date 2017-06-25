@@ -33,11 +33,14 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import net.proteanit.sql.DbUtils;
 import pl.psk.projekt.bms.dbobjects.Bus;
 import pl.psk.projekt.bms.jdbc.BusJDBC;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class BusWindow extends JFrame implements ActionListener {
@@ -119,9 +122,11 @@ public class BusWindow extends JFrame implements ActionListener {
 
 		editButton = new JButton("Edit");
 		editButton.addActionListener(this);
+		editButton.setEnabled(false);
 
 		deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(this);
+		deleteButton.setEnabled(false);
 
 		JScrollPane scrollPane = new JScrollPane();
 		
@@ -219,6 +224,12 @@ public class BusWindow extends JFrame implements ActionListener {
 		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
 		
 		tableFilter = new JTable();
+		tableFilter.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				tableFilterMouseClicked(e);
+			}
+		});
 		tableFilter.setModel(modelFilter);
 		
 		
@@ -228,43 +239,20 @@ public class BusWindow extends JFrame implements ActionListener {
 		scrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-        /*String busID = "";
-        String busName = "";
-        String seat = "";
-     
-        try {
-			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-        
-        
-        try {
-        	preparedStatement = connect.prepareStatement("SELECT * FROM bus");
-        	ResultSet rs = preparedStatement.executeQuery();
-            int i = 0;
-            while (rs.next()) {
-            	busID = rs.getString("busID");
-            	System.out.println(busID);
-            	busName = rs.getString("busName");
-            	System.out.println(busName);
-            	seat = rs.getString("seat");
-            	System.out.println(seat);
-                model.addRow(new Object[]{busID, busName, seat});
-                i++;
-            }
-            if (i < 1) {
-                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            if (i == 1) {
-                System.out.println(i + " Record Found");
-            } else {
-                System.out.println(i + " Records Found");
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }*/
 		contentPane.setLayout(gl_contentPane);
+	}
+	
+	private void tableFilterMouseClicked(MouseEvent e) {
+		editButton.setEnabled(true);
+		deleteButton.setEnabled(true);
+		
+		int index = tableFilter.getSelectedRow();
+				
+		String busName = tableFilter.getValueAt(index, 1).toString();
+		String seat = tableFilter.getValueAt(index, 2).toString();
+		
+		busNameField.setText(busName);
+		comboBoxSeat.setSelectedItem(seat);
 	}
 
 	@Override
@@ -283,11 +271,14 @@ public class BusWindow extends JFrame implements ActionListener {
 				
 				e1.printStackTrace();
 			}
+			JOptionPane.showMessageDialog(this, "New bus :" + busName + " had added.");
 			
 		}
 
 		if (e.getSource() == editButton) {
 			
+			
+				
 				String busName = busNameField.getText();
 				int seat = Integer.parseInt(comboBoxSeat.getSelectedItem().toString());
 				int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
@@ -302,11 +293,13 @@ public class BusWindow extends JFrame implements ActionListener {
 					
 					e1.printStackTrace();
 				}
+				JOptionPane.showMessageDialog(this, "Bus :" + busName + " was edited.");
 			
 		}
 
 		if (e.getSource() == deleteButton) {
 			
+			String busName = busNameField.getText();
 			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
 			try {
 				BusJDBC bj = new BusJDBC();
@@ -318,6 +311,7 @@ public class BusWindow extends JFrame implements ActionListener {
 				
 				e1.printStackTrace();
 			}
+			JOptionPane.showMessageDialog(this, "Bus :" + busName + " was deleted.");
 		}
 
 	}

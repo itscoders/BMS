@@ -10,6 +10,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -38,6 +41,8 @@ import net.proteanit.sql.DbUtils;
 import pl.psk.projekt.bms.dbobjects.BusLine;
 import pl.psk.projekt.bms.jdbc.BusLineJDBC;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class LineWindow extends JFrame implements ActionListener {
@@ -267,6 +272,12 @@ public class LineWindow extends JFrame implements ActionListener {
 		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
 		
 		tableFilter = new JTable();
+		tableFilter.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				tableFilterMouseClicked(e);
+			}
+		});
 		tableFilter.setModel(modelFilter);
 		
 		scrollPane.setViewportView(tableFilter);
@@ -275,65 +286,36 @@ public class LineWindow extends JFrame implements ActionListener {
 		scrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-         /*String busLineID = "";
-         String busLineName = "";
-         String busLineType = "";
-         String startStation = "";
-         String endStation = "";
-         String  price = "";
-     
-        try {
-			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-        
-        
-        try {
-        	preparedStatement = connect.prepareStatement("SELECT * FROM busline");
-        	ResultSet rs = preparedStatement.executeQuery();
-            int i = 0;
-            while (rs.next()) {
-            	busLineID = rs.getString("busLineID");
-            	System.out.println(busLineID);
-            	busLineName = rs.getString("busLineName");
-            	System.out.println(busLineName);
-            	busLineType = rs.getString("busLineType");
-            	System.out.println(busLineType);
-            	startStation = rs.getString("startStation");
-            	System.out.println(startStation);
-            	endStation = rs.getString("endStation");
-            	System.out.println(endStation);
-            	price = rs.getString("price");
-            	System.out.println(price);
-                model.addRow(new Object[]{busLineID, busLineName, busLineType, startStation, endStation, price});
-                
-                i++;
-            };
-            if (i < 1) {
-                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            if (i == 1) {
-                System.out.println(i + " Record Found");
-            } else {
-                System.out.println(i + " Records Found");
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }*/
-		
-		
-		
 		contentPane.setLayout(gl_contentPane);
 	}
 
+	
+	private void tableFilterMouseClicked(MouseEvent e) {
+		int index = tableFilter.getSelectedRow();
+		
+		String busLineName = tableFilter.getValueAt(index, 1).toString();
+		String busLineType = tableFilter.getValueAt(index, 2).toString();
+		String startStation = tableFilter.getValueAt(index, 3).toString();
+		String stopStation = tableFilter.getValueAt(index, 4).toString();
+		String pirceOneWay = tableFilter.getValueAt(index, 5).toString();
+		String priceMonthly = tableFilter.getValueAt(index, 6).toString();
+				
+		lineNameField.setText(busLineName);
+		comboBoxType.setSelectedItem(busLineType);
+		startStationField.setText(startStation);
+		startStationField.setText(stopStation);
+		textFieldPirceOneWay.setText(pirceOneWay);
+		textFieldPriceMonthly.setText(priceMonthly);	
+	}
+	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == addButton) {
 			String busLineName = lineNameField.getText();
 			String startStation = startStationField.getText();
-			String stopStation = startStationField.getText();
+			String stopStation = stopStationField.getText();
 			double pirceOneWay = Double.parseDouble(textFieldPirceOneWay.getText());
 			double priceMonthly = Double.parseDouble(textFieldPriceMonthly.getText());
 			String busLineType = (String) comboBoxType.getSelectedItem();
@@ -347,6 +329,7 @@ public class LineWindow extends JFrame implements ActionListener {
 				
 				e1.printStackTrace();
 			}
+			JOptionPane.showMessageDialog(this, "New line :" + busLineName + " had added.");
 			
 			updateTable();
 		}
@@ -356,7 +339,7 @@ public class LineWindow extends JFrame implements ActionListener {
 			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
 			String busLineName = lineNameField.getText();
 			String startStation = startStationField.getText();
-			String stopStation = startStationField.getText();
+			String stopStation = stopStationField.getText();
 			double pirceOneWay = Double.parseDouble(textFieldPirceOneWay.getText());
 			double priceMonthly = Double.parseDouble(textFieldPriceMonthly.getText());
 			String busLineType = (String) comboBoxType.getSelectedItem();
@@ -370,12 +353,13 @@ public class LineWindow extends JFrame implements ActionListener {
 				
 				e1.printStackTrace();
 			}
+			JOptionPane.showMessageDialog(this, "Line :" + busLineName + " was edited.");
 			updateTable();
 		}
 
 		if (e.getSource() == deleteButton) {
+			String busLineName = lineNameField.getText();
 			int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
-			
 			
 			try {
 				BusLineJDBC bj = new BusLineJDBC();
@@ -386,8 +370,10 @@ public class LineWindow extends JFrame implements ActionListener {
 				
 				e1.printStackTrace();
 			}
+			JOptionPane.showMessageDialog(this, "Line :" + busLineName + " was deleted.");
+			updateTable();
 		}
-		updateTable();
+		
 
 	}
 	
