@@ -22,6 +22,19 @@
     <scope>system</scope>
     <systemPath>${project.basedir}/jars/rs2xml.jar</systemPath>
   </dependency>
+  <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+<dependency>
+    <groupId>javax.mail</groupId>
+    <artifactId>mail</artifactId>
+    <version>1.4.7</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/javax/javaee-api -->
+<dependency>
+    <groupId>javax</groupId>
+    <artifactId>javaee-api</artifactId>
+    <version>7.0</version>
+    <scope>provided</scope>
+</dependency>
   <dependency>
     <groupId>com.toedter</groupId>
     <artifactId>jcalendar</artifactId>
