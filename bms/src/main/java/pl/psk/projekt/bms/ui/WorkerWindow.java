@@ -485,6 +485,8 @@ public class WorkerWindow extends JFrame implements ActionListener {
 					}
 					JOptionPane.showMessageDialog(this, "New worker :" + username + " had added.");
 					updateTable();
+					editButton.setEnabled(false);
+					deleteButton.setEnabled(false);
 					
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -562,6 +564,8 @@ public class WorkerWindow extends JFrame implements ActionListener {
 					}
 					JOptionPane.showMessageDialog(this, "Worker: " + username + " was edited.");
 					updateTable();
+					editButton.setEnabled(false);
+					deleteButton.setEnabled(false);
 					
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -586,6 +590,8 @@ public class WorkerWindow extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 			JOptionPane.showMessageDialog(this, "Worker: " + username + " was deleted.");
+			editButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 		}
 
 	}

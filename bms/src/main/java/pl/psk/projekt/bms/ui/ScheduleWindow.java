@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -153,10 +155,12 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 		editButton = new JButton("Edit");
 		editButton.setBackground(Color.LIGHT_GRAY);
 		editButton.addActionListener(this);
+		editButton.setEnabled(false);
 
 		deleteButton = new JButton("Delete");
 		deleteButton.setBackground(Color.LIGHT_GRAY);
 		deleteButton.addActionListener(this);
+		deleteButton.setEnabled(false);
 
 		JScrollPane scrollPane = new JScrollPane();
 
@@ -293,10 +297,42 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
 		
 		tableFilter = new JTable();
+		tableFilter.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				tableFilterMouseClicked(e);
+			}
+		});
 		tableFilter.setModel(modelFilter);
 		scrollPane.setViewportView(tableFilter);
 		contentPane.setLayout(gl_contentPane);
 	}
+	
+	private void tableFilterMouseClicked(MouseEvent e) {
+		
+		editButton.setEnabled(true);
+		deleteButton.setEnabled(true);
+		int index = tableFilter.getSelectedRow();
+		
+		/*String startTime = tableFilter.getValueAt(index, 1).toString();
+		String stopTime = tableFilter.getValueAt(index, 2).toString();
+		
+		String busLineName = tableFilter.getValueAt(index, 1).toString();
+		String busLineType = tableFilter.getValueAt(index, 2).toString();
+		String startStation = tableFilter.getValueAt(index, 3).toString();
+		String stopStation = tableFilter.getValueAt(index, 4).toString();
+		String pirceOneWay = tableFilter.getValueAt(index, 5).toString();
+		String priceMonthly = tableFilter.getValueAt(index, 6).toString();
+				
+		lineNameField.setText(busLineName);
+		comboBoxType.setSelectedItem(busLineType);
+		startStationField.setText(startStation);
+		startStationField.setText(stopStation);
+		textFieldPirceOneWay.setText(pirceOneWay);
+		textFieldPriceMonthly.setText(priceMonthly);*/	
+	}
+	
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -319,6 +355,9 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 				
 				e1.printStackTrace();
 			}
+			JOptionPane.showMessageDialog(this, "New Schedule had added.");
+			editButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 			
 		}
 
@@ -345,7 +384,9 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 					
 					e1.printStackTrace();
 				}
-				
+				JOptionPane.showMessageDialog(this, "Schedule was edited.");
+				editButton.setEnabled(false);
+				deleteButton.setEnabled(false);
 			
 		}
 
@@ -361,6 +402,9 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 				
 				e1.printStackTrace();
 			}
+			JOptionPane.showMessageDialog(this, "Schedule was deleted.");
+			editButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 		}
 
 	}

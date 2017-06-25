@@ -462,6 +462,8 @@ public class BuyerWindow extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, invalid);
 		
 			updateTable();
+			editButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 		}
 
 		if (e.getSource() == editButton) {
@@ -528,6 +530,8 @@ public class BuyerWindow extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, invalid);
 		
 			updateTable();
+			editButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 		}
 
 		if (e.getSource() == deleteButton) {
@@ -548,6 +552,8 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, "Buyer: " + name + surname + " was deleted.");
 
 			updateTable();
+			editButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 
 		}
 

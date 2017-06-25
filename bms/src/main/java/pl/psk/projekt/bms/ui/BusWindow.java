@@ -272,7 +272,8 @@ public class BusWindow extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 			JOptionPane.showMessageDialog(this, "New bus :" + busName + " had added.");
-			
+			editButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 		}
 
 		if (e.getSource() == editButton) {
@@ -294,7 +295,8 @@ public class BusWindow extends JFrame implements ActionListener {
 					e1.printStackTrace();
 				}
 				JOptionPane.showMessageDialog(this, "Bus :" + busName + " was edited.");
-			
+				editButton.setEnabled(false);
+				deleteButton.setEnabled(false);
 		}
 
 		if (e.getSource() == deleteButton) {
@@ -312,7 +314,9 @@ public class BusWindow extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 			JOptionPane.showMessageDialog(this, "Bus :" + busName + " was deleted.");
-		}
+			editButton.setEnabled(false);
+			deleteButton.setEnabled(false);
+		}	
 
 	}
 	

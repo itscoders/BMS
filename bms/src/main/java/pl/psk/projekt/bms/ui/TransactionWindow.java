@@ -53,6 +53,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -145,10 +147,12 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		editButton = new JButton("Edit");
 		editButton.setBackground(Color.LIGHT_GRAY);
 		editButton.addActionListener(this);
+		editButton.setEnabled(false);
 
 		deleteButton = new JButton("Delete");
 		deleteButton.setBackground(Color.LIGHT_GRAY);
 		deleteButton.addActionListener(this);
+		deleteButton.setEnabled(false);
 
 		JScrollPane scrollPane = new JScrollPane();
 
@@ -337,10 +341,38 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 		tableFilter = new JTable();
 		tableFilter.setModel(modelFilter);
+		tableFilter.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				tableFilterMouseClicked(e);
+			}
+		});
 		scrollPane.setViewportView(tableFilter);
 
 		contentPane.setLayout(gl_contentPane);
 	}
+	
+	private void tableFilterMouseClicked(MouseEvent e) {
+		editButton.setEnabled(true);
+		deleteButton.setEnabled(true);
+		
+		int index = tableFilter.getSelectedRow();
+		
+		/*String busLineName = tableFilter.getValueAt(index, 1).toString();
+		String busLineType = tableFilter.getValueAt(index, 2).toString();
+		String startStation = tableFilter.getValueAt(index, 3).toString();
+		String stopStation = tableFilter.getValueAt(index, 4).toString();
+		String pirceOneWay = tableFilter.getValueAt(index, 5).toString();
+		String priceMonthly = tableFilter.getValueAt(index, 6).toString();
+				
+		lineNameField.setText(busLineName);
+		comboBoxType.setSelectedItem(busLineType);
+		startStationField.setText(startStation);
+		startStationField.setText(stopStation);
+		textFieldPirceOneWay.setText(pirceOneWay);
+		textFieldPriceMonthly.setText(priceMonthly);*/
+	}
+
 
 	private void clearFields() {
 		textBuyer.setText("");

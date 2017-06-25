@@ -329,6 +329,8 @@ public class LineWindow extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, "New line :" + busLineName + " had added.");
 			
 			updateTable();
+			editButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 		}
 
 		if (e.getSource() == editButton) {
@@ -352,6 +354,8 @@ public class LineWindow extends JFrame implements ActionListener {
 			}
 			JOptionPane.showMessageDialog(this, "Line :" + busLineName + " was edited.");
 			updateTable();
+			editButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 		}
 
 		if (e.getSource() == deleteButton) {
@@ -369,6 +373,8 @@ public class LineWindow extends JFrame implements ActionListener {
 			}
 			JOptionPane.showMessageDialog(this, "Line :" + busLineName + " was deleted.");
 			updateTable();
+			editButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 		}
 		
 

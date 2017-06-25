@@ -17,8 +17,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 public class Mail {
-	
-	
 
 	public Mail() {
 		super();
@@ -35,41 +33,37 @@ public class Mail {
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.port", "587");
 
-		Session session = Session.getInstance(props,
-		  new javax.mail.Authenticator() {
+		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(username, password);
 			}
-		  });
+		});
 
 		try {
 
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("bms.system.service@gmail.com"));
-			message.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse(mail));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail));
 			message.setSubject(title);
 			message.setText(content);
+
 			
 
-			MimeBodyPart messageContent = new MimeBodyPart();
-		
 			Multipart multipart = new MimeMultipart();
 			MimeBodyPart messageBodyPart = new MimeBodyPart();
-	        String file = pathAttachment;
-	        String fileName = nameAttachment;
-	        DataSource source = new FileDataSource(file);
-	        messageBodyPart.setDataHandler(new DataHandler(source));
-	        messageBodyPart.setFileName(fileName);
-	        messageContent.setText(content);
+			MimeBodyPart messageContent = new MimeBodyPart();
+			String file = pathAttachment;
+			String fileName = nameAttachment;
+			DataSource source = new FileDataSource(file);
+			messageBodyPart.setDataHandler(new DataHandler(source));
+			messageBodyPart.setFileName(fileName);
+			messageContent.setText(content);
 			multipart.addBodyPart(messageContent);
-	        multipart.addBodyPart(messageBodyPart);
-	        
+			multipart.addBodyPart(messageBodyPart);
 
-	        message.setContent(multipart);
+			message.setContent(multipart);
 
 			Transport.send(message);
-
 
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
