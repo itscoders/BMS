@@ -38,7 +38,7 @@ public class WorkersJDBC {
         while(rs.next()){
         	
             w.setWorkerId(rs.getInt("workerId"));
-            w.setPossition(rs.getString("possition"));
+            w.setEmail(rs.getString("email"));
             w.setAddress(rs.getString("address"));
             w.setBirthday(rs.getString("birthday"));
             w.setMobile(rs.getString("mobile"));
@@ -69,13 +69,15 @@ public class WorkersJDBC {
     
  
     public Workers passRecover(Workers w)throws SQLException{
-        String sql = "SELECT PASSWORD FROM WORKERS WHERE USERNAME =? ";
+        String sql = "SELECT PASSWORD, NAME, EMAIL FROM WORKERS WHERE USERNAME =? ";
         preparedStatement = connect.prepareStatement(sql);
         preparedStatement.setString(1,w.getUsername());
         
         ResultSet rs = preparedStatement.executeQuery();
         while(rs.next()){
             w.setPassword(rs.getString("password"));
+            w.setName(rs.getString("name"));
+            w.setEmail(rs.getString("email"));
         }
         return w;   //recovery successfully
     }
@@ -84,7 +86,7 @@ public class WorkersJDBC {
 
     
     public boolean createWorker(Workers w)throws SQLException{
-    String sql="INSERT INTO WORKERS (accountType, username, password, name, surname, possition, mobile, address, birthday, salary) values(?,?,?,?,?,?,?,?,?,?)";
+    String sql="INSERT INTO WORKERS (accountType, username, password, name, surname, email, mobile, address, birthday, salary) values(?,?,?,?,?,?,?,?,?,?)";
     preparedStatement=connect.prepareStatement(sql);
   
     preparedStatement.setString(1,w.getAccountType());
@@ -92,7 +94,7 @@ public class WorkersJDBC {
     preparedStatement.setString(3,w.getPassword());
     preparedStatement.setString(4,w.getName());
     preparedStatement.setString(5,w.getSurname());
-    preparedStatement.setString(6,w.getPossition());
+    preparedStatement.setString(6,w.getEmail());
     preparedStatement.setString(7,w.getMobile());
     preparedStatement.setString(8,w.getAddress());
     preparedStatement.setString(9,w.getBirthday());
@@ -110,7 +112,7 @@ public class WorkersJDBC {
     
     
     public boolean updateWorker(Workers w)throws SQLException{
-    String sql ="UPDATE WORKERS SET USERNAME=?, ACCOUNTTYPE=?, PASSWORD=?, NAME=?, SURNAME=?, POSSITION=?, MOBILE=?, ADDRESS=?, BIRTHDAY=?,SALARY=? WHERE WORKERID=?";
+    String sql ="UPDATE WORKERS SET USERNAME=?, ACCOUNTTYPE=?, PASSWORD=?, NAME=?, SURNAME=?, EMAIL=?, MOBILE=?, ADDRESS=?, BIRTHDAY=?,SALARY=? WHERE WORKERID=?";
     preparedStatement=connect.prepareStatement(sql);
     
     preparedStatement.setString(1,w.getAccountType());
@@ -118,7 +120,7 @@ public class WorkersJDBC {
     preparedStatement.setString(3,w.getPassword());
     preparedStatement.setString(4,w.getName());
     preparedStatement.setString(5,w.getSurname());
-    preparedStatement.setString(6,w.getPossition());
+    preparedStatement.setString(6,w.getEmail());
     preparedStatement.setString(7,w.getMobile());
     preparedStatement.setString(8,w.getAddress());
     preparedStatement.setString(9,w.getBirthday());

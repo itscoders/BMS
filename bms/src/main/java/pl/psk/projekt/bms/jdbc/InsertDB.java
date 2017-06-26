@@ -18,18 +18,18 @@ public class InsertDB  {
 			Statement   statement = connect.createStatement();
 			
 			
-			create = "INSERT INTO `workers` (`accountType`, `username`, `password`, `name`, `surname`, `possition`, `mobile`, `address`, `birthday`, `salary`) VALUES"+
-					"('Administrator', 'admin', 'admin', 'Admin', 'Admin', 'Administrator', '000000000', 'Siedziba', '16-Jun-1995', '25000'),"+
-					"('Administrator', 'pjanuszek', 'pj', 'Pawel', 'Januszek', 'Administrator', '895412369', 'Warszawa, ul.Marszalkowska', '16-Jun-1995', '25000'),"+
-					"('Administrator', 'zjanuszek', 'zj', 'Zygfryd', 'Januszek', 'Administrator', '897892369', 'Warszawa, ul.Marszalkowska', '20-Jun-1975', '25000'),"+
-					"('Driver', 'pjan', 'pj', 'Pawel', 'Jan', 'Driver', '895356869', 'Radom, ul.Kielecka', '26-Jun-1985', '5000'),"+
-					"('Driver', 'kjuras', 'kj', 'Krzysztof', 'Juras', 'Driver', '898512369', 'Kielce, ul.Marszalkowska', '06-Jun-1985', '5000'),"+
-					"('Driver', 'zjuras', 'zj', 'Zygmunt', 'Juras', 'Driver', '815634369', 'Kielce, ul.Jerozolimy', '26-Jun-1985', '5000'),"+
-					"('Driver', 'mslusarczyk', 'ms', 'Michal', 'Slusarczyk', 'Driver', '741547896', 'Pepice 21', '28-Jun-1995', '5000'),"+
-					"('Driver', 'mwachala', 'mw', 'Michal', 'Wachala', 'Driver', '874256354', 'Kielce, ul.Sady', '16-Jun-1995', '5000'),"+
-					"('Driver', 'pkuchar', 'pk', 'Pawel', 'Kuchar', 'Driver', '895456369', 'Kielce, ul.Marszalkowska', '16-Jun-1995', '5000'),"+
-					"('Seller', 'jzarym', 'jz', 'Joanna', 'Zarym', 'Seller', '987145329', 'Warszawa, ul.Marszalkowska', '16-Jun-1995', '5000'),"+
-					"('Seller', 'mjanuszek', 'mj', 'Monika', 'Januszek', 'Seller', '895412369', 'Warszawa, ul.Marszalkowska', '16-Jun-1995', '5000')";
+			create = "INSERT INTO `workers` (`accountType`, `username`, `password`, `name`, `surname`, `email`, `mobile`, `address`, `birthday`, `salary`) VALUES"+
+					"('Administrator', 'admin', 'admin', 'Admin', 'Admin', 'admin@gmail.com', '000000000', 'Siedziba', '16-Jun-1995', '25000'),"+
+					"('Administrator', 'pjanuszek', 'pj', 'Pawel', 'Januszek', 'pjanuszek@gmail.com', '895412369', 'Warszawa, ul.Marszalkowska', '16-Jun-1995', '25000'),"+
+					"('Administrator', 'zjanuszek', 'zj', 'Zygfryd', 'Januszek', 'zjanuszek@gmail.com', '897892369', 'Warszawa, ul.Marszalkowska', '20-Jun-1975', '25000'),"+
+					"('Driver', 'pjan', 'pj', 'Pawel', 'Jan', 'pjan@gmail.com', '895356869', 'Radom, ul.Kielecka', '26-Jun-1985', '5000'),"+
+					"('Driver', 'kjuras', 'kj', 'Krzysztof', 'Juras', 'kjuras@gmail.com', '898512369', 'Kielce, ul.Marszalkowska', '06-Jun-1985', '5000'),"+
+					"('Driver', 'zjuras', 'zj', 'Zygmunt', 'Juras', 'zjuras@gmail.com', '815634369', 'Kielce, ul.Jerozolimy', '26-Jun-1985', '5000'),"+
+					"('Driver', 'mslusarczyk', 'ms', 'Michal', 'Slusarczyk', 'mslusarczyk@gmail.com', '741547896', 'Pepice 21', '28-Jun-1995', '5000'),"+
+					"('Driver', 'mwachala', 'mw', 'Michal', 'Wachala', 'mwachala@gmail.com', '874256354', 'Kielce, ul.Sady', '16-Jun-1995', '5000'),"+
+					"('Driver', 'pkuchar', 'pk', 'Pawel', 'Kuchar', 'pkuchar@gmail.com', '895456369', 'Kielce, ul.Marszalkowska', '16-Jun-1995', '5000'),"+
+					"('Seller', 'jzarym', 'jz', 'Joanna', 'Zarym', 'jzarym@gmail.com', '987145329', 'Warszawa, ul.Marszalkowska', '16-Jun-1995', '5000'),"+
+					"('Seller', 'mjanuszek', 'mj', 'Monika', 'Januszek', 'mjanuszek@gmail.com', '895412369', 'Warszawa, ul.Marszalkowska', '16-Jun-1995', '5000')";
 
 					
 					statement.execute(create);

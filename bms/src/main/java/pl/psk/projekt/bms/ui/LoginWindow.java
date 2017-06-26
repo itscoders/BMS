@@ -170,7 +170,7 @@ public class LoginWindow extends JFrame implements ActionListener {
 
 		if (e.getSource() == forgetButton) {
 			this.setVisible(false);
-			RetrieveWindow rw = new RetrieveWindow(this);
+			RetrieveWindow rw = new RetrieveWindow();
 			rw.setVisible(true);
 		}
 

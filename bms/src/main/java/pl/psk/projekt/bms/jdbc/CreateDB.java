@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import pl.psk.projekt.bms.dbobjects.Workers;
 
 public class CreateDB {
 	
@@ -22,7 +21,7 @@ public class CreateDB {
 	              			"password varchar(255),"+
 	              			"name varchar(255),"+
 	              			"surname varchar(255),"+
-	              			"possition varchar(255),"+
+	              			"email varchar(255),"+
 	              			"mobile varchar(255),"+
 	              			"address varchar(255),"+
 	              			"birthday varchar(255),"+

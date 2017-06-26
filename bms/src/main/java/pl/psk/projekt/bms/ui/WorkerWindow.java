@@ -71,7 +71,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 	private JLabel labelPassword;
 	private JLabel labelSurname;
 	private JTextField salaryField;
-	private JLabel labelPosition;
+	private JLabel labelEmail;
 	private JLabel labelMobilePhone;
 	private JPasswordField passwordField;
 	private JTable tableFilter;
@@ -79,7 +79,6 @@ public class WorkerWindow extends JFrame implements ActionListener {
 	private JButton editButton;
 	private JButton deleteButton;
 	private JComboBox<String> comboBoxType;
-	private JComboBox<String> comboBoxPosition;
 	private JDateChooser birthdayField;
 	private JTextArea adressField;
 
@@ -88,6 +87,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 	ResultSet rs;
 	private JTextField filterField;
 	private DefaultTableModel modelFilter;
+	private JTextField emailField;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -151,7 +151,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		mobilePhoneField = new JTextField();
 		mobilePhoneField.setColumns(10);
 
-		labelPosition = new JLabel("Position:");
+		labelEmail = new JLabel("Email:");
 
 		labelMobilePhone = new JLabel("Mobile Phone:");
 
@@ -169,9 +169,6 @@ public class WorkerWindow extends JFrame implements ActionListener {
 
 		comboBoxType = new JComboBox<String>();
 		comboBoxType.setModel(new DefaultComboBoxModel<String>(new String[] {"Administrator", "Driver", "Seller"}));
-
-		comboBoxPosition = new JComboBox<String>();
-		comboBoxPosition.setModel(new DefaultComboBoxModel<String>(new String[] {"Administrator", "Driver", "Seller"}));
 
 		addButton = new JButton("Add");
 		addButton.setBackground(Color.LIGHT_GRAY);
@@ -224,6 +221,9 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			}
 		});
 		filterField.setColumns(10);
+		
+		emailField = new JTextField();
+		emailField.setColumns(10);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -246,9 +246,9 @@ public class WorkerWindow extends JFrame implements ActionListener {
 										.addComponent(labelUserName)
 										.addComponent(labelName))
 									.addGap(18)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 										.addComponent(nameField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
-										.addComponent(userNameField, GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)))
+										.addComponent(userNameField, GroupLayout.PREFERRED_SIZE, 214, GroupLayout.PREFERRED_SIZE)))
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(labelBirthday)
@@ -265,14 +265,14 @@ public class WorkerWindow extends JFrame implements ActionListener {
 								.addComponent(labelPassword)
 								.addComponent(labelSurname)
 								.addComponent(labelSalary)
-								.addComponent(labelPosition))
+								.addComponent(labelEmail))
 							.addGap(18)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(emailField)
 								.addComponent(salaryField)
 								.addComponent(surnameField)
 								.addComponent(passwordField, 103, 103, Short.MAX_VALUE)
-								.addComponent(mobilePhoneField)
-								.addComponent(comboBoxPosition, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+								.addComponent(mobilePhoneField))))
 					.addGap(30))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap(199, Short.MAX_VALUE)
@@ -300,8 +300,8 @@ public class WorkerWindow extends JFrame implements ActionListener {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(labelPosition)
-								.addComponent(comboBoxPosition, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(labelEmail)
+								.addComponent(emailField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 							.addGap(18)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(labelMobilePhone)
@@ -336,8 +336,8 @@ public class WorkerWindow extends JFrame implements ActionListener {
 					.addContainerGap())
 		);
 		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, editButton, deleteButton});
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {nameField, mobilePhoneField, surnameField, salaryField, passwordField});
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelUserName, labelName, lblNewLabel_2, labelBirthday, labelPassword, labelSurname, labelPosition, labelMobilePhone, labelAdress, labelSalary});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {userNameField, nameField, mobilePhoneField, surnameField, salaryField, passwordField});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelUserName, labelName, lblNewLabel_2, labelBirthday, labelPassword, labelSurname, labelEmail, labelMobilePhone, labelAdress, labelSalary});
 
 		adressField = new JTextArea();
 		adressField.setColumns(20);
@@ -387,7 +387,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		String name = tableFilter.getValueAt(index, 4).toString();
 		String surname = tableFilter.getValueAt(index, 5).toString();
 		String type = tableFilter.getValueAt(index, 1).toString();
-		String position = tableFilter.getValueAt(index, 6).toString();
+		String email = tableFilter.getValueAt(index, 6).toString();
 		String birthday = tableFilter.getValueAt(index, 9).toString();
 		String mobilePhone = tableFilter.getValueAt(index, 7).toString();
 		String adress = tableFilter.getValueAt(index, 8).toString();
@@ -408,7 +408,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 		nameField.setText(name);
 		surnameField.setText(surname);
 		comboBoxType.setSelectedItem(type);
-		comboBoxPosition.setSelectedItem(position);
+		emailField.setText(email);
 		birthdayField.setDate(date);
 		mobilePhoneField.setText(mobilePhone);
 		adressField.setText(adress);
@@ -424,7 +424,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			String name = nameField.getText();
 			String surname = surnameField.getText();
 			String type = (String) comboBoxType.getSelectedItem();
-			String position = (String) comboBoxPosition.getSelectedItem();
+			String email = emailField.getText();
 			String birthday = ((JTextField) birthdayField.getDateEditor().getUiComponent()).getText();
 			String mobilePhone = mobilePhoneField.getText();
 			String adress = adressField.getText();
@@ -476,7 +476,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 					double salary = Double.parseDouble(salaryy);
 					try {
 						WorkersJDBC wj = new WorkersJDBC();
-						Workers w = new Workers(type, username, password, name, surname, position, mobilePhone, adress,birthday, salary);
+						Workers w = new Workers(type, username, password, name, surname, email, mobilePhone, adress,birthday, salary);
 						wj.createWorker(w);
 					} catch (SQLException e1) {
 
@@ -502,7 +502,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			String name = nameField.getText();
 			String surname = surnameField.getText();
 			String type = (String) comboBoxType.getSelectedItem();
-			String position = (String) comboBoxPosition.getSelectedItem();
+			String email = emailField.getText();
 			String birthday = ((JTextField) birthdayField.getDateEditor().getUiComponent()).getText();
 			String mobilePhone = mobilePhoneField.getText();
 			String adress = adressField.getText();
@@ -555,7 +555,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 					double dSalary = Double.parseDouble(salary);
 					try {
 						WorkersJDBC wj = new WorkersJDBC();
-						Workers w = new Workers(type, username, password, name, surname, position, mobilePhone, adress,birthday, dSalary);
+						Workers w = new Workers(type, username, password, name, surname, email, mobilePhone, adress,birthday, dSalary);
 						w.setWorkerId(value);
 						wj.updateWorker(w);
 					} catch (SQLException e1) {

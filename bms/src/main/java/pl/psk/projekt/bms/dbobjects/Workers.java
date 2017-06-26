@@ -8,7 +8,7 @@ public class Workers {
 	private String password;
 	private String name;
 	private String surname;
-	private String possition;
+	private String email;
 	private String mobile;
 	private String address;
 	private String birthday;
@@ -18,7 +18,7 @@ public class Workers {
 
 	}
 
-	public Workers(String accountType, String username, String password, String name, String surname, String possition,
+	public Workers(String accountType, String username, String password, String name, String surname, String email,
 			String mobile, String address, String birthday, double salary) {
 		super();
 		this.accountType = accountType;
@@ -26,15 +26,16 @@ public class Workers {
 		this.password = password;
 		this.name = name;
 		this.surname = surname;
-		this.possition = possition;
+		this.email = email;
 		this.mobile = mobile;
 		this.address = address;
 		this.birthday = birthday;
 		this.salary = salary;
+
 	}
 
 	public Workers(int workerId, String accountType, String username, String password, String name, String surname,
-			String possition, String mobile, String address, String birthday, double salary) {
+			String email, String mobile, String address, String birthday, double salary) {
 		super();
 		this.workerId = workerId;
 		this.accountType = accountType;
@@ -42,7 +43,7 @@ public class Workers {
 		this.password = password;
 		this.name = name;
 		this.surname = surname;
-		this.possition = possition;
+		this.email = email;
 		this.mobile = mobile;
 		this.address = address;
 		this.birthday = birthday;
@@ -97,12 +98,12 @@ public class Workers {
 		this.surname = surname;
 	}
 
-	public String getPossition() {
-		return possition;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setPossition(String possition) {
-		this.possition = possition;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getMobile() {

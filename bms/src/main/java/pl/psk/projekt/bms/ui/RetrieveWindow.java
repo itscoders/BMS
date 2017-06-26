@@ -3,7 +3,13 @@ package pl.psk.projekt.bms.ui;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import pl.psk.projekt.bms.component.Mail;
+import pl.psk.projekt.bms.dbobjects.Workers;
+import pl.psk.projekt.bms.jdbc.WorkersJDBC;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
@@ -16,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.EventQueue;
 
 public class RetrieveWindow extends JFrame implements ActionListener {
 
@@ -23,17 +30,23 @@ public class RetrieveWindow extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField userNameField;
-
-	 /*
-	 * public static void main(String[] args) { EventQueue.invokeLater(new
-	 * Runnable() { public void run() { try { RetrieveWindow frame = new
-	 * RetrieveWindow(); frame.setVisible(true); } catch (Exception e) {
-	 * e.printStackTrace(); } } }); }
-	 */
-	LoginWindow loginWindow;
+	private JButton retrieveButton;
 	private JButton prevButton;
 
-	public RetrieveWindow(LoginWindow loginWindow) {
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					RetrieveWindow frame = new RetrieveWindow();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	public RetrieveWindow() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
@@ -50,8 +63,6 @@ public class RetrieveWindow extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 		SwingUtilities.updateComponentTreeUI(this);
-
-		this.loginWindow = loginWindow;
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		setResizable(false);
@@ -72,30 +83,8 @@ public class RetrieveWindow extends JFrame implements ActionListener {
 		prevButton.setBackground(Color.LIGHT_GRAY);
 		prevButton.addActionListener(this);
 
-		JButton retrieveButton = new JButton("Retrieve Password");
-		retrieveButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				String username = userNameField.getText();
-				/*
-				try {
-					Member m = mt.passRecover(username);
-					if (m == null) {
-						JOptionPane.showMessageDialog(this, "Incorrect Information, Fail to retrieve password.");
-					} else {
-						JOptionPane.showMessageDialog(this,
-								"Username :" + m.getUsername() + "\nPassword :" + m.getPassword());
-						dispose();
-						loginWindow.setVisible(true);
-					}
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(this, ex.getMessage());
-				}
-				*/
-			}
-			
-
-		});
+		retrieveButton = new JButton("Retrieve Password");
+		retrieveButton.addActionListener(this);
 		retrieveButton.setBackground(Color.LIGHT_GRAY);
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -123,14 +112,42 @@ public class RetrieveWindow extends JFrame implements ActionListener {
 		contentPane.setLayout(gl_contentPane);
 	}
 
-	
 	public void actionPerformed(ActionEvent e) {
-		
+
 		if (e.getSource() == prevButton) {
-		RetrieveWindow.this.setVisible(false);
-		loginWindow.setVisible(true);
-		
+			LoginWindow lw = new LoginWindow();
+			lw.setVisible(true);
+			this.dispose();
+
+		}
+
+		if (e.getSource() == retrieveButton) {
+
+			String username = userNameField.getText();
+
+			try {
+				WorkersJDBC wj = new WorkersJDBC();
+				Workers w = new Workers();
+				w.setUsername(username);
+				w = wj.passRecover(w);
+				String email = w.getEmail();
+				String name = w.getName();
+				String password = w.getPassword();
+				if (w == null) {
+					JOptionPane.showMessageDialog(this, "Incorrect Information, Fail to retrieve password.");
+				} else {
+					Mail m = new Mail();
+					String contentMail = "HI " + name + "\nYou recently requested to recover your password for BMS SYSTEM account.\n" + "Your Password:" + password + "\n" + "Thanks,\n" + "ITS CODERS & PabloIT from BMS team.";
+					m.sendMail(email, "Recover password in BMS SYSTEM", contentMail);
+					JOptionPane.showMessageDialog(this, "The password has been sent to the email: " + w.getEmail());
+					LoginWindow lw = new LoginWindow();
+					lw.setVisible(true);
+					this.dispose();
+				}
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(this, ex.getMessage());
+			}
+
 		}
 	}
-
 }
