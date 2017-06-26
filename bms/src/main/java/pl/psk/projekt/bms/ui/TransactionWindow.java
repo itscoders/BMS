@@ -392,7 +392,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 	private void generateSlip(String discount, String date, int buyer) {
 
-		String name = "", surname="", mail="";
+		String name = "", surname="", mail="", numberPhone="";
 		String nameLine = comboBoxBusLine.getSelectedItem().toString();
 
 		try {
@@ -405,6 +405,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 			name = rs.getString("name");
 			surname = rs.getString("surname");
 			mail = rs.getString("email");
+			numberPhone = rs.getString("mobile");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -458,6 +459,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 				Mail m = new Mail();
 				
 				m.sendMail(mail, "BILL SLIP FOR "+ nameLine + " TICKET", "In the attachment you will find a receipt for your ticket", filePath, name +"_"+ surname + "_salary_slip_" + date + ".pdf");
+				m.sendSMS(numberPhone, "BILL SLIP FOR "+ nameLine + " TICKET");
 				
 				JOptionPane.showMessageDialog(null, "Report was successfully generated");
 } catch (FileNotFoundException e) {

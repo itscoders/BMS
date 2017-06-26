@@ -53,7 +53,7 @@ public class BuyerJDBC {
     
     
     public boolean updateBuyer(Buyer b)throws SQLException{
-    String sql ="UPDATE Buyer SET NAME=?, SURNAME=?, BIRTHDAY=?, EMAIL=?, MOBILE=?, STREET=?, HOUSENUMBER=?, POSTCODE=?, CITY=?, INSURENCENUMBER=? WHERE BUYERID=?";
+    String sql ="UPDATE Buyer SET NAME=?, SURNAME=?, BIRTHDAY=?, EMAIL=?, MOBILE=?, STREET=?, HOUSENUMBER=?, POSTCODE=?, CITY=?, INSURANCENUMBER=? WHERE BUYERID=?";
     preparedStatement=connect.prepareStatement(sql);
     
     preparedStatement.setString(1,b.getName());

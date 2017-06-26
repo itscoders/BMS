@@ -482,7 +482,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			String invalid = "";
 
 			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 				Date dd = sdf.parse(birthday);
 				Calendar cal = Calendar.getInstance();
 				String today = sdf.format(cal.getTime());
@@ -521,7 +521,7 @@ public class BuyerWindow extends JFrame implements ActionListener {
 
 						e1.printStackTrace();
 					}
-					JOptionPane.showMessageDialog(this, "New Buyer: " + name + surname + " had added.");
+					JOptionPane.showMessageDialog(this, "New Buyer: " + name + surname + " was edited.");
 
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, ex.getMessage());

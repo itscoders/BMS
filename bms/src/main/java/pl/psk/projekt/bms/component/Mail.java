@@ -69,4 +69,36 @@ public class Mail {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public void sendSMS(String numberPhone, String content) {
+		
+		final String username = "bms.system.service@gmail.com";
+		final String password = "bmsProject";
+
+		Properties props = new Properties();
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+
+		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username, password);
+			}
+		});
+
+		try {
+
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress("bms.system.service@gmail.com"));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("48" + numberPhone + "@txtlocal.co.uk"));
+			message.setSubject("");
+			message.setText(content + "##");
+
+			Transport.send(message);
+
+		} catch (MessagingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
