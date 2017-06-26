@@ -123,9 +123,9 @@ public class LineWindow extends JFrame implements ActionListener {
 		stopStationField.setColumns(10);
 
 		 comboBoxType = new JComboBox<String>();
-		 String e ="normalny";
+		 String e ="normal";
 		 comboBoxType.addItem(e);
-		 e ="pośpieszny";
+		 e ="express";
 		 comboBoxType.addItem(e);
 
 		addButton = new JButton("Add");
@@ -300,7 +300,7 @@ public class LineWindow extends JFrame implements ActionListener {
 		lineNameField.setText(busLineName);
 		comboBoxType.setSelectedItem(busLineType);
 		startStationField.setText(startStation);
-		startStationField.setText(stopStation);
+		stopStationField.setText(stopStation);
 		textFieldPirceOneWay.setText(pirceOneWay);
 		textFieldPriceMonthly.setText(priceMonthly);	
 	}

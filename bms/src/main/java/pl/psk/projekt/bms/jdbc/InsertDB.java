@@ -48,16 +48,16 @@ public class InsertDB  {
 			statement.execute(create);
 			
 			create = "INSERT INTO `busline` (`busLineName`, `busLineType`, `startStation`, `endStation`, `priceOneWay`, `priceMonthly`) VALUES"+
-			"('Radom - Kielce', 'normalny', 'Radom', 'Kielce', '10.00', '100.00'),"+
-			"('Kielce - Radom', 'normalny', 'Kielce', 'Radom', '10.00', '100.00'),"+
-			"('Krakow - Kielce', 'normalny', 'Krakow', 'Kielce', '15.00', '150.00'),"+
-			"('Kielce - Krakow', 'normalny', 'Kielce', 'Krakow', '15.00', '150.00'),"+
-			"('Warszawa - Kielce', 'normalny', 'Warszawa', 'Kielce', '25.00', '250.00'),"+
-			"('Kielce - Warszawa', 'normalny', 'Kielce', 'Warszawa', '25.00', '250.00'),"+
-			"('Rzeszow - Kielce', 'normalny', 'Rzeszow', 'Kielce', '20.00', '200.00'),"+
-			"('Kielce - Rzeszow', 'normalny', 'Kielce', 'Rzeszow', '20.00', '200.00'),"+
-			"('Lublin - Kielce', 'normalny', 'Lublin', 'Kielce', '20.00', '200.00'),"+
-			"('Kielce - Lublin', 'normalny', 'Kielce', 'Lublin', '20.00', '200.00')";
+			"('Radom - Kielce', 'normal', 'Radom', 'Kielce', '10.00', '100.00'),"+
+			"('Kielce - Radom', 'normal', 'Kielce', 'Radom', '10.00', '100.00'),"+
+			"('Krakow - Kielce', 'normal', 'Krakow', 'Kielce', '15.00', '150.00'),"+
+			"('Kielce - Krakow', 'normal', 'Kielce', 'Krakow', '15.00', '150.00'),"+
+			"('Warszawa - Kielce', 'normal', 'Warszawa', 'Kielce', '25.00', '250.00'),"+
+			"('Kielce - Warszawa', 'normal', 'Kielce', 'Warszawa', '25.00', '250.00'),"+
+			"('Rzeszow - Kielce', 'normal', 'Rzeszow', 'Kielce', '20.00', '200.00'),"+
+			"('Kielce - Rzeszow', 'normal', 'Kielce', 'Rzeszow', '20.00', '200.00'),"+
+			"('Lublin - Kielce', 'normal', 'Lublin', 'Kielce', '20.00', '200.00'),"+
+			"('Kielce - Lublin', 'normal', 'Kielce', 'Lublin', '20.00', '200.00')";
 			
 			statement.execute(create);
 			
@@ -77,7 +77,7 @@ public class InsertDB  {
 			"('14:00:00', '16:00:00', '2', '4', '5'),"+
 			"('16:15:00', '18:15:00', '2', '3', '5'),"+
 			"('18:30:00', '20:30:00', '2', '4', '5'),"+
-			"('20:45:00', '22:45:00', '3', '5', '6'),"+
+			"('20:45:00', '22:45:00', '3', '5', '5'),"+
 			"('05:00:00', '07:00:00', '3', '6', '6'),"+
 			"('07:15:00', '09:15:00', '3', '5', '6'),"+
 			"('09:30:00', '11:30:00', '3', '6', '6'),"+

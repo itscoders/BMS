@@ -297,7 +297,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 			EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					try {
-						TransactionWindow tw = new TransactionWindow();
+						TransactionWindow tw = new TransactionWindow(w);
 						tw.setVisible(true);
 					} catch (Exception e) {
 						e.printStackTrace();

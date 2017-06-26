@@ -53,8 +53,6 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -62,6 +60,7 @@ import java.io.FileOutputStream;
 import pl.psk.projekt.bms.component.ComboKeyHandler;
 import pl.psk.projekt.bms.component.Mail;
 import pl.psk.projekt.bms.dbobjects.Transaction;
+import pl.psk.projekt.bms.dbobjects.Workers;
 import pl.psk.projekt.bms.jdbc.TransactionJDBC;
 
 import javax.swing.DefaultComboBoxModel;
@@ -72,7 +71,6 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JButton addButton;
-	private JButton editButton;
 	private JButton deleteButton;
 	private JButton newBuyerButton;
 	private JSpinner spinnerDepartureTime;
@@ -96,12 +94,14 @@ public class TransactionWindow extends JFrame implements ActionListener {
 	JTextField textBusLine;
 	JTextField textScheduler;
 	JTextField textDiscount;
+	Workers w;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TransactionWindow frame = new TransactionWindow();
+					
+					TransactionWindow frame = new TransactionWindow(new Workers());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -110,7 +110,10 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		});
 	}
 
-	public TransactionWindow() {
+	public TransactionWindow(Workers w) {
+		
+		this.w = w;
+		
 		setResizable(false);
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -142,15 +145,10 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		addButton.setBackground(Color.LIGHT_GRAY);
 		addButton.addActionListener(this);
 
-		editButton = new JButton("Edit");
-		editButton.setBackground(Color.LIGHT_GRAY);
-		editButton.addActionListener(this);
-		editButton.setEnabled(false);
-
 		deleteButton = new JButton("Delete");
 		deleteButton.setBackground(Color.LIGHT_GRAY);
 		deleteButton.addActionListener(this);
-		deleteButton.setEnabled(false);
+		
 
 		JScrollPane scrollPane = new JScrollPane();
 
@@ -218,101 +216,105 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		JLabel labelScheduler = new JLabel("Scheduler:");
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane
-				.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-								.addComponent(labelChooseBuyer).addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(comboBoxBuyer, 0, 327, Short.MAX_VALUE).addGap(18)
-								.addComponent(newBuyerButton).addGap(163))
-						.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(lblBusLine, GroupLayout.PREFERRED_SIZE, 65,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(18)
-												.addComponent(comboBoxBusLine, GroupLayout.PREFERRED_SIZE, 225,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(28)
-												.addComponent(lblTicketType, GroupLayout.PREFERRED_SIZE,
-														65, GroupLayout.PREFERRED_SIZE)
-												.addGap(18).addComponent(comboBoxTicketType, 0, 237, Short.MAX_VALUE))
-										.addGroup(gl_contentPane.createSequentialGroup().addGroup(gl_contentPane
-												.createParallelGroup(Alignment.TRAILING)
-												.addGroup(gl_contentPane.createSequentialGroup()
-														.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 78,
-																GroupLayout.PREFERRED_SIZE)
-														.addGap(4))
-												.addGroup(gl_contentPane.createSequentialGroup()
-														.addComponent(labelScheduler, GroupLayout.PREFERRED_SIZE, 65,
-																GroupLayout.PREFERRED_SIZE)
-														.addGap(18)))
-												.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-														.addComponent(comboBoxScheduler, 0, GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE)
-														.addComponent(spinnerDepartureTime, GroupLayout.DEFAULT_SIZE,
-																226, Short.MAX_VALUE))
-												.addGap(28)
-												.addComponent(labelTicketType, GroupLayout.PREFERRED_SIZE, 65,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(18).addComponent(comboBoxDiscount, 0, 237, Short.MAX_VALUE)))
-								.addGap(20))
-						.addGroup(
-								gl_contentPane.createSequentialGroup().addGap(28)
-										.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 636,
-												GroupLayout.PREFERRED_SIZE)
-										.addContainerGap())
-						.addGroup(
-								gl_contentPane.createSequentialGroup().addContainerGap(188, Short.MAX_VALUE)
-										.addComponent(labelBuyer).addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(186))
-						.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(252, Short.MAX_VALUE)
-								.addComponent(addButton).addGap(18).addComponent(editButton).addGap(18)
-								.addComponent(deleteButton).addGap(209)));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addComponent(labelChooseBuyer)
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(labelChooseBuyer)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(comboBoxBuyer, 0, 327, Short.MAX_VALUE)
+					.addGap(18)
+					.addComponent(newBuyerButton)
+					.addGap(163))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblBusLine, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(comboBoxBusLine, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
+							.addGap(28)
+							.addComponent(lblTicketType, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(comboBoxTicketType, 0, 235, Short.MAX_VALUE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+									.addGap(4))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(labelScheduler, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)))
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(comboBoxScheduler, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(spinnerDepartureTime, GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
+							.addGap(28)
+							.addComponent(labelTicketType, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(comboBoxDiscount, 0, 234, Short.MAX_VALUE)))
+					.addGap(20))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(28)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 636, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap(186, Short.MAX_VALUE)
+					.addComponent(labelBuyer)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(addButton)
+							.addGap(18)
+							.addComponent(deleteButton))
+						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE))
+					.addGap(186))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(labelChooseBuyer)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(comboBoxBuyer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(newBuyerButton)))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+							.addComponent(comboBoxBuyer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(newBuyerButton)))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup().addGap(3).addComponent(lblBusLine))
-								.addComponent(comboBoxBusLine, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBoxTicketType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addGap(3)
+								.addComponent(lblBusLine))
+							.addComponent(comboBoxBusLine, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(comboBoxTicketType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(lblTicketType))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(3).addComponent(label_4))
-						.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(3)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(labelTicketType).addComponent(comboBoxDiscount,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE))))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBoxScheduler, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(label_4))
+						.addComponent(spinnerDepartureTime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(labelTicketType)
+								.addComponent(comboBoxDiscount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(comboBoxScheduler, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelScheduler))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addComponent(addButton)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(editButton)
-								.addComponent(deleteButton)))
-				.addGap(43)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addButton)
+						.addComponent(deleteButton))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(filterField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelBuyer))
-				.addGap(18).addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-				.addContainerGap()));
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] { addButton, editButton, deleteButton });
+					.addGap(18)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, deleteButton});
 
 		try {
 			connect = DriverManager.getConnection(
@@ -341,23 +343,11 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		tableFilter.setModel(modelFilter);
 
 		
-		/*tableFilter.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				tableFilterMouseClicked(e);
-			}
-		});*/
-		tableFilter.setModel(modelFilter);
-		
 		scrollPane.setViewportView(tableFilter);
 
 		contentPane.setLayout(gl_contentPane);
 	}
-	/*
-	private void tableFilterMouseClicked(MouseEvent e) {
-		//editButton.setEnabled(true);
-		//deleteButton.setEnabled(true);
-	}*/
+
 
 
 	private void clearFields() {
@@ -481,7 +471,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 			try {
 				TransactionJDBC wj = new TransactionJDBC();
-				Transaction w = new Transaction(discount, "cash", today, scheduler, 2, buyer);
+				Transaction w = new Transaction(discount, "cash", today, scheduler, this.w.getWorkerId(), buyer);
 				wj.addTransaction(w);
 			} catch (SQLException e1) {
 
@@ -493,42 +483,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 			updateTable();
 		}
 
-		if (e.getSource() == editButton) {
-			
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-			Calendar cal = Calendar.getInstance();
-			String today = sdf.format(cal.getTime());
-			int buyer = comparBuyer();
-			int scheduler = comparScheduler();
-			String discount;
-
-			if (comboBoxTicketType.getSelectedItem().toString().equals("Monthly"))
-				discount = comboBoxDiscount.getItemAt(1);
-			else
-				discount = comboBoxDiscount.getItemAt(0);
-			System.out.println(discount);
-
-			try {
-				int index = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
-				System.out.println(index);
-				TransactionJDBC wj = new TransactionJDBC();
-				Transaction w = new Transaction(index, discount, "cash", today, scheduler, 2, buyer);
-				wj.updateTransaction(w);
-			} catch (SQLException e1) {
-				e1.getSQLState();
-				e1.printStackTrace();
-			}
-			generateSlip(discount, today, buyer);
-			
-			clearFields();
-			updateTable();
-		}
-
 		if (e.getSource() == deleteButton) {
-			
-			
-			
 		
 			try {
 				int index = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
