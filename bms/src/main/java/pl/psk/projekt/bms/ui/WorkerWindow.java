@@ -492,6 +492,8 @@ public class WorkerWindow extends JFrame implements ActionListener {
 				}
 			} else
 				JOptionPane.showMessageDialog(null, invalid);
+			
+			updateTable();
 		}
 
 		if (e.getSource() == editButton) {
@@ -572,6 +574,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 				}
 			} else
 				JOptionPane.showMessageDialog(null, invalid);
+			updateTable();
 		}
 
 		if (e.getSource() == deleteButton) {
@@ -592,6 +595,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, "Worker: " + username + " was deleted.");
 			editButton.setEnabled(false);
 			deleteButton.setEnabled(false);
+			updateTable();
 		}
 
 	}
