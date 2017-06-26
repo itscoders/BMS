@@ -34,5 +34,17 @@ public class DropDB {
             
  }
 	
+	
+	public static void main(String[] args) {
+		
+		try {
+			new DropDB();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 
 }

@@ -28,22 +28,10 @@ public class CreateDB {
 	              			"birthday varchar(255),"+
 	              			"salary double );";
 	            
-	            boolean result = statement.execute(create);
-	            System.out.println(result);
-	            try {
-	            if(!result) {
-	    	    	
-	    	    	WorkersJDBC wj = new WorkersJDBC();
-	    	    	
-	    	         Workers w = new Workers("admin", "admin1", "admin1", "admin1", "admin1", "admin1", "2136455558588", "Kielce", "25-07-1968", 25638);
-	    	           
-	    	            wj.createWorker(w);
+	            statement.execute(create);
+	       
 	            
-				}
-	            
-	            } catch (SQLException e) {
-					e.printStackTrace();
-					} finally{
+	 
 					
 	            
 	            create = 		"CREATE TABLE IF NOT EXISTS Bus ("+
@@ -104,8 +92,19 @@ public class CreateDB {
         statement.execute(create);
 	            
 					}
-	 }
+	 
 	    
-
+		public static void main(String[] args) {
+			
+			try {
+				new CreateDB();
+				new InsertDB();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
 	
 }

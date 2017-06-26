@@ -402,7 +402,6 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			e1.printStackTrace();
 		}
 		
-		System.out.println(date);
 						
 		userNameField.setText(username);
 		passwordField.setText(password);
@@ -552,6 +551,7 @@ public class WorkerWindow extends JFrame implements ActionListener {
 			if (valid) {
 				try {
 					int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
+					System.out.println(value);
 					double dSalary = Double.parseDouble(salary);
 					try {
 						WorkersJDBC wj = new WorkersJDBC();

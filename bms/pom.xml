@@ -15,13 +15,6 @@
   </properties>
 
   <dependencies>
-  <dependency>
-    <groupId>net.proteanit.sql</groupId>
-    <artifactId>rs2xml</artifactId>
-    <version>1.0</version>
-    <scope>system</scope>
-    <systemPath>${project.basedir}/jars/rs2xml.jar</systemPath>
-  </dependency>
   <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
 <dependency>
     <groupId>javax.mail</groupId>
@@ -57,5 +50,12 @@
     <artifactId>itextpdf</artifactId>
     <version>5.5.11</version>
 </dependency>
+  <dependency>
+    <groupId>net.proteanit.sql</groupId>
+    <artifactId>rs2xml</artifactId>
+    <version>1.0</version>
+    <scope>system</scope>
+    <systemPath>${project.basedir}/jars/rs2xml.jar</systemPath>
+  </dependency>
   </dependencies>
 </project>

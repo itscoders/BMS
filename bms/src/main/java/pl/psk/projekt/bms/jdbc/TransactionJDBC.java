@@ -47,8 +47,8 @@ public class TransactionJDBC {
         
     }
     
-    public boolean deletetransaction(String transactionId)throws SQLException{
-        String sql = "delete from Transaction where transactionId ='"+transactionId+"'";
+    public boolean deletetransaction(int index)throws SQLException{
+        String sql = "delete from Transaction where transactionId ="+index;
         int result = preparedStatement.executeUpdate(sql);
         
         

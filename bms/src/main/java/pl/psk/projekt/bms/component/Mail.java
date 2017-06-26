@@ -72,8 +72,8 @@ public class Mail {
 	
 	public void sendSMS(String numberPhone, String content) {
 		
-		final String username = "bms.system.service@gmail.com";
-		final String password = "bmsProject";
+		final String username = "bms.sms.service@gmail.com";
+		final String password = "bmsproject";
 
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -90,7 +90,7 @@ public class Mail {
 		try {
 
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("bms.system.service@gmail.com"));
+			message.setFrom(new InternetAddress("bms.sms.service@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("48" + numberPhone + "@txtlocal.co.uk"));
 			message.setSubject("");
 			message.setText(content + "##");

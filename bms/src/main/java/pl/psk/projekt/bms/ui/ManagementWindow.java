@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import pl.psk.projekt.bms.dbobjects.Workers;
 import pl.psk.projekt.bms.jdbc.CreateDB;
 import pl.psk.projekt.bms.jdbc.DropDB;
+import pl.psk.projekt.bms.jdbc.InsertDB;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -214,40 +215,113 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == workerButton) {
-			WorkerWindow wd = new WorkerWindow();
-			wd.setVisible(true);
+			
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						WorkerWindow wd = new WorkerWindow();
+						wd.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+
 		}
+		
 
 		if (e.getSource() == scheduleButton) {
-			ScheduleWindow sw = new ScheduleWindow();
-			sw.setVisible(true);
+			
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						ScheduleWindow sw = new ScheduleWindow();
+						sw.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		}
 
 		if (e.getSource() == busButton) {
-			BusWindow bw = new BusWindow();
-			bw.setVisible(true);
+			
+			
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						BusWindow bw = new BusWindow();
+						bw.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
 		}
 
 		if (e.getSource() == lineButton) {
-			LineWindow lw = new LineWindow();
-			lw.setVisible(true);
+			
+			
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						LineWindow lw = new LineWindow();
+						lw.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
 		}
 
 		if (e.getSource() == buyerButton) {
-			BuyerWindow bw = new BuyerWindow();
-			bw.setVisible(true);
+			
+			
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						BuyerWindow bw = new BuyerWindow();
+						bw.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
 		}
 
 		if (e.getSource() == transactionButton) {
-			TransactionWindow tw = new TransactionWindow();
-			tw.setVisible(true);
+			
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						TransactionWindow tw = new TransactionWindow();
+						tw.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
 		}
 		
 		if (e.getSource() == logoutButton) {
 			String username = w.getUsername();
 			JOptionPane.showMessageDialog(this, "Worker: " + username + " was successfully logged out.");
-			LoginWindow lw = new LoginWindow();
-			lw.setVisible(true);
+			
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						LoginWindow lw = new LoginWindow();
+						lw.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
 			this.dispose();
 		}
 
@@ -258,6 +332,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		if (e.getSource() == databaseCreateButton) {
 			try {
 				new CreateDB();
+				new InsertDB();
 			} catch (SQLException e1) {
 
 				e1.printStackTrace();

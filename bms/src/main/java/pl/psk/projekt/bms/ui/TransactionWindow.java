@@ -96,8 +96,6 @@ public class TransactionWindow extends JFrame implements ActionListener {
 	JTextField textBusLine;
 	JTextField textScheduler;
 	JTextField textDiscount;
-	double monthlyPrice;
-	double onewayPrice;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -341,37 +339,25 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 		tableFilter = new JTable();
 		tableFilter.setModel(modelFilter);
-		tableFilter.addMouseListener(new MouseAdapter() {
+
+		
+		/*tableFilter.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				tableFilterMouseClicked(e);
 			}
-		});
+		});*/
+		tableFilter.setModel(modelFilter);
+		
 		scrollPane.setViewportView(tableFilter);
 
 		contentPane.setLayout(gl_contentPane);
 	}
-	
+	/*
 	private void tableFilterMouseClicked(MouseEvent e) {
-		editButton.setEnabled(true);
-		deleteButton.setEnabled(true);
-		
-		int index = tableFilter.getSelectedRow();
-		
-		/*String busLineName = tableFilter.getValueAt(index, 1).toString();
-		String busLineType = tableFilter.getValueAt(index, 2).toString();
-		String startStation = tableFilter.getValueAt(index, 3).toString();
-		String stopStation = tableFilter.getValueAt(index, 4).toString();
-		String pirceOneWay = tableFilter.getValueAt(index, 5).toString();
-		String priceMonthly = tableFilter.getValueAt(index, 6).toString();
-				
-		lineNameField.setText(busLineName);
-		comboBoxType.setSelectedItem(busLineType);
-		startStationField.setText(startStation);
-		startStationField.setText(stopStation);
-		textFieldPirceOneWay.setText(pirceOneWay);
-		textFieldPriceMonthly.setText(priceMonthly);*/
-	}
+		//editButton.setEnabled(true);
+		//deleteButton.setEnabled(true);
+	}*/
 
 
 	private void clearFields() {
@@ -381,13 +367,14 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		comboBoxScheduler.setSelectedIndex(0);
 		comboBoxTicketType.setSelectedIndex(0);
 		
+		/*
 		fillComboBoxBuyer();
 		comboBoxBuyer.setModel(comboModelBuyerD);
 		
 
 		fillComboBoxBusLine();
 		comboBoxBusLine.setModel(comboModelBusLineD);
-		
+		*/
 	}
 
 	private void generateSlip(String discount, String date, int buyer) {
@@ -459,7 +446,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 				Mail m = new Mail();
 				
 				m.sendMail(mail, "BILL SLIP FOR "+ nameLine + " TICKET", "In the attachment you will find a receipt for your ticket", filePath, name +"_"+ surname + "_salary_slip_" + date + ".pdf");
-				m.sendSMS(numberPhone, "BILL SLIP FOR "+ nameLine + " TICKET");
+				//m.sendSMS(numberPhone, "BILL SLIP FOR "+ nameLine + " TICKET");
 				
 				JOptionPane.showMessageDialog(null, "Report was successfully generated");
 } catch (FileNotFoundException e) {
@@ -507,13 +494,52 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == editButton) {
+			
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			Calendar cal = Calendar.getInstance();
+			String today = sdf.format(cal.getTime());
+			int buyer = comparBuyer();
+			int scheduler = comparScheduler();
+			String discount;
 
+			if (comboBoxTicketType.getSelectedItem().toString().equals("Monthly"))
+				discount = comboBoxDiscount.getItemAt(1);
+			else
+				discount = comboBoxDiscount.getItemAt(0);
+			System.out.println(discount);
+
+			try {
+				int index = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
+				System.out.println(index);
+				TransactionJDBC wj = new TransactionJDBC();
+				Transaction w = new Transaction(index, discount, "cash", today, scheduler, 2, buyer);
+				wj.updateTransaction(w);
+			} catch (SQLException e1) {
+				e1.getSQLState();
+				e1.printStackTrace();
+			}
+			generateSlip(discount, today, buyer);
+			
 			clearFields();
 			updateTable();
 		}
 
 		if (e.getSource() == deleteButton) {
+			
+			
+			
+		
+			try {
+				int index = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
+				System.out.println(index);
+				TransactionJDBC wj = new TransactionJDBC();
+				wj.deletetransaction(index);
+			} catch (SQLException e1) {
 
+				e1.printStackTrace();
+			}
+			
 			clearFields();
 			updateTable();
 		}
