@@ -8,16 +8,39 @@ import java.awt.Dimension;
 import java.awt.Font;
 
 
+/**
+ * Klasa StartWindow zawiera komponenty do stworzenia UI okna startowego 
+ * aplikacji oraz metody obsługujące akcje występujące w oknie.
+ * Klasa StartWindow dziedziczy po klasie {@link javax.swing.JFrame}
+ * celem stworzenia obiektu okna. Ponadto rozszerzona jest ona
+ * poprzez interfejs {@link java.awt.event.ActionListener} celem zdefiniowania
+ * akcji po wciśnięciu przycisku.
+ * 
+ * @author Paweł Pawelec i Kamil Świąder
+ * @see javax.swing.JFrame
+ * @see java.awt.event.ActionListener
+ */
 public class StartWindow extends JFrame implements ActionListener
 {   
   
+	/** Zmienna określająca unikalny numer w celu serializacji. */
 	private static final long serialVersionUID = 1L;
 	
-	JLabel labelWindow;
-	JButton move;
-	JFrame frame = new JFrame();
+	/** Deklaracja obiektu klasy JLabel. */
+	private JLabel labelWindow;
+	/** Deklaracja obiekty klasy JButton */
+	private JButton move;
 		
 	
+	/**
+	 * Konstruktor bezparametrowy klasy StartWindow odpowiedzialny za inicializację komponentów biblioteki Swing.
+	 * Komponenty definiowane: Jlabel, JButton, JPanel, JFrame - dla tych komponentów ustawiane są wymiary, fonty, kolory. 
+	 * 
+	 * @see JPanel
+	 * @see JButton
+	 * @see JFrame
+	 * @see JLabel
+	 */
 	public StartWindow() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
@@ -70,6 +93,12 @@ public class StartWindow extends JFrame implements ActionListener
 		
 	}
 	
+	/** Przesłonięta metoda służąca do określania zachowania aplikacji po kliknięciu na dany komponent przez użytkownika.
+	 *  W metodzie tej określono działanie dla  przycisu znajdującego się na środku okna.
+	 *  W przypadku kliknięcia na przycisk 'move' utworzony zostaje obiekt klasy LoginWindow, który ustawiany jest na widoczny, 
+	 *  zaś aktualny jest niszczony. 
+	 */
+	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		if(e.getSource() == move)

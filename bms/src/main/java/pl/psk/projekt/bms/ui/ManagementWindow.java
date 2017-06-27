@@ -30,24 +30,52 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 
+/**
+ * Klasa ManagementWindow zawiera komponenty do stworzenia UI okna startowego
+ * aplikacji oraz metody obsługujące akcje występujące w oknie. Klasa
+ * StartWindow dziedziczy po klasie {@link javax.swing.JFrame} celem stworzenia
+ * obiektu okna. Ponadto rozszerzona jest ona poprzez interfejs
+ * {@link java.awt.event.ActionListener} celem zdefiniowania akcji po wciśnięciu
+ * przycisku.
+ * 
+ * @author Paweł Pawelec i Kamil Świąder
+ * @see javax.swing.JFrame
+ * @see java.awt.event.ActionListener
+ */
 public class ManagementWindow extends JFrame implements ActionListener {
 
+	/** Zmienna określająca unikalny numer w celu serializacji. */
 	private static final long serialVersionUID = 1L;
 
+	/** Inicjalizacja obiektu klasy JPanel. */
 	private JPanel contentPane;
+	/** Inicjalizacja obiektu klasy JPanel. */
 	private JPanel panel;
+	/** Inicjalizacja obiektu klasy JButton. */
 	private JButton logoutButton;
+	/** Inicjalizacja obiektu klasy JButton. */
 	private JButton scheduleButton;
+	/** Inicjalizacja obiektu klasy JButton. */
 	private JButton busButton;
+	/** Inicjalizacja obiektu klasy JButton. */
 	private JButton lineButton;
+	/** Inicjalizacja obiektu klasy JButton. */
 	private JButton workerButton;
+	/** Inicjalizacja obiektu klasy JButton. */
 	private JButton transactionButton;
+	/** Inicjalizacja obiektu klasy JButton. */
 	private JButton buyerButton;
+	/** Inicjalizacja obiektu klasy JButton. */
 	private JButton databaseDropButton;
+	/** Inicjalizacja obiektu klasy JButton. */
 	private JButton databaseCreateButton;
-	private JLabel logLabel;
-	private Workers w;
+	/** Inicjalizacja obiektu klasy JButton. */
 	private JButton databaseInsertButton;
+	/** Inicjalizacja obiektu klasy JLabel. */
+	private JLabel logLabel;
+	/** Pole klasy Workers. */
+	private Workers w;
+	
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {

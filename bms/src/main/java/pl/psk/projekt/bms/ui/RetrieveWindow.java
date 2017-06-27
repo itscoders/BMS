@@ -24,6 +24,18 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 
+/**
+ * Klasa RetrieveWindow zawiera komponenty do stworzenia UI okna startowego
+ * aplikacji oraz metody obsługujące akcje występujące w oknie. Klasa
+ * StartWindow dziedziczy po klasie {@link javax.swing.JFrame} celem stworzenia
+ * obiektu okna. Ponadto rozszerzona jest ona poprzez interfejs
+ * {@link java.awt.event.ActionListener} celem zdefiniowania akcji po wciśnięciu
+ * przycisku.
+ * 
+ * @author Paweł Pawelec i Kamil Świąder
+ * @see javax.swing.JFrame
+ * @see java.awt.event.ActionListener
+ */
 public class RetrieveWindow extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;

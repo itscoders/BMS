@@ -5,8 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -50,6 +48,18 @@ import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+/**
+ * Klasa ScheduleWindow zawiera komponenty do stworzenia UI okna startowego
+ * aplikacji oraz metody obsługujące akcje występujące w oknie. Klasa
+ * StartWindow dziedziczy po klasie {@link javax.swing.JFrame} celem stworzenia
+ * obiektu okna. Ponadto rozszerzona jest ona poprzez interfejs
+ * {@link java.awt.event.ActionListener} celem zdefiniowania akcji po wciśnięciu
+ * przycisku.
+ * 
+ * @author Paweł Pawelec i Kamil Świąder
+ * @see javax.swing.JFrame
+ * @see java.awt.event.ActionListener
+ */
 public class ScheduleWindow extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
