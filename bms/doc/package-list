@@ -1,1 +1,5 @@
+pl.psk.projekt.bms
+pl.psk.projekt.bms.component
+pl.psk.projekt.bms.dbobjects
 pl.psk.projekt.bms.jdbc
+pl.psk.projekt.bms.ui

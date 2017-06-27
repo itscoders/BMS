@@ -387,8 +387,7 @@ public class LineWindow extends JFrame implements ActionListener {
 
 	}
 	
-		// METODA ODŚWIERZAJĄCA TABELE JTABLE
-		// MUSI ZOSTAĆ WYWOŁANA ZAWSZE NA KOŃCU W PRZYCISKACH: ADD, EDIT, DELETE
+
 		private void updateTable() {
 			try {
 				connect = DriverManager.getConnection(
@@ -412,7 +411,7 @@ public class LineWindow extends JFrame implements ActionListener {
 			}
 		}
 
-		//METODA DO DYNAMICZNEGO WYSZUKIWANIA W TABELI
+		
 		private void filter(String query) {
 
 			TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
