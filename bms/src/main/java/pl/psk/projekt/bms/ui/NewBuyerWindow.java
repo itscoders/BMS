@@ -1,6 +1,5 @@
 package pl.psk.projekt.bms.ui;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -19,7 +18,6 @@ import java.awt.Rectangle;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
-import javax.swing.RowFilter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -31,7 +29,6 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -56,42 +53,67 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class NewBuyerWindow extends JFrame implements ActionListener {
 
+	/** Zmienna określająca unikalny numer w celu serializacji. */
 	private static final long serialVersionUID = 1L;
 
+	/** Deklaracja obiektu klasy JPanel. */
 	private JPanel contentPane;
+	/** Deklaracja obiektu klasy JTextField. */
 	private JTextField nameField;
+	/** Deklaracja obiektu klasy JTextField. */
 	private JTextField postCodeField;
+	/** Deklaracja obiektu klasy JTextField. */
 	private JTextField emailField;
-	private JLabel labelCity;
+	/** Deklaracja obiektu klasy JTextField. */
+	private JTextField mobilePhoneField;
+	/** Deklaracja obiektu klasy JTextField. */
+	private JTextField streetField;
+	/** Deklaracja obiektu klasy JTextField. */
+	private JTextField cityField;
+	/** Deklaracja obiektu klasy JTextField. */
+	private JTextField surnameField;
+	/** Deklaracja obiektu klasy JTextField. */
 	private JTextField houseNumberField;
+	/** Deklaracja obiektu klasy JTextField. */
+	private JTextField textFieldInsuranceNumber;
+	/** Deklaracja obiektu klasy JLabel. */
+	private JLabel labelCity;
+	/** Deklaracja obiektu klasy JLabel. */
+	private JLabel labelInsuranceNumber;
+	 /** Deklaracja obiektu klasy JTable. */
 	private JTable tableFilter;
+	/** Deklaracja obiektu klasy JDefaultTableModel. */
+	private DefaultTableModel modelFilter;
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton addButton;
+	/** Deklaracja obiektu klasy JDateChooser. */
 	private JDateChooser birthdayField;
 
-	PreparedStatement preparedStatement;
-	Connection connect;
-	ResultSet rs;
-	private JTextField mobilePhoneField;
-	private JTextField streetField;
-	private JTextField cityField;
-	private JTextField surnameField;
-	private DefaultTableModel modelFilter;
-	private JLabel labelInsuranceNumber;
-	private JTextField textFieldInsuranceNumber;
+	/** Deklaracja obiektu klasy PreparedStatement. */
+	private PreparedStatement preparedStatement;
+	/** Deklaracja obiektu klasy Connection. */
+	private Connection connect;
+	/** Deklaracja obiektów klasy ResultSet. */
+	private ResultSet rs;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					NewBuyerWindow frame = new NewBuyerWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
+	/**
+	 * Konstruktor klasy NewBuyerWindow odpowiedzialny za
+	 * inicializację komponentów biblioteki Swing. Komponenty definiowane:
+	 * Jlabel, JButton, JPanel, JDateChooser, JTextField, JTable, JFrame - dla tych
+	 * komponentów ustawiane są wymiary, fonty, kolory. Dodatkowo dla komponentu JTable zastosowany jest model tabeli - DefaultTableModel, 
+	 * Komponenty zostały rozmieszczone przy pomocy GroupLayout.
+	 * W konstruktorze przy pomocy zmiennej connect nawiązywane jest połączenie z bazą bms_db, 
+	 * preparedStatement pozwala na wykonanie zapytania do bazy, a 'rs' na wyświetlenie wyników zapytania.
+	 * 
+	 * @see JDateChooser
+	 * @see JTextField
+	 * @see JTable
+	 * @see JPanel
+	 * @see JButton
+	 * @see JFrame
+	 * @see JLabel
+	 */
 	public NewBuyerWindow() {
 		setResizable(false);
 		try {
@@ -314,6 +336,31 @@ public class NewBuyerWindow extends JFrame implements ActionListener {
 		contentPane.setLayout(gl_contentPane);
 	}
 
+	/**
+	 * Przesłonięta metoda służąca do określania zachowania aplikacji po
+	 * kliknięciu na dany komponent przez użytkownika. W metodzie tej określono
+	 * działanie dla przycisków znajdujących się w oknie do dodawania nowego kupującego. 
+	 * W przypadku kliknięcia na przycisk 'addButton' pobierane są dane z pól formularza okna NewBuyerWindow, 
+	 * a następnie zostaje dodany rekord do bazy danych bms_db z pobranymi danymi.
+	 * Tworzony jest obiekt klasy BuyerJDBC oraz klasy Buyer. 
+	 * Na obiekcie klasy BuyerJDBC wykonywana jest metoda 'createBuyer'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwania rekordów z tabeli. 
+	 * W przypadku kliknięcia na przycisk 'editButton' pobierane są dane z pól formularza okna NewBuyerWindow, 
+	 * a następnie zostaje zaktualizowany rekord w bazie danych bms_db z pobranymi danymi.
+	 * Tworzony jest obiekt klasy BuyerJDBC oraz klasy Buyer. 
+	 * Na obiekcie klasy BuyerJDBC wykonywana jest metoda 'updateBuyer'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwania rekordów z tabeli. 
+	 * W przypadku kliknięcia na przycisk 'deleteButton' pobierane są dane z pól formularza okna NewBuyerWindow, 
+	 * a następnie zostaje usunięty rekord z bazy danych bms_db na podtsawie pobranych danych. 
+	 * Tworzony jest obiekt klasy BuyerJDBC oraz klasy Buyer. 
+	 * Na obiekcie klasy BuyerJDBC wykonywana jest metoda 'deleteBuyer'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwanai rekordów z tabeli. 
+	 * Do informowani użytkownika oraz wyświetlania okien dialogowych
+	 * wykorzystane zostały komponenty JOptionPane.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -346,7 +393,7 @@ public class NewBuyerWindow extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, "Fail to compare Date");
 			}
 
-			// Handphone validation
+
 			if (mobilePhone.length() != 9) {
 				valid = false;
 				invalid = "Handphone number should have 9 number";
@@ -371,9 +418,7 @@ public class NewBuyerWindow extends JFrame implements ActionListener {
 						e1.printStackTrace();
 					}
 					JOptionPane.showMessageDialog(this, "New Buyer: " + name + surname + " had added.");
-					// dispose();
-					// staffSelect ss = new staffSelect();
-					// ss.setVisible(true);
+
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, ex.getMessage());
 				}
@@ -385,7 +430,10 @@ public class NewBuyerWindow extends JFrame implements ActionListener {
 
 	}
 
-
+	/** Metoda odpowiedzialna za odświeżanie tabeli Jtable z danymi.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	private void Update_table() {
 		try {
 			connect = DriverManager.getConnection(
@@ -409,12 +457,5 @@ public class NewBuyerWindow extends JFrame implements ActionListener {
 		}
 	}
 
-	private void filter(String query) {
-
-		TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
-		tableFilter.setRowSorter(trs);
-
-		trs.setRowFilter(RowFilter.regexFilter(query));
-	}
 
 }

@@ -10,9 +10,14 @@ import pl.psk.projekt.bms.ui.StartWindow;
 
 public class App 
 {
+	/** Metoda odpowiedzialna za wywołanie konstruktora klasy StartWindow. 
+	 *  Dzięki wywołaniu konstruktora w tej metodzie możliwe jest prawidłowe uruchomienie gry poprzez jej kompilację 
+	 *  lub bezpośrednio z poziomu archiwum .jar dla użytkownika.
+	 *  @param args - domyślna tablica Stringów w celu poprawnego wywołania metody statycznej main(). 
+	 */
     public static void main( String[] args )
     {
-    	StartWindow sw = new StartWindow();
+    	new StartWindow();
        
     }
 }

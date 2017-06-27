@@ -1,6 +1,5 @@
 package pl.psk.projekt.bms.ui;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -63,46 +62,77 @@ import java.awt.event.MouseEvent;
  */
 public class BuyerWindow extends JFrame implements ActionListener {
 
+	/** Zmienna określająca unikalny numer w celu serializacji. */
 	private static final long serialVersionUID = 1L;
 
+	/** Deklaracja obiektu klasy JPanel. */
 	private JPanel contentPane;
+	/** Deklaracja obiektu klasy JTextField. */
 	private JTextField nameField;
+	/** Deklaracja obiektu klasy JTextField. */
 	private JTextField postCodeField;
+	/** Deklaracja obiektu klasy JTextField. */
 	private JTextField emailField;
-	private JLabel labelCity;
+	/** Deklaracja obiektu klasy JTextField. */
+    private JTextField mobilePhoneField;
+    /** Deklaracja obiektu klasy JTextField. */
+    private JTextField streetField;
+    /** Deklaracja obiektu klasy JTextField. */
+    private JTextField cityField;
+    /** Deklaracja obiektu klasy JTextField. */
+    private JTextField surnameField;
+    /** Deklaracja obiektu klasy JTextField. */
+    private JTextField filterField;
+    /** Deklaracja obiektu klasy JTextField. */
 	private JTextField houseNumberField;
+	/** Deklaracja obiektu klasy JTextField. */
+    private JTextField textFieldInsuranceNumber;
+    /** Deklaracja obiektu klasy JLabel. */
+	private JLabel labelCity;
+	/** Deklaracja obiektu klasy JLabel. */
+    private JLabel label;
+    /** Deklaracja obiektu klasy JLabel. */
+    private JLabel labelInsuranceNumber;
+    /** Deklaracja obiektu klasy JTable. */
 	private JTable tableFilter;
+	/** Deklaracja obiektu klasy JDefaultTableModel. */
+    private DefaultTableModel modelFilter;
+    /** Deklaracja obiektu klasy JButton. */
 	private JButton addButton;
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton editButton;
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton deleteButton;
+	/** Deklaracja obiektu klasy JDateChooser. */
 	private JDateChooser birthdayField;
 	
-	PreparedStatement  preparedStatement;
-    Connection connect;
-    ResultSet rs;
-    private JTextField mobilePhoneField;
-    private JTextField streetField;
-    private JTextField cityField;
-    private JTextField surnameField;
-    private JTextField filterField;
-    private DefaultTableModel modelFilter;
-    private JLabel label;
-    private JTextField textFieldInsuranceNumber;
-    private JLabel labelInsuranceNumber;
+	/** Deklaracja obiektu klasy PreparedStatement. */
+	private PreparedStatement  preparedStatement;
+	/** Deklaracja obiektu klasy Connection. */
+	private Connection connect;
+	/** Deklaracja obiektów klasy ResultSet. */
+	private ResultSet rs;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					BuyerWindow frame = new BuyerWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
+	/**
+	 * Konstruktor klasy BuyerWindow odpowiedzialny za
+	 * inicializację komponentów biblioteki Swing. Komponenty definiowane:
+	 * Jlabel, JButton, JPanel, JDateChooser, JTextField, JTable, JFrame - dla tych
+	 * komponentów ustawiane są wymiary, fonty, kolory. Dodatkowo dla komponentu JTable zastosowany jest model tabeli - DefaultTableModel, 
+	 * Dla JTable dodana jest niego metoda 'keyReleased' służąca do określania zachowania po zwolnieniuu klawisza, gdzie wywoływana jest metoda'filter' 
+	 * oraz metoda 'mouseClicked' służąca do określania zachowania po kliknięciu myszką, gdzie wywoływana jest metoda 'tableFilterMouseClicked'.
+	 * Komponenty zostały rozmieszczone przy pomocy GroupLayout.
+	 * W konstruktorze przy pomocy zmiennej connect nawiązywane jest połączenie z bazą bms_db, 
+	 * preparedStatement pozwala na wykonanie zapytania do bazy, a 'rs' na wyświetlenie wyników zapytania.
+	 * 
+	 * @see JDateChooser
+	 * @see JTextField
+	 * @see JTable
+	 * @see JPanel
+	 * @see JButton
+	 * @see JFrame
+	 * @see JLabel
+	 */
 	public BuyerWindow() {
 		setResizable(false);
 		try {
@@ -370,6 +400,11 @@ public class BuyerWindow extends JFrame implements ActionListener {
 	}
 
 
+	/**
+	 * Metoda służąca do określania zachowania aplikacji po
+	 * kliknięciu na rekord w tabeli JTable. W metodzie tej ustawiono przycisk do edycji oraz usuwania rekordów z bazy na widoczne. 
+	 * W przypadku kliknięcia na rekord w tabeli JTable dane z tego rekordu ustawiane są w polach formularzu okna BuyerWindow.
+	 */
 	private void tableFilterMouseClicked(MouseEvent e) {
 		editButton.setEnabled(true);
 		deleteButton.setEnabled(true);
@@ -408,6 +443,31 @@ public class BuyerWindow extends JFrame implements ActionListener {
 		textFieldInsuranceNumber.setText(in);
 	}
 
+	/**
+	 * Przesłonięta metoda służąca do określania zachowania aplikacji po
+	 * kliknięciu na dany komponent przez użytkownika. W metodzie tej określono
+	 * działanie dla przycisków znajdujących się w oknie do zarządzania kupującymi. 
+	 * W przypadku kliknięcia na przycisk 'addButton' pobierane są dane z pól formularza okna BuyerWindow, 
+	 * a następnie zostaje dodany rekord do bazy danych bms_db z pobranymi danymi.
+	 * Tworzony jest obiekt klasy BuyerJDBC oraz klasy Buyer. 
+	 * Na obiekcie klasy BuyerJDBC wykonywana jest metoda 'createBuyer'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwania rekordów z tabeli. 
+	 * W przypadku kliknięcia na przycisk 'editButton' pobierane są dane z pól formularza okna BuyerWindow, 
+	 * a następnie zostaje zaktualizowany rekord w bazie danych bms_db z pobranymi danymi.
+	 * Tworzony jest obiekt klasy BuyerJDBC oraz klasy Buyer. 
+	 * Na obiekcie klasy BuyerJDBC wykonywana jest metoda 'updateBuyer'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwania rekordów z tabeli. 
+	 * W przypadku kliknięcia na przycisk 'deleteButton' pobierane są dane z pól formularza okna BuyerWindow, 
+	 * a następnie zostaje usunięty rekord z bazy danych bms_db na podtsawie pobranych danych. 
+	 * Tworzony jest obiekt klasy BuyerJDBC oraz klasy Buyer. 
+	 * Na obiekcie klasy BuyerJDBC wykonywana jest metoda 'deleteBuyer'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwanai rekordów z tabeli. 
+	 * Do informowani użytkownika oraz wyświetlania okien dialogowych
+	 * wykorzystane zostały komponenty JOptionPane.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -441,7 +501,6 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			}
 
 
-			// Handphone validation
 			if (mobilePhone.length() != 9) {
 				valid = false;
 				invalid = "Handphone number should have 9 number";
@@ -507,7 +566,6 @@ public class BuyerWindow extends JFrame implements ActionListener {
 			}
 
 
-			// Handphone validation
 			if (mobilePhone.length() != 9) {
 				valid = false;
 				invalid = "Handphone number should have 9 number";
@@ -571,6 +629,10 @@ public class BuyerWindow extends JFrame implements ActionListener {
 	}
 	
 	
+	/** Metoda odpowiedzialna za odświeżanie tabeli Jtable z danymi.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	private void updateTable() {
 		try {
 			connect = DriverManager.getConnection(
@@ -594,7 +656,13 @@ public class BuyerWindow extends JFrame implements ActionListener {
 		}
 	}
 
-		
+
+	/** Metoda odpowiedzialna za filtrowanie danych w tabeli Jtable.
+	 * 
+	 * @param query - parametr String - tekst jako wyznacznik filtrowania.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	private void filter(String query) {
 
 		TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
