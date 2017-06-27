@@ -2,10 +2,14 @@ package pl.psk.projekt.bms.ui;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.awt.Color;
+import java.awt.EventQueue;
+
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import pl.psk.projekt.bms.dbobjects.Workers;
+import pl.psk.projekt.bms.jdbc.CreateDB;
 import pl.psk.projekt.bms.jdbc.WorkersJDBC;
 
 import java.awt.Font;
@@ -21,9 +25,12 @@ public class LoginWindow extends JFrame implements ActionListener {
 	JPasswordField passwordField = new JPasswordField();
 	JLabel labelUserName = new JLabel("User Name:");
 	JLabel labelPassword = new JLabel("Password:");
+	Workers w;
+	JButton buttonCreateDB = new JButton("Create DataBase");
 	
 
 	public LoginWindow() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -59,7 +66,7 @@ public class LoginWindow extends JFrame implements ActionListener {
 		prevButton.setBounds(128, 178, 90, 30);
 		prevButton.setBackground(Color.LIGHT_GRAY);
 		prevButton.addActionListener(this);
-		forgetButton.setBounds(126, 219, 168, 30);
+		forgetButton.setBounds(172, 219, 168, 30);
 		forgetButton.setBackground(Color.LIGHT_GRAY);
 		forgetButton.addActionListener(this);
 		getContentPane().setLayout(null);
@@ -72,11 +79,15 @@ public class LoginWindow extends JFrame implements ActionListener {
 		passwordField.setBounds(128, 135, 257, 32);
 		getContentPane().add(passwordField);
 		getContentPane().add(forgetButton);
-
-		JLabel background = new JLabel("");
-		background.setIcon(new ImageIcon(this.getClass().getResource("/login.png")));
-		background.setBounds(0, 0, 494, 371);
-		getContentPane().add(background);
+		buttonCreateDB.setBackground(Color.LIGHT_GRAY);
+		buttonCreateDB.setBounds(172, 261, 168, 30);
+		
+		getContentPane().add(buttonCreateDB);
+		
+				JLabel background = new JLabel("");
+				background.setIcon(new ImageIcon(this.getClass().getResource("/login.png")));
+				background.setBounds(0, 0, 494, 371);
+				getContentPane().add(background);
 
 	}
 
@@ -90,32 +101,60 @@ public class LoginWindow extends JFrame implements ActionListener {
 			try {
 				WorkersJDBC wj = new WorkersJDBC();
 
-				Workers w = wj.workersLog(username, password);
+				w = wj.workersLog(username, password);
 				if (w.getName() == null) {
 					JOptionPane.showMessageDialog(this, "Invalid Username or Password");
 				} else {
+					
 					JOptionPane.showMessageDialog(this,
 							"Login Success\n\n Worker: " + w.getName() + " " + w.getSurname());
 					dispose();
 
-					System.err.println(w.getAccountType());
+					
 					if (w.getAccountType().equals("Administrator")) {
-						ManagementWindow mw = new ManagementWindow(w);
-						mw.setVisible(true);
+						
+						EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								try {
+									ManagementWindow mw = new ManagementWindow(w);
+									mw.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
 					}
 					if (w.getAccountType().equals("Driver")) {
-						DriverWindow dw = new DriverWindow(w);
-						dw.setVisible(true);
+						
+						EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								try {
+									DriverWindow dw = new DriverWindow(w);
+									dw.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
 					}
 
 					if (w.getAccountType().equals("Seller")) {
-						SellerWindow sw = new SellerWindow(w);
-						sw.setVisible(true);
+						
+						EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								try {
+									SellerWindow sw = new SellerWindow(w);
+									sw.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
 					}
 				}
 
 			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(this, "Wrong password");
+				ex.printStackTrace();
 			}
 
 		}
@@ -130,6 +169,23 @@ public class LoginWindow extends JFrame implements ActionListener {
 			this.setVisible(false);
 			RetrieveWindow rw = new RetrieveWindow();
 			rw.setVisible(true);
+		}
+		
+		if (e.getSource() == buttonCreateDB) {
+			
+			int value = JOptionPane.showConfirmDialog(null, "You want create new DB? IF You choose yes curently DB (IF EXIST) been dealete.", "Question Box", JOptionPane.YES_NO_OPTION);
+	        if (value == JOptionPane.YES_OPTION) {
+	          JOptionPane.showMessageDialog(null, "OK. Start Create ");
+	          try {
+				new CreateDB(value);
+			} catch (SQLException e1) {
+			
+				e1.printStackTrace();
+			}
+	        }
+	        else {
+	           JOptionPane.showMessageDialog(null, "Ok. Create DB Not Start");
+	        }
 		}
 
 	}

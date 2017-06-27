@@ -367,7 +367,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		*/
 	}
 
-	private void generateSlip(String discount, String date, int buyer) {
+	private void generateSlip(String discount, String date, int buyer, int email, int sms) {
 
 		String name = "", surname="", mail="", numberPhone="";
 		String nameLine = comboBoxBusLine.getSelectedItem().toString();
@@ -435,8 +435,8 @@ public class TransactionWindow extends JFrame implements ActionListener {
 				
 				Mail m = new Mail();
 				
-				m.sendMail(mail, "BILL SLIP FOR "+ nameLine + " TICKET", "In the attachment you will find a receipt for your ticket", filePath, name +"_"+ surname + "_salary_slip_" + date + ".pdf");
-				//m.sendSMS(numberPhone, "BILL SLIP FOR "+ nameLine + " TICKET");
+				if(email == 0) m.sendMail(mail, "BILL SLIP FOR "+ nameLine + " TICKET", "In the attachment you will find a receipt for your ticket", filePath, name +"_"+ surname + "_salary_slip_" + date + ".pdf");
+				//if(sms == 0) m.sendSMS(numberPhone, "BILL SLIP FOR "+ nameLine + " TICKET");
 				
 				JOptionPane.showMessageDialog(null, "Report was successfully generated");
 } catch (FileNotFoundException e) {
@@ -450,6 +450,29 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		}
 
 	}
+	
+	public void ask(String discount, String today, int buyer){
+		int mail = JOptionPane.showConfirmDialog(null, "The Buyer want to get bill/ ticket on mail ?", "Question Box", JOptionPane.YES_NO_OPTION);
+        if (mail == JOptionPane.YES_OPTION) {
+          JOptionPane.showMessageDialog(null, "OK. We send bill/ticket to buyer mail!");
+         
+        }
+        else {
+           JOptionPane.showMessageDialog(null, "Ok. We not send a mail!");
+        }
+        
+		int sms = JOptionPane.showConfirmDialog(null, "The Buyer want to get information about payment on His/Her mobilephon?", "Question Box", JOptionPane.YES_NO_OPTION);
+        if (sms == JOptionPane.YES_OPTION) {
+        	
+          JOptionPane.showMessageDialog(null, "OK. We send sms to buyer mobile!");
+        }
+        else {
+        	
+           JOptionPane.showMessageDialog(null, "Ok. We not send sms to buyer mobile!");
+        }
+		
+       generateSlip(discount, today, buyer, mail, sms);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -462,13 +485,12 @@ public class TransactionWindow extends JFrame implements ActionListener {
 			int buyer = comparBuyer();
 			int scheduler = comparScheduler();
 			String discount;
-
+			if(buyer != 0 || scheduler!=0){
 			if (comboBoxTicketType.getSelectedItem().toString().equals("Monthly"))
 				discount = comboBoxDiscount.getItemAt(1);
 			else
 				discount = comboBoxDiscount.getItemAt(0);
-			System.out.println(discount);
-
+	
 			try {
 				TransactionJDBC wj = new TransactionJDBC();
 				Transaction w = new Transaction(discount, "cash", today, scheduler, this.w.getWorkerId(), buyer);
@@ -477,8 +499,10 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 				e1.printStackTrace();
 			}
-			generateSlip(discount, today, buyer);
 			
+	        ask(discount, today, buyer);
+	        
+			}
 			clearFields();
 			updateTable();
 		}
@@ -487,7 +511,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		
 			try {
 				int index = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
-				System.out.println(index);
+				
 				TransactionJDBC wj = new TransactionJDBC();
 				wj.deletetransaction(index);
 			} catch (SQLException e1) {
@@ -657,7 +681,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 			}
 		}
-		return (Integer) null;
+		return 0;
 	}
 
 	private void fillComboBoxBusLine() {
@@ -715,7 +739,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 			}
 		}
-		return (Integer) null;
+		return 0;
 	}
 
 	private void fillComboBoxScheduler(int i, String string) {
@@ -776,7 +800,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 			}
 		}
-		return (Integer) null;
+		return 0;
 	}
 
 	private void fillComboBoxDiscount(int i) {

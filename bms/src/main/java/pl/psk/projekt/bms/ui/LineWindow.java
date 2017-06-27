@@ -136,6 +136,9 @@ public class LineWindow extends JFrame implements ActionListener {
 
 		deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(this);
+		
+		editButton.setEnabled(false);
+		deleteButton.setEnabled(false);
 
 		JScrollPane scrollPane = new JScrollPane();
 		
@@ -248,23 +251,13 @@ public class LineWindow extends JFrame implements ActionListener {
 			connect = DriverManager.getConnection(
 						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
 						"root", "toor");
+				preparedStatement = connect.prepareStatement("SELECT * FROM BUSLINE");
+				rs = preparedStatement.executeQuery();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		try {
-			preparedStatement = connect.prepareStatement("SELECT * FROM BUSLINE");
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			rs = preparedStatement.executeQuery();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
 		
@@ -289,6 +282,9 @@ public class LineWindow extends JFrame implements ActionListener {
 	
 	private void tableFilterMouseClicked(MouseEvent e) {
 		int index = tableFilter.getSelectedRow();
+		
+		editButton.setEnabled(true);
+		deleteButton.setEnabled(true);
 		
 		String busLineName = tableFilter.getValueAt(index, 1).toString();
 		String busLineType = tableFilter.getValueAt(index, 2).toString();
@@ -373,8 +369,7 @@ public class LineWindow extends JFrame implements ActionListener {
 			}
 			JOptionPane.showMessageDialog(this, "Line :" + busLineName + " was deleted.");
 			updateTable();
-			editButton.setEnabled(false);
-			deleteButton.setEnabled(false);
+		
 		}
 		
 
@@ -412,5 +407,6 @@ public class LineWindow extends JFrame implements ActionListener {
 			tableFilter.setRowSorter(trs);
 
 			trs.setRowFilter(RowFilter.regexFilter(query));
+
 		}
 }

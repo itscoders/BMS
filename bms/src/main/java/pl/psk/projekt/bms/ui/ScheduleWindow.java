@@ -276,44 +276,22 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 			connect = DriverManager.getConnection(
 						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
 						"root", "toor");
-		} catch (SQLException e1) {
-			
-			e1.printStackTrace();
-		}
-
-		try {
 			preparedStatement = connect.prepareStatement("SELECT * FROM SCHEDULER");
-		} catch (SQLException e1) {
-			
-			e1.printStackTrace();
-		}
-		try {
 			rs = preparedStatement.executeQuery();
 		} catch (SQLException e1) {
 			
 			e1.printStackTrace();
 		}
+
 		
 		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
 		
 		tableFilter = new JTable();
-		tableFilter.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				tableFilterMouseClicked(e);
-			}
-		});
+
 		tableFilter.setModel(modelFilter);
 		scrollPane.setViewportView(tableFilter);
 		contentPane.setLayout(gl_contentPane);
 	}
-	
-	private void tableFilterMouseClicked(MouseEvent e) {
-		
-		editButton.setEnabled(true);
-		deleteButton.setEnabled(true);	
-	}
-	
 	
 
 	@Override
@@ -340,6 +318,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, "New Schedule had added.");
 			editButton.setEnabled(false);
 			deleteButton.setEnabled(false);
+			updateTable();
 			
 		}
 
@@ -347,7 +326,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 			
 				
 				int value = Integer.parseInt(tableFilter.getValueAt(tableFilter.getSelectedRow(), 0).toString());
-				System.out.println(value);
+				
 				int driver = comparDriver();
 				int bus = comparBus();
 				int line = comparBusLine();
@@ -359,7 +338,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 					SchedulerJDBC sj = new SchedulerJDBC();
 					Scheduler s = new Scheduler(bus,driver,line,startTime,stopTime);
 					s.setSchedulerRecordID(value);
-					System.out.println(s.getSchedulerRecordID());
+					
 					sj.updateSchedulerRecord(s);
 					updateTable();
 				} catch (SQLException e1) {
@@ -369,6 +348,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, "Schedule was edited.");
 				editButton.setEnabled(false);
 				deleteButton.setEnabled(false);
+				updateTable();
 			
 		}
 
@@ -387,6 +367,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, "Schedule was deleted.");
 			editButton.setEnabled(false);
 			deleteButton.setEnabled(false);
+			updateTable();
 		}
 
 	}
@@ -520,8 +501,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 				
 				while (rs.next()) {
 					String name ="id:"+" "+ rs.getString("busID")+" - "+ rs.getString("busName");
-					System.err.println(name);
-					System.err.println(comboModelBusD.getSelectedItem().toString());
+				
 					if (name.equals(comboModelBusD.getSelectedItem().toString())) {
 						return Integer.parseInt(rs.getString("busID"));
 					}
@@ -580,8 +560,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 				
 				while (rs.next()) {
 					String name = "id:"+" "+ rs.getString("busLineID")+" "+rs.getString("busLineName") + " - " + rs.getString("busLineType");
-					System.err.println(name);
-					System.err.println(comboModelBusLineD.getSelectedItem().toString());
+					
 					if (name.equals(comboModelBusLineD.getSelectedItem().toString())) {
 						return Integer.parseInt(rs.getString("busLineID"));
 					}

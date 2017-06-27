@@ -19,6 +19,7 @@ public class StartWindow extends JFrame implements ActionListener
 		
 	
 	public StartWindow() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

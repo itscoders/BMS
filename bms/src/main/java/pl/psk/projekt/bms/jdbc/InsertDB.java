@@ -19,7 +19,6 @@ public class InsertDB  {
 			
 			
 			create = "INSERT INTO `workers` (`accountType`, `username`, `password`, `name`, `surname`, `email`, `mobile`, `address`, `birthday`, `salary`) VALUES"+
-					"('Administrator', 'admin', 'admin', 'Admin', 'Admin', 'admin@gmail.com', '000000000', 'Siedziba', '16-Jun-1995', '25000'),"+
 					"('Administrator', 'pjanuszek', 'pj', 'Pawel', 'Januszek', 'pjanuszek@gmail.com', '895412369', 'Warszawa, ul.Marszalkowska', '16-Jun-1995', '25000'),"+
 					"('Administrator', 'zjanuszek', 'zj', 'Zygfryd', 'Januszek', 'zjanuszek@gmail.com', '897892369', 'Warszawa, ul.Marszalkowska', '20-Jun-1975', '25000'),"+
 					"('Driver', 'pjan', 'pj', 'Pawel', 'Jan', 'pjan@gmail.com', '895356869', 'Radom, ul.Kielecka', '26-Jun-1985', '5000'),"+
