@@ -48,6 +48,7 @@ import javax.swing.SpinnerDateModel;
 import java.awt.ComponentOrientation;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class ScheduleWindow extends JFrame implements ActionListener {
 
@@ -192,7 +193,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 		JLabel lblSearchSchedule = new JLabel("Search Schedule:");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap(240, Short.MAX_VALUE)
 					.addComponent(addButton)
@@ -201,7 +202,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 					.addGap(18)
 					.addComponent(deleteButton)
 					.addGap(219))
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(173)
 					.addComponent(lblSearchSchedule, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
 					.addGap(10)
@@ -218,13 +219,13 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 										.addComponent(labelDepartureTime)
 										.addComponent(labelIdBus))
 									.addGap(18)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(spinnerDepartureTimeStart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(comboBoxBusId, 0, 190, Short.MAX_VALUE)))
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(spinnerDepartureTimeStart, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+										.addComponent(comboBoxBusId, GroupLayout.PREFERRED_SIZE, 190, GroupLayout.PREFERRED_SIZE)))
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(labelIdDriver)
-									.addGap(18)
-									.addComponent(comboBoxDriverId, 0, 200, Short.MAX_VALUE)))
+									.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+									.addComponent(comboBoxDriverId, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)))
 							.addGap(28)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(labelArrivalTime)
@@ -269,8 +270,9 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
 					.addContainerGap())
 		);
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, editButton, deleteButton});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {comboBoxDriverId, comboBoxBusId});
 		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {labelDepartureTime, labelIdBus, labelIdDriver, labelArrivalTime, labelIdLine});
+		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, editButton, deleteButton});
 		
 		try {
 			connect = DriverManager.getConnection(

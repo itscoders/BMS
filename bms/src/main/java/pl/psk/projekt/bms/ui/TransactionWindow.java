@@ -201,6 +201,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		comboBoxBusLine.addActionListener(this);
 		textBusLine.addKeyListener(new ComboKeyHandler(comboBoxBusLine));
 
+
 		String[] ticketType = { "Monthly", "One-way" };
 
 		comboBoxTicketType = new JComboBox<String>(ticketType);
@@ -436,7 +437,7 @@ public class TransactionWindow extends JFrame implements ActionListener {
 				Mail m = new Mail();
 				
 				if(email == 0) m.sendMail(mail, "BILL SLIP FOR "+ nameLine + " TICKET", "In the attachment you will find a receipt for your ticket", filePath, name +"_"+ surname + "_salary_slip_" + date + ".pdf");
-				//if(sms == 0) m.sendSMS(numberPhone, "BILL SLIP FOR "+ nameLine + " TICKET");
+				if(sms == 0) m.sendSMS(numberPhone, "BILL SLIP FOR "+ nameLine + " TICKET");
 				
 				JOptionPane.showMessageDialog(null, "Report was successfully generated");
 } catch (FileNotFoundException e) {
