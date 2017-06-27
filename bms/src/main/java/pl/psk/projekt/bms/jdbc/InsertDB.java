@@ -5,7 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
+/** KLASA InsertDB zawiera w swoim konstruktorze zapytania do bazy, dodające rekordy testowe do tabel WORKERS, BUS,BUSLINE, SCHEDULER
+ * w Klasie użyto połączenia za pomocą JDBC sterownika bazy mysql.
+ * @see Connection
+ * @see DriverManager
+ * @see DriverManager.getConnection()
+ * @see Statement
+ */
 
 public class InsertDB  {
 

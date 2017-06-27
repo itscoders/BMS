@@ -7,6 +7,17 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
+
+/** KLASA DropDB zawiera w swoim ciele dwa konstruktory  
+ *
+ *	Pierwszy z nich bezparametrowy tj.  CreateDB() tworzy tylko tabele w utworzonej bazie
+ *	Drugi parametrowy CreateDB(int value) wykorzystywany jest przy pierwszym uruchomieniu aplikacji aby utworzyć baze, stworzyć tabele i utworzyć uzytkownika admin
+ * @see Connection
+ * @see DriverManager
+ * @see DriverManager.getConnection()
+ * @see Statement
+ */
+
 public class CreateDB {
 	
 	

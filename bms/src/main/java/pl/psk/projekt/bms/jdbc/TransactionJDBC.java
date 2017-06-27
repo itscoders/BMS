@@ -12,6 +12,15 @@ import java.sql.Statement;
 import pl.psk.projekt.bms.dbobjects.Transaction;
 
 
+/** KLASA TransactionJDBC - Zawiera w swoim ciele metody umożliwiające połączenie oraz dodanie, usunięcie, edytowanie rekordów bazy 
+* @see Connection
+* @see DriverManager
+* @see DriverManager.getConnection()
+* @see PreparedStatement
+* @see Statement
+*/
+
+
 public class TransactionJDBC {
 	
 	Statement statement;

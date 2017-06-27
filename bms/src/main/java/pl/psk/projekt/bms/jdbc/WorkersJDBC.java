@@ -11,6 +11,16 @@ import java.sql.Statement;
 import pl.psk.projekt.bms.dbobjects.Workers;
 
 
+/** KLASA WorkersJDBC - Zawiera w swoim ciele metody umożliwiające połączenie oraz dodanie, usunięcie, edytowanie rekordó bazy oraz wyciąganie iformaci przy logowanie
+* @see Connection
+* @see DriverManager
+* @see DriverManager.getConnection()
+* @see PreparedStatement
+* @see Statement
+*/
+
+
+
 public class WorkersJDBC {
 
     Statement statement;

@@ -5,6 +5,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/** KLASA DropDB zawiera w swoim ciele konstruktor w którego zawartości występuje łączenie do bazy i wykonywanie usunięcia tabel.
+ * @see Connection
+ * @see DriverManager
+ * @see DriverManager.getConnection()
+ * @see Statement
+ */
+
+
 public class DropDB {
 
 	public DropDB() throws SQLException {
