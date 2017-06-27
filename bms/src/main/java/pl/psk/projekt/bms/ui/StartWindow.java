@@ -13,8 +13,8 @@ public class StartWindow extends JFrame implements ActionListener
   
 	private static final long serialVersionUID = 1L;
 	
-	JLabel labelWindow=new JLabel("<html><center>Welcome To Bus Management System<br>\r\nITS CODERS & PABLO IT</center></html>");
-	JButton move =new JButton("Move forward");
+	JLabel labelWindow;
+	JButton move;
 	JFrame frame = new JFrame();
 		
 	
@@ -44,21 +44,27 @@ public class StartWindow extends JFrame implements ActionListener
 		setVisible(true);
 		getContentPane().setLayout(null);
 		setLocationRelativeTo(null);
+		labelWindow=new JLabel("<html><center>Welcome To Bus Management System<br>\r\nITS CODERS & PABLO IT</center></html>");
 		labelWindow.setToolTipText("");
 		labelWindow.setHorizontalAlignment(SwingConstants.CENTER);
 	
 
-		labelWindow.setBounds(90,63,403,120);
+		labelWindow.setBounds(95,29,403,120);
 		getContentPane().add(labelWindow);
 		labelWindow.setPreferredSize(new Dimension(150, 100));
 		labelWindow.setFont(new Font("Courier New", Font.BOLD, 20));
 		labelWindow.setForeground(Color.DARK_GRAY);
 		
-		
+		move =new JButton("Move forward");
 		move.setBounds(204,350,175,50);
-		getContentPane().add(move);
-		move.setBackground(Color.LIGHT_GRAY);
 		move.addActionListener(this);
+		getContentPane().add(move);
+		
+		JLabel background = new JLabel("");
+		background.setIcon(new ImageIcon(this.getClass().getResource("/start.png")));
+		background.setBounds(0, 0, 594, 571);
+		getContentPane().add(background);
+		
 
 		
 	}
@@ -69,12 +75,11 @@ public class StartWindow extends JFrame implements ActionListener
 		{
 			
 			LoginWindow l = new LoginWindow();
-			this.setVisible(false);
+			l.setVisible(true);
+			this.dispose();
 		}
 			
 		
 		
 	}
-	
-	
 }

@@ -311,25 +311,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 	private void tableFilterMouseClicked(MouseEvent e) {
 		
 		editButton.setEnabled(true);
-		deleteButton.setEnabled(true);
-		int index = tableFilter.getSelectedRow();
-		
-		/*String startTime = tableFilter.getValueAt(index, 1).toString();
-		String stopTime = tableFilter.getValueAt(index, 2).toString();
-		
-		String busLineName = tableFilter.getValueAt(index, 1).toString();
-		String busLineType = tableFilter.getValueAt(index, 2).toString();
-		String startStation = tableFilter.getValueAt(index, 3).toString();
-		String stopStation = tableFilter.getValueAt(index, 4).toString();
-		String pirceOneWay = tableFilter.getValueAt(index, 5).toString();
-		String priceMonthly = tableFilter.getValueAt(index, 6).toString();
-				
-		lineNameField.setText(busLineName);
-		comboBoxType.setSelectedItem(busLineType);
-		startStationField.setText(startStation);
-		startStationField.setText(stopStation);
-		textFieldPirceOneWay.setText(pirceOneWay);
-		textFieldPriceMonthly.setText(priceMonthly);*/	
+		deleteButton.setEnabled(true);	
 	}
 	
 	
@@ -449,7 +431,7 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
 						"root", "toor");
 
-				preparedStatement = connect.prepareStatement("SELECT * FROM Workers WHERE possition = 'Driver'");
+				preparedStatement = connect.prepareStatement("SELECT * FROM Workers WHERE accountType = 'Driver'");
 				rs = preparedStatement.executeQuery();
 				comboModelDriverIdD = new DefaultComboBoxModel<String>();
 				while (rs.next()) {
@@ -476,13 +458,11 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 						"jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York",
 						"root", "toor");
 
-				preparedStatement = connect.prepareStatement("SELECT * FROM Workers WHERE possition = 'Driver'");
+				preparedStatement = connect.prepareStatement("SELECT * FROM Workers WHERE accountType = 'Driver'");
 				rs = preparedStatement.executeQuery();
 				
 				while (rs.next()) {
 					String name ="id:"+" "+ rs.getString("workerId")+"  "+ rs.getString("name") + " - " + rs.getString("surname");
-					System.err.println(name);
-					System.err.println(comboModelDriverIdD.getSelectedItem().toString());
 					if (name.equals(comboModelDriverIdD.getSelectedItem().toString())) {
 						return Integer.parseInt(rs.getString("workerId"));
 					}

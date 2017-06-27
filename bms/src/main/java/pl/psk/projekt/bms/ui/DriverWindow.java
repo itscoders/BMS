@@ -18,6 +18,7 @@ import pl.psk.projekt.bms.component.Mail;
 import pl.psk.projekt.bms.dbobjects.Workers;
 
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -116,12 +117,15 @@ public class DriverWindow extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 
 		printSchedulerButton = new JButton("Print Your Scheduler");
+		printSchedulerButton.setBounds(423, 110, 156, 23);
 		printSchedulerButton.setBackground(Color.LIGHT_GRAY);
 		printSchedulerButton.addActionListener(this);
 
 		scrollPane = new JScrollPane();
+		scrollPane.setBounds(15, 151, 564, 204);
 
 		textField = new JTextField();
+		textField.setBounds(137, 110, 199, 23);
 		textField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -132,40 +136,17 @@ public class DriverWindow extends JFrame implements ActionListener {
 		textField.setColumns(10);
 
 		JLabel lebelSearch = new JLabel("Search in your schedule:");
+		lebelSearch.setBounds(15, 110, 118, 23);
 
 		logoutButton = new JButton("Logout");
+		logoutButton.setBounds(490, 13, 89, 29);
+		logoutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logout.png")));
 		logoutButton.addActionListener(this);
 
 		logLabel = new JLabel();
+		logLabel.setBounds(15, 11, 341, 25);
 		logLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		welcomeLabel();
-
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_contentPane.createSequentialGroup().addComponent(lebelSearch)
-												.addPreferredGap(ComponentPlacement.RELATED).addComponent(textField,
-														GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE))
-										.addComponent(logLabel))
-								.addGap(31)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-										.addComponent(logoutButton).addComponent(printSchedulerButton,
-												GroupLayout.PREFERRED_SIZE, 178, GroupLayout.PREFERRED_SIZE))
-								.addGap(14)))
-				.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addComponent(logLabel)
-								.addComponent(logoutButton))
-						.addGap(18)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(lebelSearch)
-								.addComponent(printSchedulerButton).addComponent(textField, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(18).addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)));
 
 		try {
 			connect = DriverManager.getConnection(
@@ -188,7 +169,18 @@ public class DriverWindow extends JFrame implements ActionListener {
 		scrollPane.setViewportView(tableFilter);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		contentPane.setLayout(gl_contentPane);
+		contentPane.setLayout(null);
+		contentPane.add(scrollPane);
+		contentPane.add(lebelSearch);
+		contentPane.add(textField);
+		contentPane.add(logLabel);
+		contentPane.add(logoutButton);
+		contentPane.add(printSchedulerButton);
+		
+		JLabel background = new JLabel("");
+		background.setIcon(new ImageIcon(this.getClass().getResource("/worker.png")));
+		background.setBounds(0, 0, 594, 371);
+		contentPane.add(background);
 	}
 
 	@Override
@@ -297,5 +289,4 @@ public class DriverWindow extends JFrame implements ActionListener {
 
 		trs.setRowFilter(RowFilter.regexFilter(query));
 	}
-	
 }

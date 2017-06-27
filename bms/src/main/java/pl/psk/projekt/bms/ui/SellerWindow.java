@@ -11,6 +11,7 @@ import net.proteanit.sql.DbUtils;
 import pl.psk.projekt.bms.dbobjects.Workers;
 
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -57,6 +58,7 @@ public class SellerWindow extends JFrame implements ActionListener {
 	PreparedStatement preparedStatement;
 	Connection connect;
 	ResultSet rs;
+	private JLabel background;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -104,16 +106,20 @@ public class SellerWindow extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 
 		buyerButton = new JButton("Buyer");
+		buyerButton.setBounds(383, 107, 89, 23);
 		buyerButton.addActionListener(this);
 		buyerButton.setBackground(Color.LIGHT_GRAY);
 
 		transactionButton = new JButton("Transaction");
+		transactionButton.setBounds(490, 107, 89, 23);
 		transactionButton.addActionListener(this);
 		transactionButton.setBackground(Color.LIGHT_GRAY);
 
 		scrollPane = new JScrollPane();
+		scrollPane.setBounds(15, 148, 564, 207);
 
 		textField = new JTextField();
+		textField.setBounds(149, 107, 199, 23);
 		textField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -124,60 +130,17 @@ public class SellerWindow extends JFrame implements ActionListener {
 		textField.setColumns(10);
 
 		JLabel lebelSearch = new JLabel("Search in your transaction:");
+		lebelSearch.setBounds(15, 107, 130, 23);
 
 		logoutButton = new JButton("Logout");
+		logoutButton.setBounds(490, 18, 89, 29);
+		logoutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logout.png")));
 		logoutButton.addActionListener(this);
 
 		logLabel = new JLabel();
+		logLabel.setBounds(15, 16, 341, 25);
 		logLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		welcomeLabel();
-
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
-							.addContainerGap())
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(buyerButton)
-							.addGap(18)
-							.addComponent(transactionButton)
-							.addGap(242))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lebelSearch)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap(241, Short.MAX_VALUE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(logLabel, GroupLayout.PREFERRED_SIZE, 341, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
-							.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(logoutButton)
-						.addComponent(logLabel, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(buyerButton)
-						.addComponent(transactionButton))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lebelSearch)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 205, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
-		);
-		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {buyerButton, transactionButton});
-		gl_contentPane.linkSize(SwingConstants.HORIZONTAL, new Component[] {buyerButton, transactionButton});
 		
 		
 		try {
@@ -192,12 +155,24 @@ public class SellerWindow extends JFrame implements ActionListener {
 		}
 		
 		modelFilter = (DefaultTableModel) DbUtils.resultSetToTableModel(rs);
+		contentPane.setLayout(null);
 
 		tableFilter = new JTable();
 		tableFilter.setModel(modelFilter);
 		
 		scrollPane.setViewportView(tableFilter);
-		contentPane.setLayout(gl_contentPane);
+		contentPane.add(scrollPane);
+		contentPane.add(logLabel);
+		contentPane.add(logoutButton);
+		contentPane.add(lebelSearch);
+		contentPane.add(textField);
+		contentPane.add(buyerButton);
+		contentPane.add(transactionButton);
+		
+		background = new JLabel("");
+		background.setIcon(new ImageIcon(this.getClass().getResource("/worker.png")));
+		background.setBounds(0, 0, 594, 371);
+		contentPane.add(background);
 	}
 
 	@Override

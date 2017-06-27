@@ -41,7 +41,6 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	private JButton busButton;
 	private JButton lineButton;
 	private JButton workerButton;
-	private JButton raportButton;
 	private JButton transactionButton;
 	private JButton buyerButton;
 	private JButton databaseDropButton;
@@ -104,6 +103,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		contentPane.add(panel);
 
 		logoutButton = new JButton("Logout");
+		logoutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logout.png")));
 		logoutButton.addActionListener(this);
 
 		scheduleButton = new JButton("Schedule");
@@ -117,10 +117,6 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		lineButton = new JButton("Line");
 		lineButton.addActionListener(this);
 		lineButton.setBackground(Color.LIGHT_GRAY);
-
-		raportButton = new JButton("Raport");
-		raportButton.addActionListener(this);
-		raportButton.setBackground(Color.LIGHT_GRAY);
 
 		workerButton = new JButton("Worker");
 		workerButton.addActionListener(this);
@@ -153,7 +149,6 @@ public class ManagementWindow extends JFrame implements ActionListener {
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(raportButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addGroup(gl_panel.createSequentialGroup()
 								.addComponent(databaseCreateButton)
 								.addGap(18)
@@ -170,7 +165,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 									.addComponent(scheduleButton, Alignment.TRAILING))))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addComponent(logLabel)
-							.addPreferredGap(ComponentPlacement.RELATED, 716, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED, 556, Short.MAX_VALUE)
 							.addComponent(logoutButton)))
 					.addGap(28))
 		);
@@ -181,12 +176,10 @@ public class ManagementWindow extends JFrame implements ActionListener {
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(logoutButton)
 						.addComponent(logLabel))
-					.addPreferredGap(ComponentPlacement.RELATED, 312, Short.MAX_VALUE)
-					.addComponent(raportButton, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
+					.addPreferredGap(ComponentPlacement.RELATED, 365, Short.MAX_VALUE)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(scheduleButton)
-						.addComponent(workerButton))
+						.addComponent(workerButton, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lineButton)
@@ -201,12 +194,12 @@ public class ManagementWindow extends JFrame implements ActionListener {
 						.addComponent(databaseCreateButton))
 					.addGap(22))
 		);
-		gl_panel.linkSize(SwingConstants.VERTICAL, new Component[] {scheduleButton, busButton, lineButton, raportButton, workerButton, transactionButton, buyerButton, databaseCreateButton, databaseDropButton});
+		gl_panel.linkSize(SwingConstants.VERTICAL, new Component[] {scheduleButton, busButton, lineButton, workerButton, transactionButton, buyerButton, databaseCreateButton, databaseDropButton});
 		gl_panel.linkSize(SwingConstants.HORIZONTAL, new Component[] {scheduleButton, busButton, lineButton, workerButton, transactionButton, buyerButton, databaseCreateButton, databaseDropButton});
 		panel.setLayout(gl_panel);
 
 		JLabel background = new JLabel("");
-		background.setIcon(new ImageIcon(this.getClass().getResource("/bk2.jpg")));
+		background.setIcon(new ImageIcon(this.getClass().getResource("/managment.png")));
 		background.setBounds(0, 0, 1000, 620);
 		contentPane.add(background);
 	}
@@ -323,10 +316,6 @@ public class ManagementWindow extends JFrame implements ActionListener {
 			});
 			
 			this.dispose();
-		}
-
-		if (e.getSource() == raportButton) {
-
 		}
 
 		if (e.getSource() == databaseCreateButton) {
