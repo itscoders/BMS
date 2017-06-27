@@ -47,6 +47,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	private JButton databaseCreateButton;
 	private JLabel logLabel;
 	private Workers w;
+	private JButton databaseInsertButton;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -142,6 +143,9 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		logLabel.setForeground(Color.WHITE);
 		logLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		welcomeLabel();
+		
+		databaseInsertButton = new JButton("Database Insert");
+		databaseInsertButton.addActionListener(this);
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.TRAILING)
@@ -162,10 +166,11 @@ public class ManagementWindow extends JFrame implements ActionListener {
 								.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
 									.addComponent(lineButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 									.addComponent(transactionButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(scheduleButton, Alignment.TRAILING))))
+									.addComponent(scheduleButton, Alignment.TRAILING)))
+							.addComponent(databaseInsertButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addComponent(logLabel)
-							.addPreferredGap(ComponentPlacement.RELATED, 556, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED, 532, Short.MAX_VALUE)
 							.addComponent(logoutButton)))
 					.addGap(28))
 		);
@@ -176,7 +181,7 @@ public class ManagementWindow extends JFrame implements ActionListener {
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(logoutButton)
 						.addComponent(logLabel))
-					.addPreferredGap(ComponentPlacement.RELATED, 365, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 321, Short.MAX_VALUE)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(scheduleButton)
 						.addComponent(workerButton, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
@@ -192,9 +197,11 @@ public class ManagementWindow extends JFrame implements ActionListener {
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(databaseDropButton)
 						.addComponent(databaseCreateButton))
-					.addGap(22))
+					.addGap(18)
+					.addComponent(databaseInsertButton)
+					.addGap(18))
 		);
-		gl_panel.linkSize(SwingConstants.VERTICAL, new Component[] {scheduleButton, busButton, lineButton, workerButton, transactionButton, buyerButton, databaseCreateButton, databaseDropButton});
+		gl_panel.linkSize(SwingConstants.VERTICAL, new Component[] {scheduleButton, busButton, lineButton, workerButton, transactionButton, buyerButton, databaseCreateButton, databaseDropButton, databaseInsertButton});
 		gl_panel.linkSize(SwingConstants.HORIZONTAL, new Component[] {scheduleButton, busButton, lineButton, workerButton, transactionButton, buyerButton, databaseCreateButton, databaseDropButton});
 		panel.setLayout(gl_panel);
 
@@ -331,6 +338,15 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		if (e.getSource() == databaseDropButton) {
 			try {
 				new DropDB();
+			} catch (SQLException e1) {
+
+				e1.printStackTrace();
+			}
+		}
+		
+		if (e.getSource() == databaseInsertButton) {
+			try {
+				new InsertDB();
 			} catch (SQLException e1) {
 
 				e1.printStackTrace();

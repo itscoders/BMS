@@ -105,9 +105,9 @@ public class CreateDB {
 			try {
 				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
 				statement = conn.createStatement();
-		        statement.executeUpdate("CREATE DATABASE januszowa");
+		        statement.executeUpdate("CREATE DATABASE bms_db");
 		        
-		        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/januszowa?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
+		        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
 				statement = conn.createStatement();
 		        
 		        create = 	"CREATE TABLE IF NOT EXISTS Workers ("+
