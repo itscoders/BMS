@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.awt.Color;
 import java.awt.EventQueue;
 
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import pl.psk.projekt.bms.dbobjects.Workers;
 import pl.psk.projekt.bms.jdbc.CreateDB;
 import pl.psk.projekt.bms.jdbc.WorkersJDBC;

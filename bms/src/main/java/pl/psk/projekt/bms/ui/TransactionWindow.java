@@ -79,49 +79,86 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class TransactionWindow extends JFrame implements ActionListener {
 
+	/** Zmienna określająca unikalny numer w celu serializacji. */
 	private static final long serialVersionUID = 1L;
 
+	/** Deklaracja obiektu klasy JPanel. */
 	private JPanel contentPane;
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton addButton;
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton deleteButton;
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton newBuyerButton;
+	/** Deklaracja obiektu klasy JSpinner. */
 	private JSpinner spinnerDepartureTime;
-	JSpinner.DateEditor de_spinnerDepartureTime;
-	PreparedStatement preparedStatement;
-	Connection connect;
-	ResultSet rs;
+	/** Deklaracja obiektu klasy JSpinner. */
+	private JSpinner.DateEditor de_spinnerDepartureTime;
+	 /** Deklaracja obiektu klasy JTable. */
 	private JTable tableFilter;
-	private JTextField filterField;
+	/** Deklaracja obiektu klasy JDefaultTableModel. */
 	private DefaultTableModel modelFilter;
-	JComboBox<String> comboBoxBuyer;
-	JComboBox<String> comboBoxBusLine;
-	JComboBox<String> comboBoxTicketType;
-	JComboBox<String> comboBoxDiscount;
-	JComboBox<String> comboBoxScheduler;
+	/** Deklaracja obiektu klasy JComboBox. */
+	private JComboBox<String> comboBoxBuyer;
+	/** Deklaracja obiektu klasy JComboBox. */
+	private JComboBox<String> comboBoxBusLine;
+	/** Deklaracja obiektu klasy JComboBox. */
+	private JComboBox<String> comboBoxTicketType;
+	/** Deklaracja obiektu klasy JComboBox. */
+	private JComboBox<String> comboBoxDiscount;
+	/** Deklaracja obiektu klasy JComboBox. */
+	private JComboBox<String> comboBoxScheduler;
+	/** Deklaracja obiektu klasy DefaultComboBoxModel. */
 	private DefaultComboBoxModel<String> comboModelBuyerD;
+	/** Deklaracja obiektu klasy DefaultComboBoxModel. */
 	private DefaultComboBoxModel<String> comboModelBusLineD;
+	/** Deklaracja obiektu klasy DefaultComboBoxModel. */
 	private DefaultComboBoxModel<String> comboBoxDiscountD;
+	/** Deklaracja obiektu klasy DefaultComboBoxModel. */
 	private DefaultComboBoxModel<String> comboBoxSchedulerD;
-	JTextField textBuyer;
-	JTextField textBusLine;
-	JTextField textScheduler;
-	JTextField textDiscount;
+	/** Deklaracja obiektu klasy JTextField. */
+	private JTextField textBuyer;
+	/** Deklaracja obiektu klasy JTextField. */
+	private JTextField textBusLine;
+	/** Deklaracja obiektu klasy JTextField. */
+	private JTextField textScheduler;
+	/** Deklaracja obiektu klasy JTextField. */
+	private JTextField textDiscount;
+	/** Deklaracja obiektu klasy JTextField. */
+	private JTextField filterField;
+	/** Pole klasy Workers. */
 	Workers w;
+	
+	/** Deklaracja obiektu klasy PreparedStatement. */
+	private PreparedStatement preparedStatement;
+	/** Deklaracja obiektu klasy Connection. */
+	private Connection connect;
+	/** Deklaracja obiektów klasy ResultSet. */
+	private ResultSet rs;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					
-					TransactionWindow frame = new TransactionWindow(new Workers());
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
+	/**
+	 * Konstruktor klasy BuyerWindow odpowiedzialny za
+	 * inicializację komponentów biblioteki Swing. Komponenty definiowane:
+	 * Jlabel, JButton, JPanel, JComboBox, JSpinner JTextField, JTable, JFrame - dla tych
+	 * komponentów ustawiane są wymiary, fonty, kolory. Dodatkowo dla komponentu JTable zastosowany jest model tabeli - DefaultTableModel, 
+	 * Dla JTable dodana jest niego metoda 'keyReleased' służąca do określania zachowania po zwolnieniuu klawisza, gdzie wywoływana jest metoda'filter'.
+	 * Dla komponentu JSpinner wykorzystana została klasa ComboKeyHandler pozwalająca na podpowiadanie sugestti podczas wpisywania teksu.
+	 * Komponenty zostały rozmieszczone przy pomocy GroupLayout.
+	 * W konstruktorze przy pomocy zmiennej connect nawiązywane jest połączenie z bazą bms_db, 
+	 * preparedStatement pozwala na wykonanie zapytania do bazy, a 'rs' na wyświetlenie wyników zapytania.
+	 * 
+	 * @param w - parametr Workers - dane pracownika
+	 * 
+	 * @see JSpinner
+	 * @see JComboBox
+	 * @see JTextField
+	 * @see JTable
+	 * @see JPanel
+	 * @see JButton
+	 * @see JFrame
+	 * @see JLabel
+	 */
 	public TransactionWindow(Workers w) {
 		
 		this.w = w;
@@ -363,6 +400,10 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 
 
+	/** Metoda bezparametrowa odpowiedzialna za czyszczenie pól forumlarza okna TransactionWindow.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	private void clearFields() {
 		textBuyer.setText("");
 		comboBoxBusLine.setSelectedIndex(0);
@@ -370,16 +411,14 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		comboBoxScheduler.setSelectedIndex(0);
 		comboBoxTicketType.setSelectedIndex(0);
 		
-		/*
-		fillComboBoxBuyer();
-		comboBoxBuyer.setModel(comboModelBuyerD);
-		
-
-		fillComboBoxBusLine();
-		comboBoxBusLine.setModel(comboModelBusLineD);
-		*/
 	}
 
+	/** Metoda bezparametrowa odpowiedzialna za generowanie biletu do pliku .pdf dla kupującego i zapisywania do wybranej lokalizacji na dysku.
+	 * W pliku zapisywane są takie informacje jak informacje o kupującym, cena biletu oraz wszystkie informacje dotyczące przejazdu.
+	 * Opcjonalnie plik z potwierdzeniem wysyłany jest jako załącznik na email kupującego lub samo potwierdzenie na SMS.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	private void generateSlip(String discount, String date, int buyer, int email, int sms) {
 
 		String name = "", surname="", mail="", numberPhone="";
@@ -464,6 +503,11 @@ public class TransactionWindow extends JFrame implements ActionListener {
 
 	}
 	
+	
+	/** Metoda bezparametrowa odpowiedzialna za wyświetlenie komunikatów dotyczących wysłania rodzaju powiadomienia dla kupującego na email lub SMS.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	public void ask(String discount, String today, int buyer){
 		int mail = JOptionPane.showConfirmDialog(null, "The Buyer want to get bill/ ticket on mail ?", "Question Box", JOptionPane.YES_NO_OPTION);
         if (mail == JOptionPane.YES_OPTION) {
@@ -487,12 +531,39 @@ public class TransactionWindow extends JFrame implements ActionListener {
        generateSlip(discount, today, buyer, mail, sms);
 	}
 
+	
+	/**
+	 * Przesłonięta metoda służąca do określania zachowania aplikacji po
+	 * kliknięciu na dany komponent przez użytkownika. W metodzie tej określono
+	 * działanie dla przycisków oraz komponentów JComboBox znajdujących się w oknie do zarządzania transakcjami. 
+	 * W przypadku kliknięcia na przycisk 'addButton' wywołane zostają metody comparBuyer, 
+	 * comparScheduler, comparBusLine oraz pobierane są dane z pól formularza okna TransactionWindow, 
+	 * a następnie zostaje dodany rekord do bazy danych bms_db z pobranymi danymi.
+	 * Tworzony jest obiekt klasy TransactionJDBC oraz klasy Transaction. 
+	 * Na obiekcie klasy TransactionJDBC wykonywana jest metoda 'addTransaction'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable oraz do czyszczenia pól - clearFields. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwania rekordów z tabeli. 
+	 * W przypadku kliknięcia na przycisk 'deleteButton' pobierane są dane z pól formularza okna TransactionWindow, 
+	 * a następnie zostaje usunięty rekord z bazy danych bms_db na podtsawie pobranych danych. 
+	 * Tworzony jest obiekt klasy TransactionJDBC oraz klasy Transaction. 
+	 * Na obiekcie klasy TransactionJDBC wykonywana jest metoda 'deletetransaction'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable oraz do czyszczenia pól - clearFields. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwanai rekordów z tabeli. 
+	 * W przypadku kliknięcia na pole 'comboBoxBusLine' sprawdzane są odpowiednio warunki powodujące uaktywnianie oraz 
+	 * deaktywowanie kolejnych pól formularza okna TransactionWindow.
+	 * W przypadku kliknięcia na pole 'comboBoxTicketType' sprawdzane są odpowiednio warunki powodujące uaktywnianie oraz 
+	 * deaktywowanie kolejnych pól formularza okna TransactionWindow. Wywoływane są metody: 'fillComboBoxDiscount' oraz 'fillComboBoxScheduler'
+	 * W przypadku kliknięcia na pole 'newBuyerButton' uruchamiane jest okno do dodawania nowego kupującego. 
+	 * Tworzony jest obiekt klasy NewBuyerWindow, ustawiany na widoczny. 
+	 * Do informowani użytkownika oraz wyświetlania okien dialogowych
+	 * wykorzystane zostały komponenty JOptionPane.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == addButton) {
 
-			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 			Calendar cal = Calendar.getInstance();
 			String today = sdf.format(cal.getTime());
 			int buyer = comparBuyer();
@@ -606,6 +677,10 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		}
 	}
 
+	/** Metoda odpowiedzialna za odświeżanie tabeli Jtable z danymi.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	private void updateTable() {
 		try {
 			connect = DriverManager.getConnection(
@@ -629,6 +704,12 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		}
 	}
 
+	/** Metoda odpowiedzialna za filtrowanie danych w tabeli Jtable.
+	 * 
+	 * @param query - parametr String - tekst jako wyznacznik filtrowania.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	private void filter(String query) {
 
 		TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
@@ -637,6 +718,11 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		trs.setRowFilter(RowFilter.regexFilter(query));
 	}
 
+	
+	/** Metoda odpowiedzialna za wypełnianie danymi kupujących z bazy danych bms_db komponentu JComboBox przez model DefaultComboBoxModel.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	private void fillComboBoxBuyer() {
 		try {
 			connect = DriverManager.getConnection(
@@ -665,6 +751,12 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		}
 	}
 
+
+	/** Metoda odpowiedzialna za pobranie ID kupującego rekordu z wybranego pola formularzu okna ScheduleWindow, gdzie ID jest kluczem obcym tabeli Transaction w bazie.
+	 * Wynik zwraca na podstawaie porównywania danych z bazy danych bms_db.
+	 * 
+	 * @return 	numer ID kupującego jeśli porównane dane są takie same
+	 */
 	private int comparBuyer() {
 		try {
 			connect = DriverManager.getConnection(
@@ -697,6 +789,11 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		return 0;
 	}
 
+	
+	/** Metoda odpowiedzialna za wypełnianie danymi linii busów z bazy danych bms_db komponentu JComboBox przez model DefaultComboBoxModel.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	private void fillComboBoxBusLine() {
 		try {
 			connect = DriverManager.getConnection(
@@ -724,6 +821,12 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		}
 	}
 
+	
+	/** Metoda odpowiedzialna za pobranie ID linii busa rekordu z wybranego pola formularzu okna ScheduleWindow, gdzie ID jest kluczem obcym tabeli Transaction w bazie.
+	 * Wynik zwraca na podstawaie porównywania danych z bazy danych bms_db.
+	 * 
+	 * @return 	numer ID linii busa jeśli porównane dane są takie same
+	 */
 	private int comparBusLine() {
 		try {
 			connect = DriverManager.getConnection(
@@ -755,6 +858,10 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		return 0;
 	}
 
+	/** Metoda odpowiedzialna za wypełnianie danymi rozkładów z bazy danych bms_db komponentu JComboBox przez model DefaultComboBoxModel.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	private void fillComboBoxScheduler(int i, String string) {
 		try {
 			connect = DriverManager.getConnection(
@@ -784,6 +891,12 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		}
 	}
 
+	
+	/** Metoda odpowiedzialna za pobranie ID rozkładu rekordu z wybranego pola formularzu okna ScheduleWindow, gdzie ID jest kluczem obcym tabeli Transaction w bazie.
+	 * Wynik zwraca na podstawaie porównywania danych z bazy danych bms_db.
+	 * 
+	 * @return 	numer ID rozkładu jeśli porównane dane są takie same
+	 */
 	private int comparScheduler() {
 		try {
 			connect = DriverManager.getConnection(
@@ -816,6 +929,12 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		return 0;
 	}
 
+	/** Metoda odpowiedzialna za wypełnianie cenami linii busów z bazy danych bms_db komponentu JComboBox przez model DefaultComboBoxModel.
+	 * 
+	 * @param i - parametr int - ID linii busa
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	private void fillComboBoxDiscount(int i) {
 		try {
 			connect = DriverManager.getConnection(

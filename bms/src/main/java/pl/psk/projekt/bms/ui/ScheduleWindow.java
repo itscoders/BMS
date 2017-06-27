@@ -1,6 +1,5 @@
 package pl.psk.projekt.bms.ui;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -62,43 +61,72 @@ import javax.swing.LayoutStyle.ComponentPlacement;
  */
 public class ScheduleWindow extends JFrame implements ActionListener {
 
+	/** Zmienna określająca unikalny numer w celu serializacji. */
 	private static final long serialVersionUID = 1L;
 
+	/** Deklaracja obiektu klasy JPanel. */
 	private JPanel contentPane;
+	 /** Deklaracja obiektu klasy JTable. */
 	private JTable tableFilter;
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton addButton;
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton editButton;
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton deleteButton;
+	/** Deklaracja obiektu klasy JTextField. */
 	private JTextField filterField;
+	/** Deklaracja obiektu klasy JDefaultTableModel. */
 	private DefaultTableModel modelFilter;
+	/** Deklaracja obiektu klasy JComboBox. */
 	private JComboBox<String> comboBoxDriverId;
+	/** Deklaracja obiektu klasy JComboBox. */
 	private JComboBox<String> comboBoxBusId; 
+	/** Deklaracja obiektu klasy JComboBox. */
 	private JComboBox<String> comboBoxLineId;
-	PreparedStatement preparedStatement;
-	Connection connect;
-	ResultSet rs;
-
+	/** Deklaracja obiektu klasy DefaultComboBoxModel. */
 	private DefaultComboBoxModel<String> comboModelDriverIdD;
+	/** Deklaracja obiektu klasy DefaultComboBoxModel. */
 	private DefaultComboBoxModel<String> comboModelBusLineD;
+	/** Deklaracja obiektu klasy DefaultComboBoxModel. */
 	private DefaultComboBoxModel<String> comboModelBusD;
+	/** Deklaracja obiektu klasy JSpinner. */
 	private JSpinner spinnerDepartureTimeStart;
+	/** Deklaracja obiektu klasy JSpinner. */
 	private JSpinner spinnerArrivalTimeStop;
-	JSpinner.DateEditor de_spinnerArrivalTime;
-	JSpinner.DateEditor de_spinnerDepartureTime;
+	/** Deklaracja obiektu klasy JSpinner. */
+	private JSpinner.DateEditor de_spinnerArrivalTime;
+	/** Deklaracja obiektu klasy JSpinner. */
+	private JSpinner.DateEditor de_spinnerDepartureTime;
 	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ScheduleWindow frame = new ScheduleWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	/** Deklaracja obiektu klasy PreparedStatement. */
+	private PreparedStatement preparedStatement;
+	/** Deklaracja obiektu klasy Connection. */
+	private Connection connect;
+	/** Deklaracja obiektów klasy ResultSet. */
+	private ResultSet rs;
+	
 
+	/**
+	 * Konstruktor klasy BuyerWindow odpowiedzialny za
+	 * inicializację komponentów biblioteki Swing. Komponenty definiowane:
+	 * Jlabel, JButton, JPanel, JComboBox, JSpinner JTextField, JTable, JFrame - dla tych
+	 * komponentów ustawiane są wymiary, fonty, kolory. Dodatkowo dla komponentu JTable zastosowany jest model tabeli - DefaultTableModel, 
+	 * Dla JTable dodana jest niego metoda 'keyReleased' służąca do określania zachowania po zwolnieniuu klawisza, gdzie wywoływana jest metoda'filter'.
+	 * Dla komponentu JSpinner wykorzystana została klasa ComboKeyHandler pozwalająca na podpowiadanie sugestti podczas wpisywania teksu.
+	 * Komponenty zostały rozmieszczone przy pomocy GroupLayout.
+	 * W konstruktorze przy pomocy zmiennej connect nawiązywane jest połączenie z bazą bms_db, 
+	 * preparedStatement pozwala na wykonanie zapytania do bazy, a 'rs' na wyświetlenie wyników zapytania.
+	 * 
+	 * @see JSpinner
+	 * @see JComboBox
+	 * @see JTextField
+	 * @see JTable
+	 * @see JPanel
+	 * @see JButton
+	 * @see JFrame
+	 * @see JLabel
+	 */
 	public ScheduleWindow() {
 		setResizable(false);
 		try {
@@ -306,6 +334,33 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 	}
 	
 
+	/**
+	 * Przesłonięta metoda służąca do określania zachowania aplikacji po
+	 * kliknięciu na dany komponent przez użytkownika. W metodzie tej określono
+	 * działanie dla przycisków znajdujących się w oknie do zarządzania rozkładem. 
+	 * W przypadku kliknięcia na przycisk 'addButton' wywołane zostają metody comparDriver, 
+	 * comparBus, comparBusLine oraz pobierane są dane z pól formularza okna ScheduleWindow, 
+	 * a następnie zostaje dodany rekord do bazy danych bms_db z pobranymi danymi.
+	 * Tworzony jest obiekt klasy SchedulerJDBC oraz klasy Scheduler. 
+	 * Na obiekcie klasy SchedulerJDBC wykonywana jest metoda 'addSchedulerRecord'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwania rekordów z tabeli. 
+	 * W przypadku kliknięcia na przycisk 'editButton' wywołane zostają metody comparDriver, 
+	 * comparBus, comparBusLine oraz pobierane są dane z pól formularza okna ScheduleWindow, 
+	 * a następnie zostaje zaktualizowany rekord w bazie danych bms_db z pobranymi danymi.
+	 * Tworzony jest obiekt klasy SchedulerJDBC oraz klasy Scheduler. 
+	 * Na obiekcie klasy SchedulerJDBC wykonywana jest metoda 'updateSchedulerRecord'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwania rekordów z tabeli. 
+	 * W przypadku kliknięcia na przycisk 'deleteButton' pobierane są dane z pól formularza okna ScheduleWindow, 
+	 * a następnie zostaje usunięty rekord z bazy danych bms_db na podtsawie pobranych danych. 
+	 * Tworzony jest obiekt klasy SchedulerJDBC oraz klasy Scheduler. 
+	 * Na obiekcie klasy SchedulerJDBC wykonywana jest metoda 'deleteSchedulerRecord'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwanai rekordów z tabeli. 
+	 * Do informowani użytkownika oraz wyświetlania okien dialogowych
+	 * wykorzystane zostały komponenty JOptionPane.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -385,6 +440,10 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 	}
 	
 	
+	/** Metoda odpowiedzialna za odświeżanie tabeli Jtable z danymi.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 		private void updateTable() {
 			try {
 				connect = DriverManager.getConnection(
@@ -409,6 +468,12 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 		}
 
 
+		/** Metoda odpowiedzialna za filtrowanie danych w tabeli Jtable.
+		 * 
+		 * @param query - parametr String - tekst jako wyznacznik filtrowania.
+		 * 
+		 * Metoda jest typu void - nie zwraca żadnej wartości. 
+		 */
 		private void filter(String query) {
 
 			TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);
@@ -418,6 +483,10 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 		}
 		
 		
+		/** Metoda odpowiedzialna za wypełnianie danymi kierowców z bazy danych bms_db komponentu JComboBox przez model DefaultComboBoxModel.
+		 * 
+		 * Metoda jest typu void - nie zwraca żadnej wartości. 
+		 */
 		private void fillComboBoxDriver() {
 			try {
 				connect = DriverManager.getConnection(
@@ -445,6 +514,12 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 			}
 		}
 		
+		
+		/** Metoda odpowiedzialna za pobranie ID kierowcy rekordu z wybranego pola formularzu okna ScheduleWindow, gdzie ID jest kluczem obcym tabeli Schedule w bazie.
+		 * Wynik zwraca na podstawaie porównywania danych z bazy danych bms_db.
+		 * 
+		 * @return 	numer ID kierowcy jeśli porównane dane są takie same
+		 */
 		private int comparDriver() {
 			try {
 				connect = DriverManager.getConnection(
@@ -475,6 +550,10 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 			return 0;
 		}
 		
+		/** Metoda odpowiedzialna za wypełnianie danymi busów z bazy danych bms_db komponentu JComboBox przez model DefaultComboBoxModel.
+		 * 
+		 * Metoda jest typu void - nie zwraca żadnej wartości. 
+		 */
 		private void fillComboBoxBus() {
 			try {
 				connect = DriverManager.getConnection(
@@ -502,6 +581,11 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 			}
 		}
 		
+		/** Metoda odpowiedzialna za pobranie ID busa rekordu z wybranego pola formularzu okna ScheduleWindow, gdzie ID jest kluczem obcym tabeli Schedule w bazie.
+		 * Wynik zwraca na podstawaie porównywania danych z bazy danych bms_db.
+		 * 
+		 * @return 	numer ID busa jeśli porównane dane są takie same
+		 */
 		private int comparBus() {
 			try {
 				connect = DriverManager.getConnection(
@@ -534,6 +618,10 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 		}
 		
 		
+		/** Metoda odpowiedzialna za wypełnianie danymi linii busów z bazy danych bms_db komponentu JComboBox przez model DefaultComboBoxModel.
+		 * 
+		 * Metoda jest typu void - nie zwraca żadnej wartości. 
+		 */
 		private void fillComboBoxBusLine() {
 			try {
 				connect = DriverManager.getConnection(
@@ -561,6 +649,11 @@ public class ScheduleWindow extends JFrame implements ActionListener {
 			}
 		}
 		
+		/** Metoda odpowiedzialna za pobranie ID linii busa rekordu z wybranego pola formularzu okna ScheduleWindow, gdzie ID jest kluczem obcym tabeli Schedule w bazie.
+		 * Wynik zwraca na podstawaie porównywania danych z bazy danych bms_db.
+		 * 
+		 * @return 	numer ID linii busa jeśli porównane dane są takie same
+		 */
 		private int comparBusLine() {
 			try {
 				connect = DriverManager.getConnection(

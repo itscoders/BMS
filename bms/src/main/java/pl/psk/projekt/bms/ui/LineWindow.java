@@ -1,6 +1,5 @@
 package pl.psk.projekt.bms.ui;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -56,39 +55,65 @@ import java.awt.event.MouseEvent;
  */
 public class LineWindow extends JFrame implements ActionListener {
 
+	/** Zmienna określająca unikalny numer w celu serializacji. */
 	private static final long serialVersionUID = 1L;
 
+	/** Deklaracja obiektu klasy JPanel. */
 	private JPanel contentPane;
+	/** Deklaracja obiektu klasy JTextField. */
 	private JTextField lineNameField;
+	/** Deklaracja obiektu klasy JTextField. */
 	private JTextField startStationField;
+	/** Deklaracja obiektu klasy JTextField. */
 	private JTextField stopStationField;
-	private JTable tableFilter;
-	private JButton addButton;
-	private JButton editButton;
-	private JButton deleteButton;
-	JComboBox<String> comboBoxType;
-	PreparedStatement  preparedStatement;
-    Connection connect;
-    ResultSet rs;
-    private JTextField filterField;
-    private DefaultTableModel modelFilter;
-    private JLabel lblSearchLine;
+	/** Deklaracja obiektu klasy JTextField. */
     private JTextField textFieldPirceOneWay;
+    /** Deklaracja obiektu klasy JTextField. */
     private JTextField textFieldPriceMonthly;
+    /** Deklaracja obiektu klasy JTextField. */
+    private JTextField filterField;
+    /** Deklaracja obiektu klasy JTable. */
+	private JTable tableFilter;
+	/** Deklaracja obiektu klasy JButton. */
+	private JButton addButton;
+	/** Deklaracja obiektu klasy JButton. */
+	private JButton editButton;
+	/** Deklaracja obiektu klasy JButton. */
+	private JButton deleteButton;
+	/** Deklaracja obiektu klasy JDefaultTableModel. */
+    private DefaultTableModel modelFilter;
+    /** Deklaracja obiektu klasy JLabel. */
+    private JLabel lblSearchLine;
+    /** Deklaracja obiektu klasy JComboBox. */
+	private JComboBox<String> comboBoxType;
+	
+	/** Deklaracja obiektu klasy PreparedStatement. */
+	private PreparedStatement  preparedStatement;
+	/** Deklaracja obiektu klasy Connection. */
+	private Connection connect;
+	/** Deklaracja obiektów klasy ResultSet. */
+	private ResultSet rs;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LineWindow frame = new LineWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
+	/**
+	 * Konstruktor klasy LineWindow odpowiedzialny za
+	 * inicializację komponentów biblioteki Swing. Komponenty definiowane:
+	 * Jlabel, JButton, JPanel, JComboBox, JTextField, JTable, JFrame - dla tych
+	 * komponentów ustawiane są wymiary, fonty, kolory. Dodatkowo dla komponentu JTable zastosowany jest model tabeli - DefaultTableModel, 
+	 * Dla JTable dodana jest niego metoda 'keyReleased' służąca do określania zachowania po zwolnieniuu klawisza, gdzie wywoływana jest metoda'filter' 
+	 * oraz metoda 'mouseClicked' służąca do określania zachowania po kliknięciu myszką, gdzie wywoływana jest metoda 'tableFilterMouseClicked'.
+	 * Komponenty zostały rozmieszczone przy pomocy GroupLayout.
+	 * W konstruktorze przy pomocy zmiennej connect nawiązywane jest połączenie z bazą bms_db, 
+	 * preparedStatement pozwala na wykonanie zapytania do bazy, a 'rs' na wyświetlenie wyników zapytania.
+	 * 
+	 * @see JComboBox
+	 * @see JTextField
+	 * @see JTable
+	 * @see JPanel
+	 * @see JButton
+	 * @see JFrame
+	 * @see JLabel
+	 */
 	public LineWindow() {
 		setResizable(false);
 		
@@ -292,6 +317,11 @@ public class LineWindow extends JFrame implements ActionListener {
 	}
 
 	
+	/**
+	 * Metoda służąca do określania zachowania aplikacji po
+	 * kliknięciu na rekord w tabeli JTable. W metodzie tej ustawiono przycisk do edycji oraz usuwania rekordów z bazy na widoczne. 
+	 * W przypadku kliknięcia na rekord w tabeli JTable dane z tego rekordu ustawiane są w polach formularzu okna LineWindow.
+	 */
 	private void tableFilterMouseClicked(MouseEvent e) {
 		int index = tableFilter.getSelectedRow();
 		
@@ -314,6 +344,31 @@ public class LineWindow extends JFrame implements ActionListener {
 	}
 	
 	
+	/**
+	 * Przesłonięta metoda służąca do określania zachowania aplikacji po
+	 * kliknięciu na dany komponent przez użytkownika. W metodzie tej określono
+	 * działanie dla przycisków znajdujących się w oknie do zarządzania liniami busów. 
+	 * W przypadku kliknięcia na przycisk 'addButton' pobierane są dane z pól formularza okna LineWindow, 
+	 * a następnie zostaje dodany rekord do bazy danych bms_db z pobranymi danymi.
+	 * Tworzony jest obiekt klasy BusLineJDBC oraz klasy BusLine. 
+	 * Na obiekcie klasy BusLineJDBC wykonywana jest metoda 'createBusLine'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwania rekordów z tabeli. 
+	 * W przypadku kliknięcia na przycisk 'editButton' pobierane są dane z pól formularza okna LineWindow, 
+	 * a następnie zostaje zaktualizowany rekord w bazie danych bms_db z pobranymi danymi.
+	 * Tworzony jest obiekt klasy BusLineJDBC oraz klasy BusLine. 
+	 * Na obiekcie klasy BusLineJDBC wykonywana jest metoda 'updateBusLine'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwania rekordów z tabeli. 
+	 * W przypadku kliknięcia na przycisk 'deleteButton' pobierane są dane z pól formularza okna LineWindow, 
+	 * a następnie zostaje usunięty rekord z bazy danych bms_db na podtsawie pobranych danych. 
+	 * Tworzony jest obiekt klasy BusLineJDBC oraz klasy BusLine. 
+	 * Na obiekcie klasy BusLineJDBC wykonywana jest metoda 'deleteBusLine'. 
+	 * Następnie wywoływana jest metoda do odświerzenia tabeli JTable - updateTable. 
+	 * Na końcu wyłączaane są przyciski do edytowania i usuwanai rekordów z tabeli. 
+	 * Do informowani użytkownika oraz wyświetlania okien dialogowych
+	 * wykorzystane zostały komponenty JOptionPane.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -387,8 +442,10 @@ public class LineWindow extends JFrame implements ActionListener {
 
 	}
 	
-		// METODA ODŚWIERZAJĄCA TABELE JTABLE
-		// MUSI ZOSTAĆ WYWOŁANA ZAWSZE NA KOŃCU W PRZYCISKACH: ADD, EDIT, DELETE
+	/** Metoda odpowiedzialna za odświeżanie tabeli Jtable z danymi.
+	 * 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 		private void updateTable() {
 			try {
 				connect = DriverManager.getConnection(
@@ -412,7 +469,13 @@ public class LineWindow extends JFrame implements ActionListener {
 			}
 		}
 
-		//METODA DO DYNAMICZNEGO WYSZUKIWANIA W TABELI
+
+		/** Metoda odpowiedzialna za filtrowanie danych w tabeli Jtable.
+		 * 
+		 * @param query - parametr String - tekst jako wyznacznik filtrowania.
+		 * 
+		 * Metoda jest typu void - nie zwraca żadnej wartości. 
+		 */
 		private void filter(String query) {
 
 			TableRowSorter<DefaultTableModel> trs = new TableRowSorter<DefaultTableModel>(modelFilter);

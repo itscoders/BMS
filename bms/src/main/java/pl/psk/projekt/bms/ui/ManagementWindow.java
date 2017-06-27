@@ -47,50 +47,50 @@ public class ManagementWindow extends JFrame implements ActionListener {
 	/** Zmienna określająca unikalny numer w celu serializacji. */
 	private static final long serialVersionUID = 1L;
 
-	/** Inicjalizacja obiektu klasy JPanel. */
+	/** Deklaracja obiektu klasy JPanel. */
 	private JPanel contentPane;
-	/** Inicjalizacja obiektu klasy JPanel. */
+	/** Deklaracja obiektu klasy JPanel. */
 	private JPanel panel;
-	/** Inicjalizacja obiektu klasy JButton. */
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton logoutButton;
-	/** Inicjalizacja obiektu klasy JButton. */
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton scheduleButton;
-	/** Inicjalizacja obiektu klasy JButton. */
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton busButton;
-	/** Inicjalizacja obiektu klasy JButton. */
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton lineButton;
-	/** Inicjalizacja obiektu klasy JButton. */
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton workerButton;
-	/** Inicjalizacja obiektu klasy JButton. */
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton transactionButton;
-	/** Inicjalizacja obiektu klasy JButton. */
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton buyerButton;
-	/** Inicjalizacja obiektu klasy JButton. */
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton databaseDropButton;
-	/** Inicjalizacja obiektu klasy JButton. */
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton databaseCreateButton;
-	/** Inicjalizacja obiektu klasy JButton. */
+	/** Deklaracja obiektu klasy JButton. */
 	private JButton databaseInsertButton;
-	/** Inicjalizacja obiektu klasy JLabel. */
+	/** Deklaracja obiektu klasy JLabel. */
 	private JLabel logLabel;
 	/** Pole klasy Workers. */
 	private Workers w;
 	
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Workers w = new Workers();
-					ManagementWindow frame = new ManagementWindow(w);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	/**
+	 * Konstruktor klasy ManagementWindow odpowiedzialny za
+	 * inicializację komponentów biblioteki Swing. Komponenty definiowane:
+	 * Jlabel, JButton, JPanel, JFrame - dla tych
+	 * komponentów ustawiane są wymiary, fonty, kolory.
+	 * Komponenty zostały rozmieszczone przy pomocy GroupLayout.
+	 * wywoływana jest metoda welcomeLabel.
+	 * 
+	 * @param w - parametr Workers - dane zalagowanego użytkownika
+	 *            
+	 * @see JPanel
+	 * @see JButton
+	 * @see JFrame
+	 * @see JLabel
+	 */
 	public ManagementWindow(Workers w) {
 		
 		this.w=w;
@@ -239,6 +239,24 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		contentPane.add(background);
 	}
 
+	/**
+	 * Przesłonięta metoda służąca do określania zachowania aplikacji po
+	 * kliknięciu na dany komponent przez użytkownika. W metodzie tej określono
+	 * działanie dla przycisków znajdujących się w oknie dla Administratora. 
+	 * W przypadku kliknięcia na przycisk 'workerButton' uruchamiane jest okno do zarządzania pracownikami. Tworzony jest nowy wątek, w którym zaś tworzony jest obiekt klasy WorkerWindow, ustawiany na widoczny, a aktualny niszczony.
+	 * W przypadku kliknięcia na przycisk 'scheduleButton' uruchamiane jest okno do zarządzania rozkładem. Tworzony jest nowy wątek, w którym zaś tworzony jest obiekt klasy ScheduleWindow, ustawiany na widoczny, a aktualny niszczony. 
+	 * W przypadku kliknięcia na przycisk 'busButton' uruchamiane jest okno do zarządzania busami. Tworzony jest nowy wątek, w którym zaś tworzony jest obiekt klasy BusWindow, ustawiany na widoczny, a aktualny niszczony. 
+	 * W przypadku kliknięcia na przycisk 'lineButton' uruchamiane jest okno do zarządzania liniami busów. Tworzony jest nowy wątek, w którym zaś tworzony jest obiekt klasy LineWindow, ustawiany na widoczny, a aktualny niszczony. 
+	 * W przypadku kliknięcia na przycisk 'buyerButton' uruchamiane jest okno do zarządzania kupującymi. Tworzony jest nowy wątek, w którym zaś tworzony jest obiekt klasy BuyerWindow, ustawiany na widoczny, a aktualny niszczony. 
+	 * W przypadku kliknięcia na przycisk 'transactionButton' uruchamiane jest okno do zarządzania transakcjami. Tworzony jest nowy wątek, w którym zaś tworzony jest obiekt klasy TransactionWindow, ustawiany na widoczny, a aktualny niszczony. 
+	 * W przypadku kliknięcia na przycisk 'logoutButton' następuje wylogowanie użytkownika i uruchamiane jest okno logowania. Tworzony jest nowy wątek, w którym zaś tworzony jest obiekt klasy LoginWindow, ustawiany na widoczny, a aktualny niszczony. 
+	 * W przypadku kliknięcia na przycisk 'databaseCreateButton' tworzona jest baza danych.
+	 * W przypadku kliknięcia na przycisk 'databaseDropButton' usuwana  jest baza danych.
+	 * W przypadku kliknięcia na przycisk 'databaseInsertButton' następuje załadowanie do bazy danych przygotowanych danych - insert`ów.
+	 *    
+	 * Do informowani użytkownika oraz wyświetlania okien dialogowych
+	 * wykorzystane zostały komponenty JOptionPane.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -382,6 +400,9 @@ public class ManagementWindow extends JFrame implements ActionListener {
 		}
 	}
 	
+	/** Metoda bezparametrowa odpowiedzialna za wyświetlenie imienia i nazwiska aktualnie zalogowanego użytkownika.
+	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 */
 	public void welcomeLabel() {
 		String name = w.getName();
 		String surname = w.getSurname();

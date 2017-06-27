@@ -22,7 +22,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.EventQueue;
 
 /**
  * Klasa RetrieveWindow zawiera komponenty do stworzenia UI okna startowego
@@ -38,26 +37,32 @@ import java.awt.EventQueue;
  */
 public class RetrieveWindow extends JFrame implements ActionListener {
 
+	/** Zmienna określająca unikalny numer w celu serializacji. */
 	private static final long serialVersionUID = 1L;
 
+	/** Inicjalizacja obiektu klasy JPanel. */
 	private JPanel contentPane;
+	/** Inicjalizacja obiektu klasy JTextField. */
 	private JTextField userNameField;
+	/** Inicjalizacja obiektu klasy JButton. */
 	private JButton retrieveButton;
+	/** Inicjalizacja obiektu klasy JButton. */
 	private JButton prevButton;
+	
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RetrieveWindow frame = new RetrieveWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	/**
+	 * Konstruktor klasy RetrieveWindow odpowiedzialny za
+	 * inicializację komponentów biblioteki Swing. Komponenty definiowane:
+	 * Jlabel, JButton, JTextField JPanel, JFrame - dla tych
+	 * komponentów ustawiane są wymiary, fonty, kolory.
+	 * Komponenty zostały rozmieszczone przy pomocy GroupLayout.
+	 *        
+	 * @see JTextField
+	 * @see JPanel
+	 * @see JButton
+	 * @see JFrame
+	 * @see JLabel
+	 */
 	public RetrieveWindow() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -124,6 +129,21 @@ public class RetrieveWindow extends JFrame implements ActionListener {
 		contentPane.setLayout(gl_contentPane);
 	}
 
+	/**
+	 * Przesłonięta metoda służąca do określania zachowania aplikacji po
+	 * kliknięciu na dany komponent przez użytkownika. W metodzie tej określono
+	 * działanie dla przycisków znajdujących się w oknie odzyskiwania hasła. 
+	 * W przypadku kliknięcia na przycisk 'prevButton' następuje powrót do poprzedniego okna, uruchamiane jest okno do logowania. Tworzony jest obiekt klasy LoginWindow, ustawiany na widoczny, a aktualny niszczony.
+	 * W przypadku kliknięcia na przycisk 'retrieveButton' pobierana jest nazwa użytkownika z pola tekstowego, 
+	 * dla której przypisane hasło zostaje wysłane na email tego użytkownika i następuje powrót do okna logowania.
+	 * Tworzony jest obiekt klasy WorkersJDBC oraz klasy Workers. 
+	 * Na obiekcie klasy WorkersJDBC wykonywana jest metoda 'passRecover'. 
+	 * Następnie tworzony jest obiekt klasy Mail i na jej obiekcie wywoływana jest metoda 'sendMail' z danymi użytkownika o podanej nazwie użytkownika. 
+	 * Na końcu tworzony jest obiekt klasy LoginWindow, ustawiany na widoczny, a aktualny niszczony. 
+	 *    
+	 * Do informowani użytkownika oraz wyświetlania okien dialogowych
+	 * wykorzystane zostały komponenty JOptionPane.
+	 */
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == prevButton) {
