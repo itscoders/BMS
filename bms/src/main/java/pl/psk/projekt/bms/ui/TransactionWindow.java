@@ -874,6 +874,8 @@ public class TransactionWindow extends JFrame implements ActionListener {
 	/** Metoda odpowiedzialna za wypełnianie danymi rozkładów z bazy danych bms_db komponentu JComboBox przez model DefaultComboBoxModel.
 	 * 
 	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 * @param i przechowuje id busa
+	 * @param string przechowuje String z czasem
 	 */
 	private void fillComboBoxScheduler(int i, String string) {
 		try {

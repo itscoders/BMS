@@ -276,6 +276,7 @@ public class BusWindow extends JFrame implements ActionListener {
 	 * Metoda służąca do określania zachowania aplikacji po
 	 * kliknięciu na rekord w tabeli JTable. W metodzie tej ustawiono przycisk do edycji oraz usuwania rekordów z bazy na widoczne. 
 	 * W przypadku kliknięcia na rekord w tabeli JTable dane z tego rekordu ustawiane są w polach formularzu okna BusWindow.
+	 * @param e MouseEvent
 	 */
 	private void tableFilterMouseClicked(MouseEvent e) {
 		editButton.setEnabled(true);
