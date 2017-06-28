@@ -413,11 +413,18 @@ public class TransactionWindow extends JFrame implements ActionListener {
 		
 	}
 
-	/** Metoda bezparametrowa odpowiedzialna za generowanie biletu do pliku .pdf dla kupującego i zapisywania do wybranej lokalizacji na dysku.
+	/** Metoda parametrowa odpowiedzialna za generowanie biletu do pliku .pdf dla kupującego i zapisywania do wybranej lokalizacji na dysku.
 	 * W pliku zapisywane są takie informacje jak informacje o kupującym, cena biletu oraz wszystkie informacje dotyczące przejazdu.
 	 * Opcjonalnie plik z potwierdzeniem wysyłany jest jako załącznik na email kupującego lub samo potwierdzenie na SMS.
 	 * 
 	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 * 
+	 * @param discount przechowuje ciąg znakó z kwotą bilteu
+	 * @param date	przechowuje date do biletu
+	 * @param buyer przekazuje id kupującego
+	 * @param email decyzja uzytkownika o wysylce jesli 0 wysylany zostaje mail jezeli 1 nie
+	 * @param sms	decyzja uzytkownika o wysylce jesli 0 wysylany zostaje sms jezeli 1 nie
+	 * 
 	 */
 	private void generateSlip(String discount, String date, int buyer, int email, int sms) {
 
@@ -504,9 +511,15 @@ public class TransactionWindow extends JFrame implements ActionListener {
 	}
 	
 	
-	/** Metoda bezparametrowa odpowiedzialna za wyświetlenie komunikatów dotyczących wysłania rodzaju powiadomienia dla kupującego na email lub SMS.
+	/** Metoda parametrowa odpowiedzialna za wyświetlenie komunikatów dotyczących wysłania rodzaju powiadomienia dla kupującego na email lub SMS.
 	 * 
-	 * Metoda jest typu void - nie zwraca żadnej wartości. 
+	 * Metoda jest typu void - nie zwraca żadnej wartości. Zbiera decyzje użytkownika a następnie wywołuje metode {link {@link #generateSlip(String, String, int, int, int)}.
+	 * {link {@link #generateSlip(String, String, int, int, int)}
+	 * @param discount przechowuje ciąg znakó z kwotą bilteu
+	 * @param today	przechowuje date do biletu
+	 * @param buyer przekazuje id kupującego
+	 * @see javax.swing.JOptionPane
+	 * 
 	 */
 	public void ask(String discount, String today, int buyer){
 		int mail = JOptionPane.showConfirmDialog(null, "The Buyer want to get bill/ ticket on mail ?", "Question Box", JOptionPane.YES_NO_OPTION);

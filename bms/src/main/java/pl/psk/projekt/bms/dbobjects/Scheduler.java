@@ -1,13 +1,29 @@
 package pl.psk.projekt.bms.dbobjects;
 
 public class Scheduler {
-	
+	/** Definicja  pola id rozkładu */
 	private int schedulerRecordID;
+	/** Definicja  pola czas odjazdu */
     private String depertureTime;
+    /** Definicja  pola czas przyjazdu */
     private String arrivalTime; 
+    /** Definicja  pola id busa */
     private int idBus;
+    /** Definicja  pola id kierowcy */
     private int idDriver;
+    /** Definicja  pola id linii */
     private int idLine;
+    
+    
+    /**
+     * Konstruktor  parametrowy bazujący na polach klasy
+     * @param idBus przyjmuje id busa
+     * @param idDriver przyjmuje id kierowcay
+     * @param idLine przyjmuje id linii
+     * @param depertureTime przyjmuje czas odjazdu
+     * @param arrivalTime przyjmuje czas przyjazdu
+     * 
+     */
     
 	public Scheduler(int idBus, int idDriver, int idLine, String depertureTime, String arrivalTime) {
 		super();
@@ -18,7 +34,11 @@ public class Scheduler {
 		this.depertureTime = depertureTime;
 		this.arrivalTime = arrivalTime;
 	}
-
+	
+	/**
+     * Konstruktor bez parametrowy  BusLine Bus używany w metodach gdzie nie potrzebujemy wypełniać całego obiektu do działania
+     */
+	
 	public Scheduler() {}
 
 	public int getSchedulerRecordID() {

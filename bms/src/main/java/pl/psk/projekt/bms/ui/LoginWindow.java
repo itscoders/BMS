@@ -113,6 +113,7 @@ public class LoginWindow extends JFrame implements ActionListener {
 		getContentPane().add(forgetButton);
 		buttonCreateDB.setBackground(Color.LIGHT_GRAY);
 		buttonCreateDB.setBounds(172, 261, 168, 30);
+		buttonCreateDB.addActionListener(this);
 
 		getContentPane().add(buttonCreateDB);
 

@@ -8,25 +8,39 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
+import pl.psk.projekt.bms.dbobjects.Buyer;
+import pl.psk.projekt.bms.dbobjects.Scheduler;
 import pl.psk.projekt.bms.dbobjects.Transaction;
 
 
 /** KLASA TransactionJDBC - Zawiera w swoim ciele metody umożliwiające połączenie oraz dodanie, usunięcie, edytowanie rekordów bazy 
-* @see Connection
-* @see DriverManager
-* @see DriverManager.getConnection()
-* @see PreparedStatement
-* @see Statement
+	 * @see java.sql.Connection
+	 * @see java.sql.DriverManager
+	 * @see java.sql.PreparedStatement
+	 * @see java.sql.SQLException
 */
 
 
 public class TransactionJDBC {
 	
+	/** Definicja obiektu klasy Statement. */
 	Statement statement;
-    PreparedStatement  preparedStatement;
-    Connection connect;
+	/** Definicja obiektu klasy PreparedStatement. */
+	PreparedStatement preparedStatement;
+	/** Definicja obiektu klasy Connection. */
+	Connection connect;
     
+	
+	/**
+	 * Konstruktor bezparametrowy klasy TransactionJDBC dokonanuje połączenia z bazą
+	 * 
+	 * @throws SQLException SQL Exception w razie problemó z połączeniem, wykonaniem zapytania etc.
+	 * @see java.sql.Connection
+	 * @see java.sql.DriverManager
+	 * @see java.sql.Statement
+	 * @see java.sql.SQLException
+	 */
+	
     public TransactionJDBC() throws SQLException{    
     	  String url = "jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York";
           String username = "root";
@@ -35,9 +49,18 @@ public class TransactionJDBC {
           statement = connect.createStatement();            
       }
     
-   
+	/**
+	 * Metoda addTransaction wykorzystywana do dodawania rekordów w tabeli Transaction
+	 * 
+	 * @param sc obiekt klasy {@link Transaction} przechowywujący dane do inserta
+	 * @throws SQLException SQL Exception w razie problemó z połączeniem, wykonaniem zapytania etc.
+	 * @see java.sql.Connection
+	 * @see java.sql.DriverManager
+	 * @see java.sql.PreparedStatement
+	 * @see java.sql.SQLException
+	 */
         
-    public boolean addTransaction(Transaction sc)throws SQLException{
+    public void addTransaction(Transaction sc)throws SQLException{
         String sql = "insert into Transaction (discount, payment, date, IdScheduler, IdSeller, IdBuyer) values(?,?,?,?,?,?)";
         preparedStatement = connect.prepareStatement(sql);
         preparedStatement.setString(1,sc.getDiscount());
@@ -47,35 +70,44 @@ public class TransactionJDBC {
         preparedStatement.setInt(5,sc.getIdSeller());
         preparedStatement.setInt(6,sc.getIdBuyer());
         
-        int result= preparedStatement.executeUpdate();
+        preparedStatement.executeUpdate();
               
-              if (result > 0)
-                   return true;
-              else
-                  return false;
+            
         
     }
     
-    public boolean deletetransaction(int index)throws SQLException{
+    
+	/**
+	 * Metoda deletetransaction wykorzystywana do usuwania rekordów w tabeli Transaction
+	 * 
+	 * @param index przechowujacy id wykorzystywane w zapytaniu delete
+	 * @throws SQLException SQL Exception w razie problemó z połączeniem, wykonaniem zapytania etc.
+	 * @see java.sql.Connection
+	 * @see java.sql.DriverManager
+	 * @see java.sql.PreparedStatement
+	 * @see java.sql.SQLException
+	 */
+    
+    public void deletetransaction(int index)throws SQLException{
         String sql = "delete from Transaction where transactionId ="+index;
-        int result = preparedStatement.executeUpdate(sql);
-        
-        
-        if (result > 0)
-            return true;
-        else
-            return false;
-        
+        preparedStatement.executeUpdate(sql);
+ 
     }    
     
-    public boolean updateTransaction(Transaction s)throws SQLException{
+	/**
+	 * Metoda updateTransaction wykorzystywana do aktualizacji rekordów w tabeli Transaction
+	 * 
+	 * @param s obiekt klasy {@link Transaction} przechowywujący dane do update
+	 * @throws SQLException SQL Exception w razie problemó z połączeniem, wykonaniem zapytania etc.
+	 * @see java.sql.Connection
+	 * @see java.sql.DriverManager
+	 * @see java.sql.PreparedStatement
+	 * @see java.sql.SQLException
+	 */
+    
+    public void updateTransaction(Transaction s)throws SQLException{
         String sql = "update Transaction set "+"',discount='"+s.getDiscount()+"',payment='"+s.getPayment()+"',date = '"+s.getDate()+"',IdScheduler='"+s.getIdScheduler()+"',IdSeller='"+s.getIdSeller()+"',IdBuyer='"+s.getIdBuyer()+"' where transactionId='"+s.getTransactionId()+"'";
-        int result = preparedStatement.executeUpdate(sql);
-        
-        if (result > 0)
-            return true;
-        else
-            return false;        
+        preparedStatement.executeUpdate(sql);      
         
     }
     

@@ -1,23 +1,55 @@
 package pl.psk.projekt.bms.dbobjects;
 
+/** KLASA Workers - Zawiera w swoim ciele odpowiednik definicji tabeli Workers z bazy danych
+*/
+
 public class Workers {
-
+	/** Definicja  pola id pracownika*/
 	private int workerId;
+	/** Definicja  pola typu pracownika*/
 	private String accountType;
+	/** Definicja  pola nazwy usera pracownika */
 	private String username;
+	/** Definicja  pola hasła do konta pracownika*/
 	private String password;
+	/** Definicja  pola imienia pracownika*/
 	private String name;
+	/** Definicja  pola nazwiska pracownika*/
 	private String surname;
+	/** Definicja  pola maila pracownika*/
 	private String email;
+	/** Definicja  pola telefonu*/
 	private String mobile;
+	/** Definicja  pola adresu pracownika*/
 	private String address;
+	/** Definicja  pola daty urodzenia*/
 	private String birthday;
+	/** Definicja  pola wyplaty pracownika*/
 	private double salary;
-
+	
+    /**
+     * Konstruktor bez parametrowy  KLASY Buyer używany w metodach gdzie nie potrzebujemy wypełniać całego obiektu do działania
+     */
 	public Workers() {
 
 	}
-
+	
+	
+    /**
+     * Konstruktor  parametrowy bazujący na polach klasy
+     * @param accountType przyjmuje typ konta/stanowisko
+     * @param username	przyjmuje login do konta
+     * @param password  przyjmuje hasło do konta
+     * @param name przyjmuje String z imieniem pracownika
+     * @param surname przyjmuje String z nazwiskiem pracownika
+     * @param birthday przyjmuje String z data urodzenia pracownika
+     * @param email przyjmuje String z mailem pracownika
+     * @param mobile przyjmuje String z numerem telefonu pracownika
+     * @param address przyjmuje adress pracownika
+     * @param salary pensja pracownika
+     * 
+     */
+	
 	public Workers(String accountType, String username, String password, String name, String surname, String email,
 			String mobile, String address, String birthday, double salary) {
 		super();
@@ -33,7 +65,25 @@ public class Workers {
 		this.salary = salary;
 
 	}
-
+	
+	
+	
+    /**
+     * Konstruktor  parametrowy bazujący na polach klasy
+     * @param workerId przyjmuje id pracownika
+     * @param accountType przyjmuje typ konta/stanowisko
+     * @param username	przyjmuje login do konta
+     * @param password  przyjmuje hasło do konta
+     * @param name przyjmuje String z imieniem pracownika
+     * @param surname przyjmuje String z nazwiskiem pracownika
+     * @param birthday przyjmuje String z data urodzenia pracownika
+     * @param email przyjmuje String z mailem pracownika
+     * @param mobile przyjmuje String z numerem telefonu pracownika
+     * @param address przyjmuje adress pracownika
+     * @param salary pensja pracownika
+     * 
+     */
+	
 	public Workers(int workerId, String accountType, String username, String password, String name, String surname,
 			String email, String mobile, String address, String birthday, double salary) {
 		super();

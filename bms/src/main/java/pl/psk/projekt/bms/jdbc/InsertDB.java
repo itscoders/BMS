@@ -6,21 +6,37 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /** KLASA InsertDB zawiera w swoim konstruktorze zapytania do bazy, dodające rekordy testowe do tabel WORKERS, BUS,BUSLINE, SCHEDULER
- * w Klasie użyto połączenia za pomocą JDBC sterownika bazy mysql.
- * @see Connection
- * @see DriverManager
- * @see DriverManager.getConnection()
- * @see Statement
+ * 
+ * @see java.sql.Connection
+ * @see java.sql.DriverManager
+ * @see java.sql.Statement
+ * @see java.sql.SQLException
  */
 
 public class InsertDB  {
+	
+	
+	
+	/**
+	 * Konstruktor bezparametrowy klasy InsertDB odpowiedzialny za inicializację zawartości
+	 * tabel w bazie danych 
+	 * 
+	 * @throws SQLException SQL Exception w razie problemó z połączeniem, wykonaniem zapytania etc.
+	 * @see java.sql.Connection
+	 * @see java.sql.DriverManager
+	 * @see java.sql.Statement
+	 * @see java.sql.SQLException
+	 */
+	
 
 	public InsertDB() throws SQLException  {
-		
+		/** Zmienna do której zapisywane są polecenia SQL */
 		String create;
+		/** Zmienna przechowująca połączenie z bazą danych*/
         Connection connect;
 		try {
 			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/bms_db?useLegacyDatetimeCode=false&serverTimezone=America/New_York", "root", "toor");
+			/** Zmienna wykorzystująca połączenie z bazą do wykonania zapytania. */
 			Statement   statement = connect.createStatement();
 			
 			
@@ -100,18 +116,7 @@ public class InsertDB  {
 		}
         
 	}
-
-	public static void main(String[] args) {
-		
-		try {
-			new InsertDB();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		
 	}
 
 	
-}
